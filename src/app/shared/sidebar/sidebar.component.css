@@ -1,0 +1,32 @@
+.sidebar {
+    height: 100vh;
+    width: 75px;
+    background: #f7f7f7;
+    margin: 0;
+    position: fixed;
+}
+.menu-item{
+    margin-left: auto;
+    text-align: center;
+    margin-right: auto;
+    display: block;
+    cursor: pointer;
+    padding-bottom: 1rem;
+    text-decoration: none;
+    color: black;
+}
+.menu-item fa-icon{
+    font-size: 2rem;
+    display: block;
+}
+.menu-item span{
+    font-size: 12px;
+}
+.menu-item:hover{
+    background: #afafaf2b;
+    color: #9c27b0;
+}
+.active{
+    background: #afafaf2b;
+    color: #9c27b0;
+}

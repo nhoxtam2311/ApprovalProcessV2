@@ -1,0 +1,74 @@
+.main-screen{
+    height: 100vh;
+    width: calc( 100vw - 75px );
+    background: #f7f7f7;
+    margin-left: 75px;
+    position: fixed;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+}
+.project-name{
+    padding: 10px;
+}
+.details{
+    padding: 10px;
+}
+.container{
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+    margin-bottom: 1em;
+}
+.label{
+    width: 150px;
+    display: inline-block;
+}
+.h-container{
+    width: 50%;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+.h-container input{
+    width: 200px;
+    padding: 1px;
+    height: 15px;
+}
+table{
+    width: 95%;
+    border-collapse: collapse;
+}
+td, th{
+    border: 1px solid #ddd;
+    padding: 5px;
+}
+tr{
+    cursor: pointer;
+}
+tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+tr:hover{
+    background-color: #ddd;
+}
+th{
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #505050;
+    color: white;
+}
+.pagination{
+    margin: 1rem;
+    text-align: right;
+}
+.pagination a {
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+.pagination a:hover{
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+}
+  
+.pagination a.active {
+    background-color: #505050;
+    color: white;
+}

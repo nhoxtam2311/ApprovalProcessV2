@@ -1,0 +1,18 @@
+<nav class="item-list">
+    <div class="list-title">
+        <span>Projects</span>
+    </div>
+    <div *ngIf="projects | async as data">
+        <div *ngFor="let project of data._embedded.projects" class="list-container">
+            <div class="item in-progress" [routerLink]="['/details', project.id]">
+                <span class="item-name">{{ project.projectName }}</span>
+                <span [class]="project.status">{{ project.status }}</span>
+                <span [class]="project.priority">{{ project.priority }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="add-item">
+        <button>Add project</button>
+    </div>
+</nav>

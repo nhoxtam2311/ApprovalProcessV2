@@ -1,0 +1,8 @@
+.main-screen{
+    height: 100vh;
+    width: calc( 100vw - 425px );
+    background: #f7f7f7;
+    margin-left: 425px;
+    position: fixed;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+}

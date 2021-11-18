@@ -1,0 +1,60 @@
+.item-list{
+    height: 100vh;
+    width: 350px;
+    background: #f7f7f7;
+    margin-left: 75px;
+    position: fixed;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+}
+.list-title{
+    padding: 20px;
+    font-weight: bold;
+}
+.list-container{
+    padding: 5px;
+}
+.item{
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    border-bottom: solid 1px#dbdbdb;
+}
+.item:hover{
+    background-color: white;
+    color: black;
+}
+.item-name{
+    display: block;
+}
+.item-status{
+    font-size: 11px;
+    padding-bottom: 3px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: white;
+}
+.in-progress .item-status{
+    background-color: #ff9800;
+}
+.open .item-status{
+    background-color: #9e9e9e;
+}
+.add-item{
+    bottom: 10px;
+    width: 100%;
+    position: absolute;
+}
+.add-item button{
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    height: 2rem;
+    width: 200px;
+    background-color: white;
+    border: solid 1px #e5e5e5;
+    cursor: pointer;
+}
+.add-item button:hover{
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+}
