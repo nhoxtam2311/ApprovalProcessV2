@@ -22,7 +22,9 @@ export class ProjectDetailComponent implements OnInit {
   ) {
   }
 
-  chart!: Chart
+  barChart!: Chart
+  pieChart!: Chart
+
   id: any
   project!: Observable<any>
   tasks!: Observable<any>
@@ -43,15 +45,15 @@ export class ProjectDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((data: any) => {
-      console.log(data.params["id"])
-      this.resolvable=true
+      // console.log(data.params["id"])
+      this.resolvable = true
       this.getProject(data.params["id"])
       this.tasks = this.taskService.findByProject(data.params["id"])
-      this.tasks.subscribe((data:any)=>{
-        this.resolvable=true
-        for(let task of data._embedded.tasks){
-          if(task.status == 'INPROGRESS' || task.status == 'WAITING'){
-            this.resolvable=false
+      this.tasks.subscribe((data: any) => {
+        this.resolvable = true
+        for (let task of data._embedded.tasks) {
+          if (task.status == 'INPROGRESS' || task.status == 'WAITING') {
+            this.resolvable = false
           }
         }
       })
@@ -68,10 +70,10 @@ export class ProjectDetailComponent implements OnInit {
     var members: any = {}
     var ids: Array<any> = []
     this.tasks.subscribe((taskData: any) => {
-      console.log(taskData)
+      // console.log(taskData)
       for (var i = 0; i < taskData._embedded.tasks.length; i++) {
         let task = taskData._embedded.tasks[i]
-        console.log(taskData)
+        // console.log(taskData)
         if (task.status == 'COMPLETED') {
           if (members[task.assignedTo]) {
             members[task.assignedTo]['total'] = members[task.assignedTo]['total'] + 1
@@ -90,49 +92,62 @@ export class ProjectDetailComponent implements OnInit {
         }
 
       }
-      var total: any = {
-        type: 'bar',
+
+      // console.log(members)
+
+      var totalBar: any = {
+        // type: 'bar',
         name: 'Total',
         data: []
       }
-      var done: any = {
-        type: 'bar',
+      var doneBar: any = {
+        // type: 'bar',
         name: 'Done',
         data: []
       }
-      var inprogress: any = {
-        type: 'bar',
+      var inprogressBar: any = {
+        // type: 'bar',
         name: 'In Progress',
         data: []
       }
-      console.log(ids)
+      var donePie: Array<any> = ["Done", 0]
+      var inprogressPie: Array<any> = ["In Progress", 0]
 
-      var categories : Array<any> =[]
+      // console.log(ids)
+
+      var categories: Array<any> = []
 
       for (let id of ids) {
         let member = members[id]
-        total.data.push(member.total)
-        done.data.push(member.done)
-        inprogress.data.push(member.total - member.done)
-        if(id == 0){
+        totalBar.data.push(member.total)
+        doneBar.data.push(member.done)
+        inprogressBar.data.push(member.total - member.done)
+        donePie[1] = donePie[1] + 1
+        console.log(donePie[1])
+        inprogressPie[1] = inprogressPie[1] + 1
+        // totalPie.push(member.total)
+        // donePie.push(member.done)
+        // inprogressPie.push(member.total - member.done)
+        if (id == 0) {
           categories.push('-')
-        }else{
+        } else {
           categories.push(id)
         }
-
-        
-        console.log(categories)
+        // console.log(categories)
       }
-      
-      console.table(total, done)
+      // console.log(totalBar.data)
 
-      this.chart = new Chart({
+      // total.type = "bar"
+      // done.type = "bar"
+      // inprogress.type = "bar"
+
+      this.barChart = new Chart({
         chart: {
           type: 'bar'
         },
-        colors: ['green', '#465ee0', '#1aadce'],
+        colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)'],
         title: {
-          text: 'Linechart'
+          text: 'barchart'
         },
         credits: {
           enabled: false
@@ -140,17 +155,54 @@ export class ProjectDetailComponent implements OnInit {
         xAxis: {
           categories: categories, title: {
             text: 'employees'
-          }},
-        series: [total, done, inprogress
-        ]
+          }
+        },
+        series: [totalBar, doneBar, inprogressBar]
       });
-      // this.chart.addPoint(ids.length);
-      // this.chart.addPoint(5);
-      // setTimeout(() => {
-      //   this.chart.addPoint(6);
-      // }, 2000);
 
-      this.chart.ref$.subscribe(console.log);
+      // total.type = "pie"
+      // done.type = "pie"
+      // inprogress.type = "pie"
+      console.log(donePie[1])
+
+      this.pieChart = new Chart({
+        chart: {
+          type: 'pie',
+          plotShadow: false
+        },
+        colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)'],
+        title: {
+          text: 'piechart'
+        },
+        credits: {
+          enabled: false
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              enabled: false
+            },
+            showInLegend: true,
+            shadow: false,
+            center: ['50%', '50%'],
+            size: '45%',
+            innerSize: '20%',
+          }
+        },
+        // xAxis: {
+        //   categories: categories, title: {
+        //     text: 'employees'
+        //   }},
+        series: [{
+          type: 'pie',
+          name: 'Tasks',
+          data: [donePie, inprogressPie]
+        }]
+      });
+      this.pieChart.ref$.subscribe(console.log);
+      this.barChart.ref$.subscribe(console.log);
     })
 
 
@@ -169,7 +221,7 @@ export class ProjectDetailComponent implements OnInit {
   resolve(project: any) {
     project["status"] = "COMPLETED"
     this.projectService.updateProject(project).subscribe()
-  } 
+  }
 
   clickShowCreateModal() {
     if (this.modalCreateClass == "modal") {
