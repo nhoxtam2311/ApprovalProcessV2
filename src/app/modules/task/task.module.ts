@@ -6,6 +6,11 @@ import { TaskComponent } from './task.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { OverviewComponent } from './overview/overview.component';
+import { ChartModule } from 'angular-highcharts';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ProjectPipe } from './project.pipe';
+import { EmployeePipe } from './employee.pipe';
+import { TaskPipe } from './task.pipe';
 
 
 @NgModule({
@@ -13,11 +18,17 @@ import { OverviewComponent } from './overview/overview.component';
     TaskComponent,
     TaskListComponent,
     TaskDetailComponent,
-    OverviewComponent
+    OverviewComponent,
+    ProjectPipe,
+    EmployeePipe,
+    TaskPipe
   ],
   imports: [
     CommonModule,
-    TaskRoutingModule
+    TaskRoutingModule,
+    ChartModule,
+    FormsModule,
+    ReactiveFormsModule,
   ]
 })
 export class TaskModule { }

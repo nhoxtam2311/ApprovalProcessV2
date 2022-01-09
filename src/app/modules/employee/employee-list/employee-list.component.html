@@ -1,97 +1,72 @@
-<div class="main-screen">
-    <div class="container">
-        <h5>Employees</h5>
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Assignee</th>
-                    <th>Status</th>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Berglunds snabbköp</td>
-                    <td>Christina Berglund</td>
-                    <td>Sweden</td>
-                </tr>
-                <tr>
-                    <td>Centro comercial Moctezuma</td>
-                    <td>Francisco Chang</td>
-                    <td>Mexico</td>
-                </tr>
-                <tr>
-                    <td>Ernst Handel</td>
-                    <td>Roland Mendel</td>
-                    <td>Austria</td>
-                </tr>
-                <tr>
-                    <td>Island Trading</td>
-                    <td>Helen Bennett</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Königlich Essen</td>
-                    <td>Philip Cramer</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Laughing Bacchus Winecellars</td>
-                    <td>Yoshi Tannamuri</td>
-                    <td>Canada</td>
-                </tr>
-                <tr>
-                    <td>Magazzini Alimentari Riuniti</td>
-                    <td>Giovanni Rovelli</td>
-                    <td>Italy</td>
-                </tr>
-                <tr>
-                    <td>North/South</td>
-                    <td>Simon Crowther</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Paris spécialités</td>
-                    <td>Marie Bertrand</td>
-                    <td>France</td>
-                </tr>
-                <tr>
-                    <td>Island Trading</td>
-                    <td>Helen Bennett</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Königlich Essen</td>
-                    <td>Philip Cramer</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Laughing Bacchus Winecellars</td>
-                    <td>Yoshi Tannamuri</td>
-                    <td>Canada</td>
-                </tr>
-                <tr>
-                    <td>Magazzini Alimentari Riuniti</td>
-                    <td>Giovanni Rovelli</td>
-                    <td>Italy</td>
-                </tr>
-                <tr>
-                    <td>North/South</td>
-                    <td>Simon Crowther</td>
-                    <td>UK</td>
-                </tr>
-            </table>
-            <div class="pagination">
-                <a href="#">&laquo;</a>
-                <a href="#">1</a>
-                <a class="active" href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">4</a>
-                <a href="#">5</a>
-                <a href="#">6</a>
-                <a href="#">&raquo;</a>
-            </div>
+<div class="main-screen" *ngIf="employees | async as data">
+    <div class="container" >
+        <h5>Employees <i class="fa fa-plus-circle" aria-hidden="true" (click)="click()"></i></h5>
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Assignee</th>
+                <th>Status</th>
+            </tr>
+            <tr *ngFor="let employee of data._embedded.employees" [routerLink]="['details',employee.id]">
+                <td>{{employee.id}}</td>
+                <td>{{employee.firstName}}</td>
+                <td>{{employee.lastName}}</td>
+                <td>Germany</td>
+            </tr>
+        </table>
+        <div class="pagination">
+            <a href="#">&laquo;</a>
+            <a href="#">1</a>
+            <a class="active" href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <a href="#">5</a>
+            <a href="#">6</a>
+            <a href="#">&raquo;</a>
+        </div>
     </div>
+
+    <div [class]="modalClass">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" (click)="click()">&times;</span>
+                <h2>Add Employee</h2>
+            </div>
+            <div class="container" [formGroup]="employeeForm">
+                <h5>Employee Information</h5>
+                <div class="h-container">
+                    <div><span class="label">First Name</span><input type="text" formControlName="firstName" value="firstName">
+                    </div>
+                    <div><span class="label">Last Name</span><input type="text" formControlName="lastName"
+                            value="lastName">
+                    </div>
+                    <div><span class="label">Email Address</span><input type="text" formControlName="emailAddress"
+                            value="emailAddress"></div>
+                    <div><span class="label">Bussiness Phone</span><input type="text" formControlName="bussinessPhone"
+                            value="bussinessPhone"></div>
+                    
+                </div>
+                <div class="h-container">
+                    <div><span class="label">Home Phone</span><input type="text" formControlName="homePhone"
+                            value="homePhone">
+                    </div>
+                    <div><span class="label">Mobile Phone</span><input type="text" formControlName="mobilePhone" value="mobilePhone">
+                    </div>
+                    <div><span class="label">Fax Number</span><input type="text" formControlName="faxNumber" value="faxNumber">
+                    </div>
+                    <div><span class="label">Address</span><input type="text" formControlName="address"
+                            value="address">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-success" (click)="create()">Add</button>
+            </div>
+        </div>
+
+    </div>
+
 </div>

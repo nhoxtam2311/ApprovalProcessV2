@@ -1,104 +1,56 @@
 <div class="main-screen">
     <h4 class="project-name">HKMC</h4>
-    <div class="details">
+    <div class="details" *ngIf="project | async as data">
         <div class="container">
-            <h5>Project details</h5>
+            <h5>Project details <i class="fa fa-pencil-square-o" aria-hidden="true"
+                    (click)="clickShowCreateModal()" *ngIf="data.status == 'WAITING'"></i></h5>
             <div class="h-container">
-                <div><span class="label">Owner</span><input type="text" value="Le Tu"></div>
-                <div><span class="label">Category</span><input type="text" value="Insuarance"></div>
-                <div><span class="label">Priority</span><input type="text" value="High"></div>
-                <div><span class="label">Status</span><input type="text" value="Open"></div>
+                <div><span class="label">Project Name</span>{{data.projectName}}</div>
+                <div *ngIf="(data.owner | employee) | async as employee">
+                    <span class="label">Owner</span>{{employee.firstName}} {{employee.lastName}}
+                </div>
+                <div *ngIf="!data.owner">
+                    <span class="label">Owner</span>Not assigned
+                </div>
+                <div><span class="label">Category</span>{{data.category}}</div>
+                <div><span class="label">Priority</span>{{data.priority}}</div>
+                <div><span class="label">Status</span>{{data.status}}</div>
             </div>
             <div class="h-container">
-                <div><span class="label">Start</span><input type="date" value="11-07-2021"></div>
-                <div><span class="label">End</span><input type="date" value="11-07-2021"></div>
-                <div><span class="label">Budget</span><input type="number" value="500"></div>
-                <div><span class="label">Budget In Days</span><input type="number" value="50"></div>
+                <div><span class="label">Start</span>{{data.startDate | date:'MM-dd-yyyy'}}</div>
+                <div><span class="label">End</span>{{data.endDate | date:'MM-dd-yyyy'}}</div>
+                <div><span class="label">Budget</span>{{data.budget}}</div>
+                <div><span class="label">Budget In Days</span>{{data.budgetInDays}}</div>
             </div>
         </div>
+        <div class="approvalButton" *ngIf="data.status == 'WAITING'">
+            <button class="approveButton" (click)="approve(data)">Approve</button>
+            <button class="declineButton" (click)="decline(data)">Decline</button>
+        </div>
+        <div class="approvalButton" *ngIf="data.status == 'INPROGRESS'">
+            <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)">Resolve</button>
+        </div>
+        
         <div class="container">
             <h5>Tasks</h5>
-            <table>
+            <table *ngIf="tasks | async as taskData ">
                 <tr>
                     <th>Name</th>
+                    <th>Employee Id</th>
                     <th>Assignee</th>
                     <th>Status</th>
                 </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
+                <tr *ngFor="let task of taskData._embedded.tasks" [routerLink]="['/task','details', task.id]">
+                    <td>{{task.title}}</td>
+                    <td *ngIf="task.assignedTo">{{task.assignedTo}}</td>
+                    <td *ngIf="!task.assignedTo">-</td>
+                    <td *ngIf="(task.assignedTo | employee) | async as employee">{{employee.firstName}}
+                        {{employee.lastName}}</td>
+                    <td *ngIf="!task.assignedTo">Not assigned</td>
+                    <td>{{task.status}}</td>
                 </tr>
-                <tr>
-                    <td>Berglunds snabbköp</td>
-                    <td>Christina Berglund</td>
-                    <td>Sweden</td>
-                </tr>
-                <tr>
-                    <td>Centro comercial Moctezuma</td>
-                    <td>Francisco Chang</td>
-                    <td>Mexico</td>
-                </tr>
-                <tr>
-                    <td>Ernst Handel</td>
-                    <td>Roland Mendel</td>
-                    <td>Austria</td>
-                </tr>
-                <tr>
-                    <td>Island Trading</td>
-                    <td>Helen Bennett</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Königlich Essen</td>
-                    <td>Philip Cramer</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Laughing Bacchus Winecellars</td>
-                    <td>Yoshi Tannamuri</td>
-                    <td>Canada</td>
-                </tr>
-                <tr>
-                    <td>Magazzini Alimentari Riuniti</td>
-                    <td>Giovanni Rovelli</td>
-                    <td>Italy</td>
-                </tr>
-                <tr>
-                    <td>North/South</td>
-                    <td>Simon Crowther</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Paris spécialités</td>
-                    <td>Marie Bertrand</td>
-                    <td>France</td>
-                </tr>
-                <tr>
-                    <td>Island Trading</td>
-                    <td>Helen Bennett</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Königlich Essen</td>
-                    <td>Philip Cramer</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Laughing Bacchus Winecellars</td>
-                    <td>Yoshi Tannamuri</td>
-                    <td>Canada</td>
-                </tr>
-                <tr>
-                    <td>Magazzini Alimentari Riuniti</td>
-                    <td>Giovanni Rovelli</td>
-                    <td>Italy</td>
-                </tr>
-                <tr>
-                    <td>North/South</td>
-                    <td>Simon Crowther</td>
-                    <td>UK</td>
-                </tr>
+
+
             </table>
             <div class="pagination">
                 <a href="#">&laquo;</a>
@@ -111,5 +63,61 @@
                 <a href="#">&raquo;</a>
             </div>
         </div>
+        <div class="container">
+            <div [chart]="chart"></div>
+        </div>
+
+
+        <!-- Modal content -->
+        <div [class]="modalCreateClass">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" (click)="clickShowCreateModal()">&times;</span>
+                    <h2>Update Project</h2>
+                </div>
+                <div class="container" [formGroup]="projectForm">
+                    <h5>Project details</h5>
+                    <div class="h-container">
+                        <div><span class="label">Project Name</span><input formControlName="projectName"
+                                value="projectName"></div>
+                        <div *ngIf="employees | async as employeeData">
+                            <span class="label">Owner</span>
+                            <select type="text" formControlName="owner">
+                                <option *ngFor="let employee of employeeData._embedded.employees" [value]="employee.id">
+                                    {{employee.firstName + " " + employee.lastName}}</option>
+                            </select>
+                        </div>
+                        <div><span class="label">Category</span><input type="text" formControlName="category"
+                                value="Insuarance"></div>
+                        <div>
+                            <span class="label">Priority</span>
+                            <select type="text" formControlName="priority" value="High">
+                                <option value="HIGH">High</option>
+                                <option value="NORMAL">Normal</option>
+                                <option value="LOW">Low</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="h-container">
+                        <div><span class="label">Start</span><input type="date" formControlName="startDate"
+                                value="11-07-2021"></div>
+                        <div><span class="label">End</span><input type="date" formControlName="endDate"
+                                value="11-07-2021">
+                        </div>
+                        <div><span class="label">Budget</span><input type="number" formControlName="budget" value="500">
+                        </div>
+                        <div><span class="label">Budget In Days</span><input type="number"
+                                formControlName="budgetInDays" value="50">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-success" (click)="update(data)">Add</button>
+                </div>
+            </div>
+        </div>
+        <!-- Modal content -->
+
     </div>
 </div>

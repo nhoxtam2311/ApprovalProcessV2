@@ -1,18 +1,61 @@
 <nav class="item-list">
-    <div class="list-title">
-        <span>Projects</span>
+  <div class="list-title">
+    <span>Projects</span>
+  </div>
+  <div class="items"*ngIf="projects | async as data">
+    <div *ngFor="let project of data._embedded.projects" class="list-container">
+      <div class="item in-progress" [routerLink]="['details', project.id]">
+        <span class="item-name">{{ project.projectName | uppercase }}</span>
+        <span [class]="project.status">{{ project.status }}</span>
+        <span [class]="project.priority">{{ project.priority }}</span>
+      </div>
     </div>
-    <div *ngIf="projects | async as data">
-        <div *ngFor="let project of data._embedded.projects" class="list-container">
-            <div class="item in-progress" [routerLink]="['/details', project.id]">
-                <span class="item-name">{{ project.projectName }}</span>
-                <span [class]="project.status">{{ project.status }}</span>
-                <span [class]="project.priority">{{ project.priority }}</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="add-item">
-        <button>Add project</button>
-    </div>
+  </div>
+  <div class="add-item">
+    <button (click)="clickShowCreateModal()">Add project</button>
+  </div>
 </nav>
+
+<!-- Modal content -->
+<div [class]="modalCreateClass">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close" (click)="clickShowCreateModal()">&times;</span>
+      <h2>Create Project</h2>
+    </div>
+    <div class="container" [formGroup]="project">
+      <h5>Project details</h5>
+      <div class="h-container">
+        <div><span class="label">Project Name</span><input formControlName="projectName" value="projectName"></div>
+        <div *ngIf="employees | async as employeeData">
+          <span class="label">Owner</span>
+          <select type="text" formControlName="owner">
+            <option *ngFor="let employee of employeeData._embedded.employees" [value]="employee.id">{{employee.firstName + " " + employee.lastName}}</option>
+          </select>
+        </div>
+        <div><span class="label">Category</span><input type="text" formControlName="category" value="Insuarance"></div>
+        <div>
+          <span class="label">Priority</span>
+          <select type="text" formControlName="priority" value="High">
+            <option value="HIGH">High</option>
+            <option value="NORMAL">Normal</option>
+            <option value="LOW">Low</option>
+          </select>
+        </div>
+      </div>
+      <div class="h-container">
+        <div><span class="label">Start</span><input type="date" formControlName="startDate" value="11-07-2021"></div>
+        <div><span class="label">End</span><input type="date" formControlName="endDate" value="11-07-2021"></div>
+        <div><span class="label">Budget</span><input type="number" formControlName="budget" value="500"></div>
+        <div><span class="label">Budget In Days</span><input type="number" formControlName="budgetInDays" value="50">
+        </div>
+      </div>
+
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-success" (click)="create()">Add</button>
+    </div>
+  </div>
+</div>
+<!-- Modal content -->

@@ -1,19 +1,83 @@
 <nav class="item-list">
-    <div class="list-title">
-        <span>Tasks</span>
+  <div class="list-title">
+    <span>Tasks</span>
+  </div>
+  <div class="items" *ngIf="tasks | async as data">
+    <div *ngFor="let task of data._embedded.tasks" class="list-container">
+      <div class="item in-progress" [routerLink]="['details', task.id]">
+        <span class="item-name">{{ task.title | uppercase }}</span>
+        <span [class]="task.status">{{ task.status }}</span>
+        <span [class]="task.priority">{{ task.priority }}</span>
+        <span *ngIf="task.parent" class="sub-task">Sub-Task</span>
+      </div>
     </div>
-    <div class="list-container">
-        <div class="item in-progress">
-            <span class="item-name">HKMC - Add design</span>
-        </div>
-        <div class="item open">
-            <span class="item-name">HKMC - Edit design</span>
-        </div>
-        <div class="item open">
-            <span class="item-name">HKMC - Remove code</span>
-        </div>
-    </div>
-    <div class="add-item">
-        <button>Add task</button>
-    </div>
+  </div>
+  <div class="add-item">
+    <button (click)="clickShowCreateModal()">Add task</button>
+  </div>
 </nav>
+
+<div [class]="modalCreateClass">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close" (click)="clickShowCreateModal()">&times;</span>
+      <h2>Create Task</h2>
+    </div>
+    <div class="container" [formGroup]="task">
+      <h5>Task details</h5>
+      <div class="h-container">
+
+        <div *ngIf="projects | async as projectData">
+          <span class="label">Project</span>
+          <select type="text" formControlName="project" required>
+            <option *ngFor="let project of projectData._embedded.projects" [value]="project.id">{{project.projectName}}</option>
+          </select>
+        </div>
+
+        <div><span class="label">Task Name</span><input type="text" formControlName="title" value="Minh Tam"></div>
+        <div>
+          <span class="label">Priority</span>
+          <select type="text" formControlName="priority" value="High">
+            <option value="HIGH">High</option>
+            <option value="NORMAL">Normal</option>
+            <option value="LOW">Low</option>
+          </select>
+        </div>
+        <div *ngIf="employees | async as employeeData">
+          <span class="label">Assign</span>
+          <select type="text" formControlName="assignedTo">
+            <option *ngFor="let employee of employeeData._embedded.employees" [value]="employee.id">{{employee.firstName + " " + employee.lastName}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="h-container">
+        <div><span class="label">Start</span><input type="date" formControlName="startDate" value="11-07-2021"></div>
+        <div><span class="label">End</span><input type="date" formControlName="endDate" value="11-07-2021"></div>
+        <div><span class="label">Cost</span><input type="number" formControlName="cost" value="500"></div>
+        <div><span class="label">Cost In Days</span><input type="number" formControlName="costInDays" value="50">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-success" (click)="create()">Add</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- <div [class]="modalChooseClass">
+  <div class="modal-content">
+    <div class="container">
+      <span class="close" style="color: #505050;" (click)="clickShowChooseModal()">&times;</span>
+      <h5>Choose Project</h5>
+      <hr>
+      <div class="h-container">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-success">Confirm</button>
+    </div>
+  </div>
+</div> -->

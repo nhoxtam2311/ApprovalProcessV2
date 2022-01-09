@@ -23,7 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(private library: FaIconLibrary){
+  constructor(private library: FaIconLibrary) {
     library.addIcons(faFolder, faUser, faListAlt)
   }
- }
+}

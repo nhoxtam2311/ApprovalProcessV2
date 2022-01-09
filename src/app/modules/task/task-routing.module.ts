@@ -6,7 +6,7 @@ import { TaskComponent } from './task.component';
 
 const routes: Routes = [
   {path:"", component: OverviewComponent},
-  {path:"details", component: TaskDetailComponent}
+  {path:"details/:id", component: TaskDetailComponent}
 ];
 
 @NgModule({
