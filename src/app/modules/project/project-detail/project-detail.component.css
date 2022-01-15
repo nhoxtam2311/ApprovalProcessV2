@@ -16,6 +16,7 @@
     padding: 10px;
 }
 .container{
+    /* display: block; */
     padding: 10px;
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
     margin-bottom: 1em;
@@ -23,11 +24,29 @@
 .label{
     width: 150px;
     display: inline-block;
+    justify-content: space-between;
 }
 .h-container{
-    width: 30%;
+    width: 50%;
     display: inline-grid;
+    align-content: baseline
 }
+.inside-container{
+    display: flex;
+    /* justify-content: space-between; */
+    flex-basis: 70% ;
+}
+
+
+.container-detail{
+    width: 125%;
+}
+
+.container-chart{
+    width: 70%;
+    /* height: 20%; */
+}
+
 .h-container input{
     width: 200px;
     padding: 1px;

@@ -60,11 +60,14 @@ export class ProjectListComponent implements OnInit {
     endDate: new FormControl("2021-07-22"),
     budget: new FormControl(500),
     budgetInDays: new FormControl(500),
+    // percentComplete: new FormControl(10)
   })
 
 
   create() {
     var project = this.project.value
+    var createdDate = new Date()
+    project.createdDate = `${createdDate.getFullYear()}-${createdDate.getMonth()+1>9?createdDate.getMonth()+1:''+createdDate.getMonth()+1}-${createdDate.getDate()+1>9?createdDate.getDate()+1:''+createdDate.getDate()+1}`
     this.projectService.create(project).subscribe(() => {
       // this.project.reset()
       this.pull()

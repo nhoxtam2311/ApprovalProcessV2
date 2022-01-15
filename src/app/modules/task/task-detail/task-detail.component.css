@@ -27,7 +27,24 @@
 .h-container{
     width: 50%;
     display: inline-grid;
+    align-content: baseline
 }
+.inside-container{
+    display: flex;
+    /* justify-content: space-between; */
+    flex-basis: 70% ;
+}
+
+.container-detail{
+    width: 125%;
+}
+
+.container-chart{
+    width: 70%;
+    /* height: 20%; */
+}
+
+
 .h-container input{
     width: 200px;
     padding: 1px;
@@ -236,6 +253,11 @@ th{
 .h-container{
     width: 50%;
     display: inline-grid;
+    align-content: baseline
+}
+.inside-h-container{
+    display: flex;
+    justify-content: space-around;
 }
 
 .h-container input{

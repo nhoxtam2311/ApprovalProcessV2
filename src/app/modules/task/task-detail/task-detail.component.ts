@@ -73,9 +73,9 @@ export class TaskDetailComponent implements OnInit {
           }
         }
       })
-    })
     this.init()
     this.getEmpolyees()
+    })
     
   }
 
@@ -87,31 +87,188 @@ export class TaskDetailComponent implements OnInit {
     })
   }
 
+  /* Chart */
+  barChart!: Chart
+  pieChart!: Chart
   init() {
-    this.chart = new Chart({
-      chart: {
-        type: 'line'
-      },
-      title: {
-        text: 'Linechart'
-      },
-      credits: {
-        enabled: false
-      },
-      series: [{
-        type: 'line',
-        name: 'Line 1',
-        data: [1, 2, 3]
-      }]
-    });
-    this.chart.addPoint(4);
-    this.chart.addPoint(5);
-    setTimeout(() => {
-      this.chart.addPoint(6);
-    }, 2000);
+    var members: any = {}
+    var ids: Array<any> = []
+    this.subTasks.subscribe((subTasksData: any) => {
+      console.log(subTasksData)
+      for (var i = 0; i < subTasksData._embedded.tasks.length; i++) {
+        let subTask = subTasksData._embedded.tasks[i]
+        // console.log(taskData)
+        if (subTask.status == 'COMPLETED') {
+          if (members[subTask.assignedTo]) {
+            members[subTask.assignedTo]['total'] = members[subTask.assignedTo]['total'] + 1
+            members[subTask.assignedTo]['done'] = members[subTask.assignedTo]['done'] + 1
+          } else {
+            members[subTask.assignedTo] = { total: 1, done: 1, reject: 0 }
+            ids.push(subTask.assignedTo)
+          }
+        }
+        else {
+          if (subTask.status == 'DEFERRED') {
+            if (members[subTask.assignedTo]) {
+              members[subTask.assignedTo]['total'] = members[subTask.assignedTo]['total'] + 1
+              members[subTask.assignedTo]['reject'] = members[subTask.assignedTo]['reject'] + 1
+            } else {
+              members[subTask.assignedTo] = { total: 1, reject: 1, done: 0 }
+              ids.push(subTask.assignedTo)
+            }
+          }
+          else {
+            if (members[subTask.assignedTo]) {
+              members[subTask.assignedTo]['total'] = members[subTask.assignedTo]['total'] + 1
+            } else {
+              members[subTask.assignedTo] = { total: 1, done: 0, reject: 0 }
+              ids.push(subTask.assignedTo)
+            }
+          }
 
-    this.chart.ref$.subscribe(console.log);
+        }
+
+      }
+
+      // console.log(members)
+
+      var total: any = {
+        // type: 'bar',
+        name: 'Total',
+        data: []
+      }
+      var done: any = {
+        // type: 'bar',
+        name: 'Done',
+        data: []
+      }
+      var inprogress: any = {
+        // type: 'bar',
+        name: 'In Progress',
+        data: []
+      }
+      var reject: any = {
+        // type: 'bar',
+        name: 'Reject',
+        data: []
+      }
+      var donePie: Array<any> = ["Done", 0]
+      var inprogressPie: Array<any> = ["In Progress", 0]
+      var rejectPie: Array<any> = ["Reject", 0]
+
+      // console.log(ids)
+
+      var categories: Array<any> = []
+
+      for (let id of ids) {
+        let member = members[id]
+        total.data.push(member.total)
+        done.data.push(member.done)
+        reject.data.push(member.reject)
+        inprogress.data.push(member.total - member.done - member.reject)
+        donePie[1] = donePie[1] + member.done
+        rejectPie[1] = rejectPie[1] + member.reject
+        inprogressPie[1] = inprogressPie[1] + (member.total - member.done - member.reject)
+
+        // rejectPie.push(member.reject)
+        // donePie.push(member.done)
+        // inprogressPie.push(member.total - member.done - member.reject)
+        if (id == 0) {
+          categories.push('-')
+        } else {
+          categories.push(id)
+        }
+        // console.log(categories)
+      }
+      // console.log(totalBar.data)
+
+      // total.type = "bar"
+      // done.type = "bar"
+      // inprogress.type = "bar"
+
+      this.barChart = new Chart({
+        chart: {
+          type: 'bar'
+        },
+        colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)', '#f77f00'],
+        title: {
+          text: 'barchart'
+        },
+        credits: {
+          enabled: false
+        },
+        xAxis: {
+          categories: categories, title: {
+            text: 'employees'
+          }
+        },
+        series: [total, done, inprogress, reject]
+      });
+
+      // total.type = "pie"
+      // done.type = "pie"
+      // inprogress.type = "pie"
+      // console.log(done[1])
+
+      this.pieChart = new Chart({
+        chart: {
+          type: 'pie',
+          plotShadow: false,
+          backgroundColor: 'transparent',
+          height: '300px',
+          // width: '100px'
+        },
+        colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)'],
+        title: {
+          text: 'piechart',
+          x: 35,
+          align: 'left',
+        },
+        credits: {
+          enabled: false
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              enabled: false
+            },
+            showInLegend: true,
+            shadow: false,
+            center: ['20%', '30%'],
+            size: '80%',
+            innerSize: '10%',
+          }
+        },
+        legend: {
+          layout: 'vertical',
+          // backgroundColor: '#transparent',
+          floating: true,
+          // align: 'left',
+          x: 90,
+          verticalAlign: 'top',
+          y: 70,
+          itemMarginTop: 10,
+          itemMarginBottom: 5
+        },
+        // xAxis: {
+        //   categories: categories, title: {
+        //     text: 'employees'
+        //   }},
+        series: [{
+          type: 'pie',
+          name: 'Tasks',
+          // data: [total.data - inprogress.data - reject.data, inprogress.data, reject.data]
+          // data: [['Total',total.data - inprogress.data - reject.data], ['In Progress',inprogress.data], ['Reject',reject.data]]
+          data: [inprogressPie, donePie, rejectPie]
+        }]
+      });
+      this.pieChart.ref$.subscribe(console.log);
+      this.barChart.ref$.subscribe(console.log);
+    })
   }
+  /* Chart */
 
   approve(task: any) {
     task["status"] = "INPROGRESS"
@@ -130,6 +287,7 @@ export class TaskDetailComponent implements OnInit {
 
   pull(){
     this.getTask(this.id)
+    this.init()
   }
 
   update(taskData: any){

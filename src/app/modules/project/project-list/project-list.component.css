@@ -27,6 +27,7 @@
     background-color: white;
     color: black;
 }
+
 .item-name{
     display: block;
 }
@@ -53,8 +54,8 @@
     font-size: 11px;
     padding-bottom: 3px;
     border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
     color: white;
 }
 .DEFERRED{
@@ -62,8 +63,8 @@
     font-size: 11px;
     padding-bottom: 3px;
     border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 17px;
+    padding-right: 17px;
     color: white;
 }
 .COMPLETED{
@@ -71,8 +72,8 @@
     font-size: 11px;
     padding-bottom: 3px;
     border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 12px;
+    padding-right: 12px;
     color: white;
 }
 
@@ -81,10 +82,11 @@
     font-size: 11px;
     padding-bottom: 3px;
     border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
     color: white;
     margin-left: 5px;
+    margin-right: 5px;
 }
 .NORMAL{
     background-color: orange;
@@ -95,16 +97,18 @@
     padding-right: 10px;
     color: white;
     margin-left: 5px;
+    margin-right: 5px;
 }
 .LOW{
     background-color: #b5da42;
     font-size: 11px;
     padding-bottom: 3px;
     border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 22px;
+    padding-right: 22px;
     color: white;
     margin-left: 5px;
+    margin-right: 5px;
 }
 .add-item{
     bottom: 35px;

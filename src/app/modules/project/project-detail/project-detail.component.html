@@ -1,30 +1,43 @@
 <div class="main-screen">
-    <h4 class="project-name">HKMC</h4>
+    <h4 class="project-name">COMPANY NAME</h4>
     <div class="details" *ngIf="project | async as data">
         <div class="container">
-            <h5>Project details <i class="fa fa-pencil-square-o" aria-hidden="true" (click)="clickShowCreateModal()"
-                    *ngIf="data.status == 'WAITING'"></i></h5>
-            <div class="h-container">
-                <div><span class="label">Project Name</span>{{data.projectName}}</div>
-                <div *ngIf="(data.owner | employee) | async as employee">
-                    <span class="label">Owner</span>{{employee.firstName}} {{employee.lastName}}
+            <div class="inside-container">
+                <div class="container-detail">
+
+                    <h5>Project details <i class="fa fa-pencil-square-o" aria-hidden="true"
+                            (click)="clickShowCreateModal()" *ngIf="data.status == 'WAITING'"></i></h5>
+
+
+                    <div class="h-container">
+                        <div><span class="label">Project Name</span>{{data.projectName}}</div>
+                        <div *ngIf="(data.owner | employee) | async as employee">
+                            <span class="label">Owner</span>
+                            <span>{{employee.firstName}} {{employee.lastName}}</span>
+                        </div>
+                        <div *ngIf="!data.owner">
+                            <span class="label">Owner</span>Not assigned
+                        </div>
+                        <div><span class="label">Category</span>{{data.category}}</div>
+                        <div><span class="label">Priority</span>{{data.priority}}</div>
+                        <div><span class="label">Status</span>{{data.status}}</div>
+                    </div>
+                    <div class="h-container">
+                        <div><span class="label">Start</span>{{data.startDate | date:'MM-dd-yyyy'}}</div>
+                        <div><span class="label">End</span>{{data.endDate | date:'MM-dd-yyyy'}}</div>
+                        <div><span class="label">Budget</span>{{data.budget}}</div>
+                        <div><span class="label">Budget In Days</span>{{data.budgetInDays}}</div>
+                    </div>
                 </div>
-                <div *ngIf="!data.owner">
-                    <span class="label">Owner</span>Not assigned
+                <div class="container-chart">
+                    <!-- <div class="inside-container"> -->
+                        <!-- <div class="h-container"> -->
+                            <div class="pieChart" [chart]="pieChart"></div>
+                        <!-- </div> -->
+                    <!-- </div> -->
                 </div>
-                <div><span class="label">Category</span>{{data.category}}</div>
-                <div><span class="label">Priority</span>{{data.priority}}</div>
-                <div><span class="label">Status</span>{{data.status}}</div>
             </div>
-            <div class="h-container">
-                <div><span class="label">Start</span>{{data.startDate | date:'MM-dd-yyyy'}}</div>
-                <div><span class="label">End</span>{{data.endDate | date:'MM-dd-yyyy'}}</div>
-                <div><span class="label">Budget</span>{{data.budget}}</div>
-                <div><span class="label">Budget In Days</span>{{data.budgetInDays}}</div>
-            </div>
-            <div class="h-container">
-                <div class="pieChart" [chart]="pieChart"></div>
-            </div>
+
         </div>
         <div class="approvalButton" *ngIf="data.status == 'WAITING'">
             <button class="approveButton" (click)="approve(data)">Approve</button>
@@ -116,7 +129,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-success" (click)="update(data)">Add</button>
+                    <button type="button" class="btn-success" (click)="update(data)">Update</button>
                 </div>
             </div>
         </div>

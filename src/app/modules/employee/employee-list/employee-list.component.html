@@ -1,18 +1,18 @@
 <div class="main-screen" *ngIf="employees | async as data">
-    <div class="container" >
+    <div class="container">
         <h5>Employees <i class="fa fa-plus-circle" aria-hidden="true" (click)="click()"></i></h5>
         <table>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
-                <th>Assignee</th>
-                <th>Status</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Email</th>
             </tr>
             <tr *ngFor="let employee of data._embedded.employees" [routerLink]="['details',employee.id]">
                 <td>{{employee.id}}</td>
                 <td>{{employee.firstName}}</td>
                 <td>{{employee.lastName}}</td>
-                <td>Germany</td>
+                <td>{{employee.emailAddress}}</td>
             </tr>
         </table>
         <div class="pagination">
@@ -38,27 +38,48 @@
             <div class="container" [formGroup]="employeeForm">
                 <h5>Employee Information</h5>
                 <div class="h-container">
-                    <div><span class="label">First Name</span><input type="text" formControlName="firstName" value="firstName">
+                    <div><span class="label">First Name</span><input type="text" formControlName="firstName"
+                            value="firstName">
                     </div>
                     <div><span class="label">Last Name</span><input type="text" formControlName="lastName"
                             value="lastName">
                     </div>
-                    <div><span class="label">Email Address</span><input type="text" formControlName="emailAddress"
+                    <div><span class="label">Company</span><input type="text" formControlName="company"
                             value="emailAddress"></div>
-                    <div><span class="label">Bussiness Phone</span><input type="text" formControlName="bussinessPhone"
+                    <div><span class="label">Job Title</span><input type="text" formControlName="jobTitle"
                             value="bussinessPhone"></div>
-                    
+
                 </div>
                 <div class="h-container">
-                    <div><span class="label">Home Phone</span><input type="text" formControlName="homePhone"
+                    <div><span class="label">Business Phone</span><input type="text" formControlName="bussinessPhone"
                             value="homePhone">
                     </div>
-                    <div><span class="label">Mobile Phone</span><input type="text" formControlName="mobilePhone" value="mobilePhone">
+                    <div><span class="label">Home Phone</span><input type="text" formControlName="homePhone"
+                            value="mobilePhone">
+                    </div>
+                    <div><span class="label">Mobile Phone</span><input type="text" formControlName="mobilePhone"
+                            value="faxNumber">
                     </div>
                     <div><span class="label">Fax Number</span><input type="text" formControlName="faxNumber" value="faxNumber">
                     </div>
-                    <div><span class="label">Address</span><input type="text" formControlName="address"
-                            value="address">
+                </div>
+                <div class="h-container">
+                    <div><span class="label">Street</span><input type="text" formControlName="street"
+                            value="street">
+                    </div>
+                    <div><span class="label">City</span><input type="text" formControlName="city"
+                            value="city">
+                    </div>
+                    <div><span class="label">State/Provine</span><input type="text" formControlName="state"
+                            value="state">
+                    </div>
+                    <div><span class="label">Zip/Postal code</span><input type="text" formControlName="zip" value="zip">
+                    </div>
+                    <div><span class="label">Country/Region</span><input type="text" formControlName="country" value="country">
+                    </div>
+                </div>
+                <div class="h-container">
+                    <div><span class="label">Email</span><input type="text" formControlName="emailAddress" value="emailAddress">
                     </div>
                 </div>
             </div>

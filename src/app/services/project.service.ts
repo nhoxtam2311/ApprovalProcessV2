@@ -27,4 +27,7 @@ export class ProjectService {
   findByStatus(status: String) {
     return this.http.get(`api/projects/search/findByStatus?status=${status}`)
   }
+  findByOwner(employeeId: String) {
+    return this.http.get(`api/projects/search/findByOwner?owner=${employeeId}`)
+  }
 }

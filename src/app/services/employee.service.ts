@@ -15,9 +15,14 @@ export class EmployeeService {
   create(employee: any) {
     return this.http.post(`api/employees`, employee)
   }
-  getEmployee(id: any){
-    return this.http.get(`api/employees/${id}`)
+  getEmployee(employeeId: any){
+    return this.http.get(`api/employees/${employeeId}`)
   }
+
+  updateEmployee(employee: any){
+    return this.http.put(`${employee._links.self.href.replace('8080', '4200')}`,employee)
+  }
+  
 }
 
 

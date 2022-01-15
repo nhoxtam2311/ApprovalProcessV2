@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { EmployeeService } from 'src/app/services/employee.service';
 
@@ -13,7 +12,6 @@ export class EmployeeListComponent implements OnInit {
 
   constructor(
     private employeeService: EmployeeService,
-    private router: Router
   ) { }
 
   employees!: Observable<any>
@@ -39,20 +37,30 @@ export class EmployeeListComponent implements OnInit {
   employeeForm = new FormGroup({
     firstName: new FormControl("firstName"),
     lastName: new FormControl("lastName"),
-    emailAddress: new FormControl("emailAddress"),
+    company: new FormControl("company"),
+    jobTitle: new FormControl("jobTitle"),
+
     bussinessPhone: new FormControl("bussinessPhone"),
     homePhone: new FormControl("homePhone"),
     mobilePhone: new FormControl("mobilePhone"),
     faxNumber: new FormControl("faxNumber"),
-    address: new FormControl("address")
+
+    street: new FormControl("street"),
+    city: new FormControl("city"),
+    state: new FormControl("state"),
+    zip: new FormControl("zip"),
+    country: new FormControl("country"),
+
+    emailAddress: new FormControl("emailAddress"),
   })
 
   create() {
     var employee = this.employeeForm.value
     this.employeeService.create(employee).subscribe(() => {
-      this.pull()
+      
       this.employees.subscribe(() => {
         this.click()
+        this.pull()
       })
     })
   }

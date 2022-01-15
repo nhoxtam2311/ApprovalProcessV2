@@ -22,9 +22,6 @@ export class ProjectDetailComponent implements OnInit {
   ) {
   }
 
-  barChart!: Chart
-  pieChart!: Chart
-
   id: any
   project!: Observable<any>
   tasks!: Observable<any>
@@ -57,15 +54,19 @@ export class ProjectDetailComponent implements OnInit {
           }
         }
       })
-    })
-    this.init()
+      this.init()
     this.getAllEmployee()
+    })
+    
   }
 
   getProject(projectId: any) {
     this.project = this.projectService.getProject(projectId)
   }
 
+  /* Chart */
+  barChart!: Chart
+  pieChart!: Chart
   init() {
     var members: any = {}
     var ids: Array<any> = []
@@ -79,39 +80,58 @@ export class ProjectDetailComponent implements OnInit {
             members[task.assignedTo]['total'] = members[task.assignedTo]['total'] + 1
             members[task.assignedTo]['done'] = members[task.assignedTo]['done'] + 1
           } else {
-            members[task.assignedTo] = { total: 1, done: 1 }
+            members[task.assignedTo] = { total: 1, done: 1, reject: 0 }
             ids.push(task.assignedTo)
           }
-        } else {
-          if (members[task.assignedTo]) {
-            members[task.assignedTo]['total'] = members[task.assignedTo]['total'] + 1
-          } else {
-            members[task.assignedTo] = { total: 1, done: 0 }
-            ids.push(task.assignedTo)
+        }
+        else {
+          if (task.status == 'DEFERRED') {
+            if (members[task.assignedTo]) {
+              members[task.assignedTo]['total'] = members[task.assignedTo]['total'] + 1
+              members[task.assignedTo]['reject'] = members[task.assignedTo]['reject'] + 1
+            } else {
+              members[task.assignedTo] = { total: 1, reject: 1, done: 0 }
+              ids.push(task.assignedTo)
+            }
           }
+          else {
+            if (members[task.assignedTo]) {
+              members[task.assignedTo]['total'] = members[task.assignedTo]['total'] + 1
+            } else {
+              members[task.assignedTo] = { total: 1, done: 0, reject: 0 }
+              ids.push(task.assignedTo)
+            }
+          }
+
         }
 
       }
 
-      // console.log(members)
+      console.log(members)
 
-      var totalBar: any = {
+      var total: any = {
         // type: 'bar',
         name: 'Total',
         data: []
       }
-      var doneBar: any = {
+      var done: any = {
         // type: 'bar',
         name: 'Done',
         data: []
       }
-      var inprogressBar: any = {
+      var inprogress: any = {
         // type: 'bar',
         name: 'In Progress',
         data: []
       }
+      var reject: any = {
+        // type: 'bar',
+        name: 'Reject',
+        data: []
+      }
       var donePie: Array<any> = ["Done", 0]
       var inprogressPie: Array<any> = ["In Progress", 0]
+      var rejectPie: Array<any> = ["Reject", 0]
 
       // console.log(ids)
 
@@ -119,15 +139,17 @@ export class ProjectDetailComponent implements OnInit {
 
       for (let id of ids) {
         let member = members[id]
-        totalBar.data.push(member.total)
-        doneBar.data.push(member.done)
-        inprogressBar.data.push(member.total - member.done)
-        donePie[1] = donePie[1] + 1
-        console.log(donePie[1])
-        inprogressPie[1] = inprogressPie[1] + 1
-        // totalPie.push(member.total)
+        total.data.push(member.total)
+        done.data.push(member.done)
+        reject.data.push(member.reject)
+        inprogress.data.push(member.total - member.done - member.reject)
+        donePie[1] = donePie[1] + member.done
+        rejectPie[1] = rejectPie[1] + member.reject
+        inprogressPie[1] = inprogressPie[1] + (member.total - member.done - member.reject)
+
+        // rejectPie.push(member.reject)
         // donePie.push(member.done)
-        // inprogressPie.push(member.total - member.done)
+        // inprogressPie.push(member.total - member.done - member.reject)
         if (id == 0) {
           categories.push('-')
         } else {
@@ -145,7 +167,7 @@ export class ProjectDetailComponent implements OnInit {
         chart: {
           type: 'bar'
         },
-        colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)'],
+        colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)', '#f77f00'],
         title: {
           text: 'barchart'
         },
@@ -157,22 +179,27 @@ export class ProjectDetailComponent implements OnInit {
             text: 'employees'
           }
         },
-        series: [totalBar, doneBar, inprogressBar]
+        series: [total, done, inprogress, reject]
       });
 
       // total.type = "pie"
       // done.type = "pie"
       // inprogress.type = "pie"
-      console.log(donePie[1])
+      // console.log(done[1])
 
       this.pieChart = new Chart({
         chart: {
           type: 'pie',
-          plotShadow: false
+          plotShadow: false,
+          backgroundColor: 'transparent',
+          height: '300px',
+          // width: '100px'
         },
         colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)'],
         title: {
-          text: 'piechart'
+          text: 'piechart',
+          x: 35,
+          align: 'left',
         },
         credits: {
           enabled: false
@@ -186,10 +213,21 @@ export class ProjectDetailComponent implements OnInit {
             },
             showInLegend: true,
             shadow: false,
-            center: ['50%', '50%'],
-            size: '45%',
-            innerSize: '20%',
+            center: ['20%', '30%'],
+            size: '80%',
+            innerSize: '10%',
           }
+        },
+        legend: {
+          layout: 'vertical',
+          backgroundColor: '#transparent',
+          floating: true,
+          // align: 'left',
+          x: 90,
+          verticalAlign: 'top',
+          y: 70,
+          itemMarginTop: 10,
+          itemMarginBottom: 5
         },
         // xAxis: {
         //   categories: categories, title: {
@@ -198,16 +236,16 @@ export class ProjectDetailComponent implements OnInit {
         series: [{
           type: 'pie',
           name: 'Tasks',
-          data: [donePie, inprogressPie]
+          // data: [total.data - inprogress.data - reject.data, inprogress.data, reject.data]
+          // data: [['Total',total.data - inprogress.data - reject.data], ['In Progress',inprogress.data], ['Reject',reject.data]]
+          data: [inprogressPie, donePie, rejectPie]
         }]
       });
       this.pieChart.ref$.subscribe(console.log);
       this.barChart.ref$.subscribe(console.log);
     })
-
-
-
   }
+  /* Chart */
 
   approve(project: any) {
     project["status"] = "INPROGRESS"
@@ -247,3 +285,4 @@ export class ProjectDetailComponent implements OnInit {
   }
 
 }
+

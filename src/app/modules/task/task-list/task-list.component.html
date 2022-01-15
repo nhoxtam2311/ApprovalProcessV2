@@ -5,6 +5,7 @@
   <div class="items" *ngIf="tasks | async as data">
     <div *ngFor="let task of data._embedded.tasks" class="list-container">
       <div class="item in-progress" [routerLink]="['details', task.id]">
+        
         <span class="item-name">{{ task.title | uppercase }}</span>
         <span [class]="task.status">{{ task.status }}</span>
         <span [class]="task.priority">{{ task.priority }}</span>

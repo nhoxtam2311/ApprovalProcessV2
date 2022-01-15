@@ -30,5 +30,7 @@ export class TaskService {
   findByParent(parentId: number){
     return this.http.get(`api/tasks/search/findByParent?parent=${parentId}`)
   }
-
+  findByAssignedTo(employeeId: number){
+    return this.http.get(`api/tasks/search/findByAssignedTo?assignedTo=${employeeId}`)
+  }
 }
