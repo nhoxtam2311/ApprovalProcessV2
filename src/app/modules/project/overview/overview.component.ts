@@ -8,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class OverviewComponent implements OnInit {
 
   constructor() { }
-
+  imgSrc = "/assets/images/project.jpg"
+  
   ngOnInit(): void {
   }
 

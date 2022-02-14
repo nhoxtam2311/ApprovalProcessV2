@@ -8,7 +8,6 @@
                     <h5>Project details <i class="fa fa-pencil-square-o" aria-hidden="true"
                             (click)="clickShowCreateModal()" *ngIf="data.status == 'WAITING'"></i></h5>
 
-
                     <div class="h-container">
                         <div><span class="label">Project Name</span>{{data.projectName}}</div>
                         <div *ngIf="(data.owner | employee) | async as employee">

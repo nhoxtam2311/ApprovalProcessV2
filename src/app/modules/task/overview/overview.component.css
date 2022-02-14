@@ -1,8 +1,259 @@
+@import "~font-awesome/css/font-awesome.css";
+
 .main-screen{
     height: 100vh;
-    width: calc( 100vw - 425px );
+    overflow: scroll;
+    width: calc( 100vw - 450px );
     background: #f7f7f7;
     margin-left: 425px;
     position: fixed;
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+    background-image: url('/assets/images/background.jpg');
 }
+.overview-title{
+    margin-top: 25%;
+text-align: center;
+font-family: Cursive;
+}
+.project-name{
+    padding: 10px;
+}
+.project-img{
+    /* position: relative; */
+    width: 100%;
+    margin-left: auto;
+    /* height: 50%; */
+    /* top: 41%; */
+    /* left: 45%; */
+    margin-right: auto;
+    /* display: block; */
+}
+
+.details{
+    padding: 10px;
+}
+.container{
+    /* display: block; */
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+    margin-bottom: 1em;
+}
+.label{
+    width: 150px;
+    display: inline-block;
+    justify-content: space-between;
+}
+.h-container{
+    width: 50%;
+    display: inline-grid;
+    align-content: baseline
+}
+.inside-container{
+    display: flex;
+    /* justify-content: space-between; */
+    flex-basis: 70% ;
+}
+
+
+.container-detail{
+    width: 125%;
+}
+
+.container-chart{
+    width: 70%;
+    /* height: 20%; */
+}
+
+.h-container input{
+    width: 200px;
+    padding: 1px;
+    height: 15px;
+}
+table{
+    width: 100%;
+    border-collapse: collapse;
+}
+td, th{
+    border: 1px solid #ddd;
+    padding: 5px;
+}
+tr{
+    cursor: pointer;
+}
+tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+tr:hover{
+    background-color: #ddd;
+}
+th{
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #505050;
+    color: white;
+}
+.pagination{
+    margin: 1rem;
+    text-align: right;
+}
+.pagination a {
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+.pagination a:hover{
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+}
+  
+.pagination a.active {
+    background-color: #505050;
+    color: white;
+}
+
+/* Approval button */
+.approveButton{
+    background-color: rgb(13, 228, 110);
+    font-size: 15px;
+    padding-bottom: 3px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: white;
+    border: wheat;
+    width: 100px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.declineButton{
+    background-color: #f59e1b;
+    font-size: 15px;
+    padding-bottom: 3px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: white;
+    border: wheat;
+    width: 100px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.resolveButton{
+    background-color: #0eda18;
+    font-size: 15px;
+    padding-bottom: 3px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: white;
+    border: wheat;
+    width: 100px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.approveButton:hover{background-color: #6fee76}
+.declineButton:hover{background-color: #f7ba76}
+.resolveButton:hover{background-color: #6fee76}
+.approvalButton {
+    display: flex;
+    justify-content: space-evenly;
+    width: 300px;
+    padding-bottom: 15px; 
+}
+
+.pieChart{
+    fill: transparent !important
+}
+
+/* Modals css */
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    /* padding-top: 100px; Location of the box */
+    justify-content: center;
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+  }
+  
+  /* Add Animation */
+  @-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+  }
+  
+  @keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+  }
+  
+  /* The Close Button */
+  .close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .modal-header {
+    padding: 2px 16px;
+    background-color: #505050;
+    color: white;
+  }
+  
+  .modal-body {padding: 2px 16px;}
+  
+  .modal-footer {
+    padding: 2px 16px;
+    background-color: #505050;
+    color: white;
+  }
+
+  .h-container select{
+    width: 206px;
+    padding: 1px;
+}
+.h-container input{
+    width: 200px;
+    padding: 1px;
+    height: 15px;
+}
+.modal{
+    display: none;
+}
+.show{
+    display: flex;
+}
+
+/* Modal content */
