@@ -69,6 +69,8 @@ export class TaskListComponent implements OnInit {
       return
     }
     var task = this.task.value
+    var createdDate = new Date()
+    task.createdDate = `${createdDate.getFullYear()}-${createdDate.getMonth()+1>9?createdDate.getMonth()+1:'0'+(createdDate.getMonth()+1)}-${createdDate.getDate()>9?createdDate.getDate():'0'+createdDate.getDate()}`
     console.log(task)
     console.log(this.task.value)
     this.taskService.create(task).subscribe(() => {

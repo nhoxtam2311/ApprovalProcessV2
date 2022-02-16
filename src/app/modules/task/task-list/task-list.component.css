@@ -12,6 +12,26 @@
 }
 .list-container{
     padding: 5px;
+    position: relative;
+}
+.list-container:hover .bages{
+    width: 100px;
+    visibility: visible;
+}
+
+.bages{
+    right: 8px;
+    top: 9px;
+    position: absolute;
+    padding: 15px;
+    z-index: 2000;
+    background: #d6d6d6;
+    width: 0;
+    -webkit-transition: width 0.5s ease-in-out;
+    -moz-transition: width 0.5s ease-in-out;
+    -o-transition: width 0.5s ease-in-out;
+    transition: width 0.5s ease-in-out;
+    visibility: hidden;
 }
 .item{
     padding: 10px;
@@ -121,10 +141,10 @@
 .sub-task{
     background-color: #9e9e9e;
     font-size: 11px;
-    padding-bottom: 3px;
+    padding-top: 3px;
     border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 13px;
+    padding-right: 13px;
     color: white;
 }
 

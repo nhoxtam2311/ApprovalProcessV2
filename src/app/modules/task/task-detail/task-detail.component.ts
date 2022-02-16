@@ -272,16 +272,20 @@ export class TaskDetailComponent implements OnInit {
 
   approve(task: any) {
     task["status"] = "INPROGRESS"
+    var startDate = new Date()
+    task["startDate"] = `${startDate.getFullYear()}-${startDate.getMonth()+1>9?startDate.getMonth()+1:'0'+(startDate.getMonth()+1)}-${startDate.getDate()>9?startDate.getDate():'0'+startDate.getDate()}`
     this.taskService.updateTask(task).subscribe()
   }
 
   decline(task: any) {
     task["status"] = "DEFERRED"
-    this.taskService.updateTask(task).subscribe()
+     this.taskService.updateTask(task).subscribe()
   }
 
   resolve(task: any) {
     task["status"] = "COMPLETED"
+    var endDate = new Date()
+    task["endDate"] = `${endDate.getFullYear()}-${endDate.getMonth()+1>9?endDate.getMonth()+1:'0'+(endDate.getMonth()+1)}-${endDate.getDate()>9?endDate.getDate():'0'+endDate.getDate()}`
     this.taskService.updateTask(task).subscribe()
   }
 
@@ -326,6 +330,9 @@ export class TaskDetailComponent implements OnInit {
       return
     }
     var task = this.taskCreateForm.value
+    var createdDate = new Date()
+    task.createdDate = `${createdDate.getFullYear()}-${createdDate.getMonth()+1>9?createdDate.getMonth()+1:'0'+(createdDate.getMonth()+1)}-${createdDate.getDate()>9?createdDate.getDate():'0'+createdDate.getDate()}`
+
     task.parent = this.id
     task.project = this.projectId
     console.log(task)

@@ -67,7 +67,7 @@ export class ProjectListComponent implements OnInit {
   create() {
     var project = this.project.value
     var createdDate = new Date()
-    project.createdDate = `${createdDate.getFullYear()}-${createdDate.getMonth()+1>9?createdDate.getMonth()+1:''+createdDate.getMonth()+1}-${createdDate.getDate()+1>9?createdDate.getDate()+1:''+createdDate.getDate()+1}`
+    project.createdDate = `${createdDate.getFullYear()}-${createdDate.getMonth()+1>9?createdDate.getMonth()+1:'0'+(createdDate.getMonth()+1)}-${createdDate.getDate()>9?createdDate.getDate():'0'+createdDate.getDate()}`
     this.projectService.create(project).subscribe(() => {
       // this.project.reset()
       this.pull()
@@ -86,4 +86,7 @@ export class ProjectListComponent implements OnInit {
   getAllEmployee(){
     this.employees = this.employeeService.getAll()
   }
+
+  td = new Date()
+  today = `${this.td.getFullYear()}-${this.td.getMonth()+1>9?this.td.getMonth()+1:'0'+(this.td.getMonth()+1)}-${this.td.getDate()>9?this.td.getDate():'0'+this.td.getDate()}T00:00:00.000+00:00`
 }

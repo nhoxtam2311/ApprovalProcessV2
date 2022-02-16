@@ -249,6 +249,8 @@ export class ProjectDetailComponent implements OnInit {
 
   approve(project: any) {
     project["status"] = "INPROGRESS"
+    var startDate = new Date()
+    project["startDate"] = `${startDate.getFullYear()}-${startDate.getMonth()+1>9?startDate.getMonth()+1:'0'+(startDate.getMonth()+1)}-${startDate.getDate()>9?startDate.getDate():'0'+startDate.getDate()}`
     this.projectService.updateProject(project).subscribe()
   }
 
@@ -258,6 +260,8 @@ export class ProjectDetailComponent implements OnInit {
   }
   resolve(project: any) {
     project["status"] = "COMPLETED"
+    var endDate = new Date()
+    project["endDate"] = `${endDate.getFullYear()}-${endDate.getMonth()+1>9?endDate.getMonth()+1:'0'+(endDate.getMonth()+1)}-${endDate.getDate()>9?endDate.getDate():'0'+endDate.getDate()}`
     this.projectService.updateProject(project).subscribe()
   }
 

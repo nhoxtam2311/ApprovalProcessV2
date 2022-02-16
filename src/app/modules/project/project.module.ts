@@ -9,8 +9,7 @@ import { ProjectDetailComponent } from './project-detail/project-detail.componen
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartModule } from 'angular-highcharts';
 import { EmployeePipe } from './employee.pipe';
-
-
+import { MomentModule } from 'ngx-moment';
 
 @NgModule({
   declarations: [
@@ -25,7 +24,8 @@ import { EmployeePipe } from './employee.pipe';
     ProjectRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    ChartModule
+    ChartModule,
+    MomentModule
   ]
 })
 export class ProjectModule { }

@@ -9,6 +9,7 @@
         <span [class]="project.status">{{ project.status }}</span>
         <span [class]="project.priority">{{ project.priority }}</span>
       </div>
+      <div class="bages">Expire in {{project.endDate | amDifference: today :'days' : true }} days</div>
     </div>
   </div>
   <div class="add-item">

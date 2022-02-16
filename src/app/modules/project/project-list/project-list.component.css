@@ -12,6 +12,28 @@
 }
 .list-container{
     padding: 5px;
+    position: relative;
+    overflow: hidden;
+}
+.list-container:hover .bages{
+    visibility: visible;
+    right: 10px;
+}
+
+.bages{
+    right: -150px;
+    top: 9px;
+    position: absolute;
+    padding: 7px;
+    z-index: 2000;
+    background: #a1a19840;
+    width: 100px;
+
+    -webkit-transition: right 0.5s ease-in-out;
+    -moz-transition: right 0.5s ease-in-out;
+    -o-transition: right 0.5s ease-in-out;
+    transition: right 0.5s ease-in-out;
+    
 }
 .item{
     padding: 10px;
