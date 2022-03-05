@@ -35,23 +35,23 @@ export class EmployeeListComponent implements OnInit {
   }
 
   employeeForm = new FormGroup({
-    firstName: new FormControl("firstName"),
-    lastName: new FormControl("lastName"),
-    company: new FormControl("company"),
-    jobTitle: new FormControl("jobTitle"),
+    firstName: new FormControl(),
+    lastName: new FormControl(),
+    company: new FormControl(),
+    jobTitle: new FormControl(),
 
-    bussinessPhone: new FormControl("bussinessPhone"),
-    homePhone: new FormControl("homePhone"),
-    mobilePhone: new FormControl("mobilePhone"),
-    faxNumber: new FormControl("faxNumber"),
+    bussinessPhone: new FormControl(),
+    homePhone: new FormControl(),
+    mobilePhone: new FormControl(),
+    faxNumber: new FormControl(),
 
-    street: new FormControl("street"),
-    city: new FormControl("city"),
-    state: new FormControl("state"),
-    zip: new FormControl("zip"),
-    country: new FormControl("country"),
+    street: new FormControl(),
+    city: new FormControl(),
+    state: new FormControl(),
+    zip: new FormControl(),
+    country: new FormControl(),
 
-    emailAddress: new FormControl("emailAddress"),
+    emailAddress: new FormControl(),
   })
 
   create() {

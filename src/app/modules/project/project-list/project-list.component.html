@@ -27,17 +27,17 @@
     <div class="container" [formGroup]="project">
       <h5>Project details</h5>
       <div class="h-container">
-        <div><span class="label">Project Name</span><input formControlName="projectName" value="projectName"></div>
+        <div><span class="label">Project Name</span><input formControlName="projectName" ></div>
         <div *ngIf="employees | async as employeeData">
           <span class="label">Owner</span>
           <select type="text" formControlName="owner">
             <option *ngFor="let employee of employeeData._embedded.employees" [value]="employee.id">{{employee.firstName + " " + employee.lastName}}</option>
           </select>
         </div>
-        <div><span class="label">Category</span><input type="text" formControlName="category" value="Insuarance"></div>
+        <div><span class="label">Category</span><input type="text" formControlName="category" ></div>
         <div>
           <span class="label">Priority</span>
-          <select type="text" formControlName="priority" value="High">
+          <select type="text" formControlName="priority" >
             <option value="HIGH">High</option>
             <option value="NORMAL">Normal</option>
             <option value="LOW">Low</option>
@@ -45,10 +45,10 @@
         </div>
       </div>
       <div class="h-container">
-        <div><span class="label">Start</span><input type="date" formControlName="startDate" value="11-07-2021"></div>
-        <div><span class="label">End</span><input type="date" formControlName="endDate" value="11-07-2021"></div>
-        <div><span class="label">Budget</span><input type="number" formControlName="budget" value="500"></div>
-        <div><span class="label">Budget In Days</span><input type="number" formControlName="budgetInDays" value="50">
+        <div><span class="label">Start</span><input type="date" formControlName="startDate"></div>
+        <div><span class="label">End</span><input type="date" formControlName="endDate"></div>
+        <div><span class="label">Budget</span><input type="number" formControlName="budget"></div>
+        <div><span class="label">Budget In Days</span><input type="number" formControlName="budgetInDays">
         </div>
       </div>
 

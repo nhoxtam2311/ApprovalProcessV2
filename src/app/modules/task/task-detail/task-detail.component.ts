@@ -16,7 +16,7 @@ export class TaskDetailComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     private route: ActivatedRoute,
-    private employeeService: EmployeeService 
+    private employeeService: EmployeeService
   ) { }
 
   chart!: Chart
@@ -25,64 +25,64 @@ export class TaskDetailComponent implements OnInit {
   subTasks!: Observable<any>
   text: any
   taskForm = new FormGroup({
-    title: new FormControl("Task Name"),
+    title: new FormControl(),
     // projectName: new FormControl(Validators.required),
     description: new FormControl(),
     assignedTo: new FormControl(),
-    startDate: new FormControl("2021-07-21"),
-    endDate: new FormControl("2021-07-21"),
-    priority: new FormControl("HIGH"),
+    startDate: new FormControl(),
+    endDate: new FormControl(),
+    priority: new FormControl(),
     // status: new FormControl("WAITING"),
     // percentComplete: new FormControl(0),
-    cost: new FormControl(200),
-    costInDays: new FormControl(10)
+    cost: new FormControl(),
+    costInDays: new FormControl()
   })
 
   taskCreateForm = new FormGroup({
-    title: new FormControl("Task Name"),
+    title: new FormControl(),
     // project: new FormControl(Validators.required),
     // description: new FormControl("Insuarance"),
     assignedTo: new FormControl(),
-    startDate: new FormControl("2021-07-21"),
-    endDate: new FormControl("2021-07-21"),
-    priority: new FormControl("HIGH"),
+    startDate: new FormControl(),
+    endDate: new FormControl(),
+    priority: new FormControl(),
     status: new FormControl("WAITING"),
     // percentComplete: new FormControl(0),
-    cost: new FormControl(200),
-    costInDays: new FormControl(10)
+    cost: new FormControl(),
+    costInDays: new FormControl()
   })
 
   employees!: Observable<any>
   modalCreateClass = "modal"
   modalCreateSubTaskClass = "modal"
-  
+
   resolvable = true
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((data: any)=>{
-      
+    this.route.paramMap.subscribe((data: any) => {
+
       this.id = data.params["id"]
       this.getTask(data.params["id"])
       this.subTasks = this.taskService.findByParent(data.params["id"])
-      this.resolvable=true
-      this.subTasks.subscribe((data:any)=>{
-        this.resolvable=true
-        for(let subTask of data._embedded.tasks){
-          if(subTask.status == 'INPROGRESS' || subTask.status == 'WAITING'){
-            this.resolvable=false
+      this.resolvable = true
+      this.subTasks.subscribe((data: any) => {
+        this.resolvable = true
+        for (let subTask of data._embedded.tasks) {
+          if (subTask.status == 'INPROGRESS' || subTask.status == 'WAITING') {
+            this.resolvable = false
           }
         }
       })
-    this.init()
-    this.getEmpolyees()
+      this.init()
+      this.getEmpolyees()
     })
-    
+
   }
 
-  projectId : any;
-  getTask(taskId: any){
+  projectId: any;
+  getTask(taskId: any) {
     this.task = this.taskService.getTask(taskId)
-    this.task.subscribe(data=>{
+    this.task.subscribe(data => {
       this.projectId = data.project
     })
   }
@@ -94,6 +94,11 @@ export class TaskDetailComponent implements OnInit {
     var members: any = {}
     var ids: Array<any> = []
     this.subTasks.subscribe((subTasksData: any) => {
+      var doneTask = 0
+      var inprogressTask = 0
+      var waitTask = 0
+      var totalTask = 0
+      var deferredTask = 0
       console.log(subTasksData)
       for (var i = 0; i < subTasksData._embedded.tasks.length; i++) {
         let subTask = subTasksData._embedded.tasks[i]
@@ -128,6 +133,19 @@ export class TaskDetailComponent implements OnInit {
 
         }
 
+        totalTask = totalTask + 1
+        if (subTask.status != 'DEFERRED') {
+          if (subTask.status == 'COMPLETED') {
+            doneTask = doneTask + 1
+          } else {
+            if (subTask.status == 'WAITING') {
+              waitTask = waitTask + 1
+            } else {
+              inprogressTask = inprogressTask + 1
+            }
+          }
+        } else { deferredTask = deferredTask + 1 }
+
       }
 
       // console.log(members)
@@ -152,11 +170,24 @@ export class TaskDetailComponent implements OnInit {
         name: 'Reject',
         data: []
       }
-      var donePie: Array<any> = ["Done", 0]
-      var inprogressPie: Array<any> = ["In Progress", 0]
-      var rejectPie: Array<any> = ["Reject", 0]
+      // var donePie: Array<any> = ["Done", 0]
+      // var inprogressPie: Array<any> = ["In Progress", 0]
+      // var rejectPie: Array<any> = ["Reject", 0]
 
       // console.log(ids)
+
+      var categories: Array<any> = []
+
+      var donePie: Array<any> = ["Done: " + doneTask, doneTask]
+      var waitingPie: Array<any> = ["Waiting: " + waitTask, waitTask]
+      var totalPie: Array<any> = ["Total", 0]
+      var inProgressPie: Array<any> = ["inProgress: " + inprogressTask, inprogressTask]
+      var deferredPie: Array<any> = ["Reject: " + deferredTask, deferredTask]
+      // console.log(totalBar.data)
+
+      // total.type = "bar"
+      // done.type = "bar"
+      // inprogress.type = "bar"
 
       var categories: Array<any> = []
 
@@ -166,9 +197,9 @@ export class TaskDetailComponent implements OnInit {
         done.data.push(member.done)
         reject.data.push(member.reject)
         inprogress.data.push(member.total - member.done - member.reject)
-        donePie[1] = donePie[1] + member.done
-        rejectPie[1] = rejectPie[1] + member.reject
-        inprogressPie[1] = inprogressPie[1] + (member.total - member.done - member.reject)
+        // donePie[1] = donePie[1] + member.done
+        // rejectPie[1] = rejectPie[1] + member.reject
+        // inprogressPie[1] = inprogressPie[1] + (member.total - member.done - member.reject)
 
         // rejectPie.push(member.reject)
         // donePie.push(member.done)
@@ -180,11 +211,6 @@ export class TaskDetailComponent implements OnInit {
         }
         // console.log(categories)
       }
-      // console.log(totalBar.data)
-
-      // total.type = "bar"
-      // done.type = "bar"
-      // inprogress.type = "bar"
 
       this.barChart = new Chart({
         chart: {
@@ -192,7 +218,7 @@ export class TaskDetailComponent implements OnInit {
         },
         colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)', '#f77f00'],
         title: {
-          text: 'barchart'
+          text: 'Employee\'s subtasks progress '
         },
         credits: {
           enabled: false
@@ -218,9 +244,9 @@ export class TaskDetailComponent implements OnInit {
           height: '300px',
           // width: '100px'
         },
-        colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)'],
+        colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)', '#f59e1b'],
         title: {
-          text: 'piechart',
+          text: 'Subtasks',
           x: 35,
           align: 'left',
         },
@@ -261,7 +287,7 @@ export class TaskDetailComponent implements OnInit {
           name: 'Tasks',
           // data: [total.data - inprogress.data - reject.data, inprogress.data, reject.data]
           // data: [['Total',total.data - inprogress.data - reject.data], ['In Progress',inprogress.data], ['Reject',reject.data]]
-          data: [inprogressPie, donePie, rejectPie]
+          data: [inProgressPie, donePie, waitingPie, deferredPie]
         }]
       });
       this.pieChart.ref$.subscribe(console.log);
@@ -273,28 +299,28 @@ export class TaskDetailComponent implements OnInit {
   approve(task: any) {
     task["status"] = "INPROGRESS"
     var startDate = new Date()
-    task["startDate"] = `${startDate.getFullYear()}-${startDate.getMonth()+1>9?startDate.getMonth()+1:'0'+(startDate.getMonth()+1)}-${startDate.getDate()>9?startDate.getDate():'0'+startDate.getDate()}`
+    task["startDate"] = `${startDate.getFullYear()}-${startDate.getMonth() + 1 > 9 ? startDate.getMonth() + 1 : '0' + (startDate.getMonth() + 1)}-${startDate.getDate() > 9 ? startDate.getDate() : '0' + startDate.getDate()}`
     this.taskService.updateTask(task).subscribe()
   }
 
   decline(task: any) {
     task["status"] = "DEFERRED"
-     this.taskService.updateTask(task).subscribe()
+    this.taskService.updateTask(task).subscribe()
   }
 
   resolve(task: any) {
     task["status"] = "COMPLETED"
     var endDate = new Date()
-    task["endDate"] = `${endDate.getFullYear()}-${endDate.getMonth()+1>9?endDate.getMonth()+1:'0'+(endDate.getMonth()+1)}-${endDate.getDate()>9?endDate.getDate():'0'+endDate.getDate()}`
+    task["endDate"] = `${endDate.getFullYear()}-${endDate.getMonth() + 1 > 9 ? endDate.getMonth() + 1 : '0' + (endDate.getMonth() + 1)}-${endDate.getDate() > 9 ? endDate.getDate() : '0' + endDate.getDate()}`
     this.taskService.updateTask(task).subscribe()
   }
 
-  pull(){
+  pull() {
     this.getTask(this.id)
     this.init()
   }
 
-  update(taskData: any){
+  update(taskData: any) {
     taskData["title"] = this.taskForm.value["title"]
     taskData["assignedTo"] = this.taskForm.value["assignedTo"]
     taskData["startDate"] = this.taskForm.value["startDate"]
@@ -303,11 +329,11 @@ export class TaskDetailComponent implements OnInit {
     taskData["cost"] = this.taskForm.value["cost"]
     taskData["costInDays"] = this.taskForm.value["costInDays"]
     taskData["description"] = this.taskForm.value["description"]
-    
+
     this.taskService.updateTask(taskData).subscribe()
     this.clickShowCreateModal()
   }
-  
+
   clickShowCreateModal() {
     if (this.modalCreateClass == "modal") {
       this.modalCreateClass = "modal show"
@@ -325,23 +351,23 @@ export class TaskDetailComponent implements OnInit {
   }
 
   createSubTask() {
-    if(this.taskCreateForm.invalid){
+    if (this.taskCreateForm.invalid) {
       this.taskCreateForm.markAsTouched()
       return
     }
     var task = this.taskCreateForm.value
     var createdDate = new Date()
-    task.createdDate = `${createdDate.getFullYear()}-${createdDate.getMonth()+1>9?createdDate.getMonth()+1:'0'+(createdDate.getMonth()+1)}-${createdDate.getDate()>9?createdDate.getDate():'0'+createdDate.getDate()}`
+    task.createdDate = `${createdDate.getFullYear()}-${createdDate.getMonth() + 1 > 9 ? createdDate.getMonth() + 1 : '0' + (createdDate.getMonth() + 1)}-${createdDate.getDate() > 9 ? createdDate.getDate() : '0' + createdDate.getDate()}`
 
     task.parent = this.id
     task.project = this.projectId
     console.log(task)
     console.log(this.taskCreateForm.value)
-    this.taskService.create(task).subscribe(()=>{
+    this.taskService.create(task).subscribe(() => {
       this.clickShowCreateSubTaskModal()
       this.pull()
     })
-    
+
   }
 
 }

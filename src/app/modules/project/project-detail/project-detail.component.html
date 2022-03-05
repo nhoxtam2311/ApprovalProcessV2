@@ -1,57 +1,59 @@
 <div class="main-screen">
     <h4 class="project-name">COMPANY NAME</h4>
     <div class="details" *ngIf="project | async as data">
-        <div class="container">
-            <div class="inside-container">
-                <div class="container-detail">
+        <div *ngIf="tasks | async as taskData ">
 
-                    <h5>Project details <i class="fa fa-pencil-square-o" aria-hidden="true"
+            <div class="container">
+                <div class="inside-container">
+                    <div class="container-detail">
+                        
+                        <h5>Project details <i class="fa fa-pencil-square-o" aria-hidden="true"
                             (click)="clickShowCreateModal()" *ngIf="data.status == 'WAITING'"></i></h5>
-
-                    <div class="h-container">
-                        <div><span class="label">Project Name</span>{{data.projectName}}</div>
-                        <div *ngIf="(data.owner | employee) | async as employee">
-                            <span class="label">Owner</span>
-                            <span>{{employee.firstName}} {{employee.lastName}}</span>
-                        </div>
-                        <div *ngIf="!data.owner">
-                            <span class="label">Owner</span>Not assigned
-                        </div>
-                        <div><span class="label">Category</span>{{data.category}}</div>
-                        <div><span class="label">Priority</span>{{data.priority}}</div>
-                        <div><span class="label">Status</span>{{data.status}}</div>
-                    </div>
-                    <div class="h-container">
-                        <div><span class="label">Created Day</span>{{data.createdDate | date:'MM-dd-yyyy'}}</div>
-                        <div *ngIf="data.status == 'WAITING'"><span class="label">Start (Proposed)</span>{{data.startDate | date:'MM-dd-yyyy'}}</div>
-                        <div *ngIf="data.status != 'WAITING'"><span class="label">Start</span>{{data.startDate | date:'MM-dd-yyyy'}}</div>
-                        <div *ngIf="data.status != 'COMPLETED'"><span class="label">End (Proposed)</span>{{data.endDate | date:'MM-dd-yyyy'}}</div>
-                        <div *ngIf="data.status == 'COMPLETED'"><span class="label">End</span>{{data.endDate | date:'MM-dd-yyyy'}}</div>
-                        <div><span class="label">Budget</span>{{data.budget}}</div>
-                        <div><span class="label">Budget In Days</span>{{data.budgetInDays}}</div>
-                    </div>
+                            
+                            <div class="h-container">
+                                <div><span class="label" >Project Name</span>{{data.projectName}}</div>
+                                <div *ngIf="(data.owner | employee) | async as employee">
+                                    <span class="label">Owner</span>
+                                    <span>{{employee.firstName}} {{employee.lastName}}</span>
+                                </div>
+                                <div *ngIf="!data.owner">
+                                    <span class="label">Owner</span>Not assigned
+                                </div>
+                                <div><span class="label">Category</span>{{data.category}}</div>
+                                <div><span class="label">Priority</span>{{data.priority}}</div>
+                                <div><span class="label">Status</span>{{data.status}}</div>
+                            </div>
+                            <div class="h-container">
+                                <div><span class="label">Created Day</span>{{data.createdDate | date:'MM-dd-yyyy'}}</div>
+                                <div *ngIf="data.status == 'WAITING'"><span class="label">Start (Proposed)</span>{{data.startDate | date:'MM-dd-yyyy'}}</div>
+                                <div *ngIf="data.status != 'WAITING'"><span class="label">Start</span>{{data.startDate | date:'MM-dd-yyyy'}}</div>
+                                <div *ngIf="data.status != 'COMPLETED'"><span class="label">End (Proposed)</span>{{data.endDate | date:'MM-dd-yyyy'}}</div>
+                                <div *ngIf="data.status == 'COMPLETED'"><span class="label">End</span>{{data.endDate | date:'MM-dd-yyyy'}}</div>
+                                <div><span class="label">Budget</span>{{data.budget}}</div>
+                                <div><span class="label">Budget In Days</span>{{data.budgetInDays}}</div>
+                            </div>
                 </div>
                 <div class="container-chart">
                     <!-- <div class="inside-container"> -->
                         <!-- <div class="h-container"> -->
                             <div class="pieChart" [chart]="pieChart"></div>
-                        <!-- </div> -->
-                    <!-- </div> -->
-                </div>
-            </div>
+                            <!-- </div> -->
+                            <!-- </div> -->
+                        </div>
+                    </div>
 
-        </div>
-        <div class="approvalButton" *ngIf="data.status == 'WAITING'">
-            <button class="approveButton" (click)="approve(data)">Approve</button>
-            <button class="declineButton" (click)="decline(data)">Decline</button>
-        </div>
+                </div>
+                <div class="approvalButton" *ngIf="data.status == 'WAITING'">
+                    <button class="approveButton" (click)="approve(data)">Approve</button>
+                    <button class="declineButton" (click)="decline(data)">Decline</button>
+                </div>
         <div class="approvalButton" *ngIf="data.status == 'INPROGRESS'">
-            <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)">Resolve</button>
+            <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)" >Resolve</button>
         </div>
 
         <div class="container">
             <h5>Tasks</h5>
-            <table *ngIf="tasks | async as taskData ">
+            <table >
                 <tr>
                     <th>Name</th>
                     <th>Employee Id</th>
@@ -64,28 +66,23 @@
                     <td *ngIf="!task.assignedTo">-</td>
                     <td *ngIf="(task.assignedTo | employee) | async as employee">{{employee.firstName}}
                         {{employee.lastName}}</td>
-                    <td *ngIf="!task.assignedTo">Not assigned</td>
-                    <td>{{task.status}}</td>
-                </tr>
-
-
-            </table>
-            <div class="pagination">
-                <a href="#">&laquo;</a>
-                <a href="#">1</a>
-                <a class="active" href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">4</a>
-                <a href="#">5</a>
-                <a href="#">6</a>
-                <a href="#">&raquo;</a>
+                        <td *ngIf="!task.assignedTo">Not assigned</td>
+                        <td>{{task.status}}</td>
+                    </tr>
+                    
+                    
+                </table>
+                <div class="pagination">
+               
+                    <a *ngFor="let page of counter(totalPages); let i = index" (click)="loadPage(i)">{{i + 1}}</a>
+         
+                </div>
             </div>
-        </div>
         <div class="container">
             <div [chart]="barChart"></div>
         </div>
-
-
+        
+        
         <!-- Modal content -->
         <div [class]="modalCreateClass">
             <div class="modal-content">
@@ -97,40 +94,40 @@
                     <h5>Project details</h5>
                     <div class="h-container">
                         <div><span class="label">Project Name</span><input formControlName="projectName"
-                                value="projectName"></div>
-                        <div *ngIf="employees | async as employeeData">
-                            <span class="label">Owner</span>
-                            <select type="text" formControlName="owner">
-                                <option *ngFor="let employee of employeeData._embedded.employees" [value]="employee.id">
-                                    {{employee.firstName + " " + employee.lastName}}</option>
-                            </select>
-                        </div>
-                        <div><span class="label">Category</span><input type="text" formControlName="category"
-                                value="Insuarance"></div>
-                        <div>
-                            <span class="label">Priority</span>
-                            <select type="text" formControlName="priority" value="High">
-                                <option value="HIGH">High</option>
-                                <option value="NORMAL">Normal</option>
-                                <option value="LOW">Low</option>
-                            </select>
+                            [value]="data.projectName" ></div>
+                            <div *ngIf="employees | async as employeeData">
+                                <span class="label">Owner</span>
+                                <select type="text" formControlName="owner">
+                                    <option *ngFor="let employee of employeeData._embedded.employees" [value]="employee.id">
+                                        {{employee.firstName + " " + employee.lastName}}</option>
+                                    </select>
+                                </div>
+                                <div><span class="label">Category</span><input type="text" formControlName="category"
+                                    ></div>
+                                    <div>
+                                        <span class="label">Priority</span>
+                                        <select type="text" formControlName="priority" >
+                                            <option value="HIGH">High</option>
+                                            <option value="NORMAL">Normal</option>
+                                            <option value="LOW">Low</option>
+                                        </select>
                         </div>
                     </div>
                     <div class="h-container">
                         <div><span class="label">Start</span><input type="date" formControlName="startDate"
-                                value="11-07-2021"></div>
-                        <div><span class="label">End</span><input type="date" formControlName="endDate"
-                                value="11-07-2021">
+                            ></div>
+                            <div><span class="label">End</span><input type="date" formControlName="endDate"
+                                >
+                            </div>
+                            <div><span class="label">Budget</span><input type="number" formControlName="budget" >
+                            </div>
+                            <div><span class="label">Budget In Days</span><input type="number"
+                                formControlName="budgetInDays" >
+                            </div>
                         </div>
-                        <div><span class="label">Budget</span><input type="number" formControlName="budget" value="500">
-                        </div>
-                        <div><span class="label">Budget In Days</span><input type="number"
-                                formControlName="budgetInDays" value="50">
-                        </div>
+                        
                     </div>
-
-                </div>
-                <div class="modal-footer">
+                    <div class="modal-footer">
                     <button type="button" class="btn-success" (click)="update(data)">Update</button>
                 </div>
             </div>
@@ -138,4 +135,5 @@
         <!-- Modal content -->
 
     </div>
+</div>
 </div>

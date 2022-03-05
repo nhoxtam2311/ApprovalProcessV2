@@ -50,17 +50,17 @@ export class TaskListComponent implements OnInit {
   }
 
   task = new FormGroup({
-    title: new FormControl("Task Name"),
+    title: new FormControl(),
     project: new FormControl(Validators.required),
-    description: new FormControl("Insuarance"),
+    description: new FormControl(),
     assignedTo: new FormControl(),
-    startDate: new FormControl("2021-07-21"),
-    endDate: new FormControl("2021-07-21"),
-    priority: new FormControl("HIGH"),
+    startDate: new FormControl(),
+    endDate: new FormControl(),
+    priority: new FormControl(),
     status: new FormControl("WAITING"),
     percentComplete: new FormControl(0),
-    cost: new FormControl(200),
-    costInDays: new FormControl(10)
+    cost: new FormControl(),
+    costInDays: new FormControl()
   })
 
   create() {
@@ -95,5 +95,9 @@ export class TaskListComponent implements OnInit {
   getEmpolyees() {
     this.employees = this.employeeService.getAll()
   }
+
+  td = new Date()
+  today = `${this.td.getFullYear()}-${this.td.getMonth()+1>9?this.td.getMonth()+1:'0'+(this.td.getMonth()+1)}-${this.td.getDate()>9?this.td.getDate():'0'+this.td.getDate()}`
+
 
 }

@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProjectPipe } from './project.pipe';
 import { EmployeePipe } from './employee.pipe';
 import { TaskPipe } from './task.pipe';
+import { MomentModule } from 'ngx-moment';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { TaskPipe } from './task.pipe';
     ChartModule,
     FormsModule,
     ReactiveFormsModule,
+    MomentModule
   ]
 })
 export class TaskModule { }

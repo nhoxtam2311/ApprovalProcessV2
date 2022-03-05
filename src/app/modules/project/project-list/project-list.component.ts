@@ -51,15 +51,15 @@ export class ProjectListComponent implements OnInit {
 
 
   project = new FormGroup({
-    projectName: new FormControl("projectName"),
+    projectName: new FormControl(),
     owner: new FormControl(),
-    category: new FormControl("Insuarance"),
-    priority: new FormControl("HIGH"),
+    category: new FormControl(),
+    priority: new FormControl(),
     status: new FormControl("WAITING"),
-    startDate: new FormControl("2021-07-21"),
-    endDate: new FormControl("2021-07-22"),
-    budget: new FormControl(500),
-    budgetInDays: new FormControl(500),
+    startDate: new FormControl(),
+    endDate: new FormControl(),
+    budget: new FormControl(),
+    budgetInDays: new FormControl(),
     // percentComplete: new FormControl(10)
   })
 

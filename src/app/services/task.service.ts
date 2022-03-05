@@ -24,8 +24,8 @@ export class TaskService {
     return this.http.put(`${task._links.self.href.replace('8080', '4200')}`,task)
   }
 
-  findByProject(projectId: number){
-    return this.http.get(`api/tasks/search/findByProject?project=${projectId}`)
+  findByProject(projectId: number, page: number){
+    return this.http.get(`api/tasks/search/findByProject?project=${projectId}&page=${page}&size=5`)
   }
   findByParent(parentId: number){
     return this.http.get(`api/tasks/search/findByParent?parent=${parentId}`)

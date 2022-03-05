@@ -12,7 +12,7 @@
         <span [class]="task.priority">{{ task.priority }}</span>
         
       </div>
-      <div class="bages">bages</div>
+      <div class="bages">Expire in {{task.endDate | amDifference: today :'days' : true }} days</div>
     </div>
   </div>
   <div class="add-item">

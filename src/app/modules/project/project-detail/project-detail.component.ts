@@ -23,30 +23,33 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   id: any
+  totalPages: number = 0
   project!: Observable<any>
   tasks!: Observable<any>
   employees!: Observable<any>
   modalCreateClass = "modal"
   resolvable = true
   projectForm = new FormGroup({
-    projectName: new FormControl("projectName"),
+    projectName: new FormControl(),
     owner: new FormControl(),
-    category: new FormControl("Insuarance"),
-    priority: new FormControl("HIGH"),
+    category: new FormControl(),
+    priority: new FormControl(),
     // status: new FormControl("WAITING"),
-    startDate: new FormControl("2021-07-21"),
-    endDate: new FormControl("2021-07-22"),
-    budget: new FormControl(500),
-    budgetInDays: new FormControl(500),
+    startDate: new FormControl(),
+    endDate: new FormControl(),
+    budget: new FormControl(),
+    budgetInDays: new FormControl(),
   })
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((data: any) => {
+      this.id =  data.params["id"]
       // console.log(data.params["id"])
       this.resolvable = true
       this.getProject(data.params["id"])
-      this.tasks = this.taskService.findByProject(data.params["id"])
+      this.tasks = this.taskService.findByProject(data.params["id"], 0)
       this.tasks.subscribe((data: any) => {
+        this.totalPages = data.page.totalPages
         this.resolvable = true
         for (let task of data._embedded.tasks) {
           if (task.status == 'INPROGRESS' || task.status == 'WAITING') {
@@ -55,9 +58,9 @@ export class ProjectDetailComponent implements OnInit {
         }
       })
       this.init()
-    this.getAllEmployee()
+      this.getAllEmployee()
     })
-    
+
   }
 
   getProject(projectId: any) {
@@ -71,6 +74,11 @@ export class ProjectDetailComponent implements OnInit {
     var members: any = {}
     var ids: Array<any> = []
     this.tasks.subscribe((taskData: any) => {
+      var doneTask = 0
+      var inprogressTask = 0
+      var waitTask = 0
+      var totalTask = 0
+      var deferredTask = 0
       // console.log(taskData)
       for (var i = 0; i < taskData._embedded.tasks.length; i++) {
         let task = taskData._embedded.tasks[i]
@@ -104,6 +112,18 @@ export class ProjectDetailComponent implements OnInit {
           }
 
         }
+        totalTask = totalTask + 1
+        if (task.status != 'DEFERRED') {
+          if (task.status == 'COMPLETED') {
+            doneTask = doneTask + 1
+          } else {
+            if (task.status == 'WAITING') {
+              waitTask = waitTask + 1
+            } else {
+              inprogressTask = inprogressTask + 1
+            }
+          }
+        } else { deferredTask = deferredTask + 1 }
 
       }
 
@@ -129,10 +149,11 @@ export class ProjectDetailComponent implements OnInit {
         name: 'Reject',
         data: []
       }
-      var donePie: Array<any> = ["Done", 0]
-      var inprogressPie: Array<any> = ["In Progress", 0]
-      var rejectPie: Array<any> = ["Reject", 0]
-
+      var donePie: Array<any> = ["Done: " + doneTask, doneTask]
+      var waitingPie: Array<any> = ["Waiting: " + waitTask, waitTask]
+      var totalPie: Array<any> = ["Total", 0]
+      var inProgressPie: Array<any> = ["In progress: " + inprogressTask, inprogressTask]
+      var deferredPie: Array<any> = ["Reject: " + deferredTask, deferredTask]
       // console.log(ids)
 
       var categories: Array<any> = []
@@ -143,9 +164,9 @@ export class ProjectDetailComponent implements OnInit {
         done.data.push(member.done)
         reject.data.push(member.reject)
         inprogress.data.push(member.total - member.done - member.reject)
-        donePie[1] = donePie[1] + member.done
-        rejectPie[1] = rejectPie[1] + member.reject
-        inprogressPie[1] = inprogressPie[1] + (member.total - member.done - member.reject)
+        // donePie[1] = donePie[1] + member.done
+        // rejectPie[1] = rejectPie[1] + member.reject
+        // inprogressPie[1] = inprogressPie[1] + (member.total - member.done - member.reject)
 
         // rejectPie.push(member.reject)
         // donePie.push(member.done)
@@ -157,6 +178,7 @@ export class ProjectDetailComponent implements OnInit {
         }
         // console.log(categories)
       }
+
       // console.log(totalBar.data)
 
       // total.type = "bar"
@@ -169,7 +191,7 @@ export class ProjectDetailComponent implements OnInit {
         },
         colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)', '#f77f00'],
         title: {
-          text: 'barchart'
+          text: 'Employee\'s tasks progress'
         },
         credits: {
           enabled: false
@@ -195,9 +217,9 @@ export class ProjectDetailComponent implements OnInit {
           height: '300px',
           // width: '100px'
         },
-        colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)'],
+        colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)', '#f59e1b'],
         title: {
-          text: 'piechart',
+          text: 'Tasks',
           x: 35,
           align: 'left',
         },
@@ -238,7 +260,7 @@ export class ProjectDetailComponent implements OnInit {
           name: 'Tasks',
           // data: [total.data - inprogress.data - reject.data, inprogress.data, reject.data]
           // data: [['Total',total.data - inprogress.data - reject.data], ['In Progress',inprogress.data], ['Reject',reject.data]]
-          data: [inprogressPie, donePie, rejectPie]
+          data: [waitingPie, donePie, inProgressPie, deferredPie]
         }]
       });
       this.pieChart.ref$.subscribe(console.log);
@@ -250,7 +272,7 @@ export class ProjectDetailComponent implements OnInit {
   approve(project: any) {
     project["status"] = "INPROGRESS"
     var startDate = new Date()
-    project["startDate"] = `${startDate.getFullYear()}-${startDate.getMonth()+1>9?startDate.getMonth()+1:'0'+(startDate.getMonth()+1)}-${startDate.getDate()>9?startDate.getDate():'0'+startDate.getDate()}`
+    project["startDate"] = `${startDate.getFullYear()}-${startDate.getMonth() + 1 > 9 ? startDate.getMonth() + 1 : '0' + (startDate.getMonth() + 1)}-${startDate.getDate() > 9 ? startDate.getDate() : '0' + startDate.getDate()}`
     this.projectService.updateProject(project).subscribe()
   }
 
@@ -261,7 +283,7 @@ export class ProjectDetailComponent implements OnInit {
   resolve(project: any) {
     project["status"] = "COMPLETED"
     var endDate = new Date()
-    project["endDate"] = `${endDate.getFullYear()}-${endDate.getMonth()+1>9?endDate.getMonth()+1:'0'+(endDate.getMonth()+1)}-${endDate.getDate()>9?endDate.getDate():'0'+endDate.getDate()}`
+    project["endDate"] = `${endDate.getFullYear()}-${endDate.getMonth() + 1 > 9 ? endDate.getMonth() + 1 : '0' + (endDate.getMonth() + 1)}-${endDate.getDate() > 9 ? endDate.getDate() : '0' + endDate.getDate()}`
     this.projectService.updateProject(project).subscribe()
   }
 
@@ -272,7 +294,7 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   update(projectData: any) {
-    projectData["title"] = this.projectForm.value["title"]
+    projectData["projectName"] = this.projectForm.value["projectName"]
     projectData["owner"] = this.projectForm.value["owner"]
     projectData["startDate"] = this.projectForm.value["startDate"]
     projectData["endDate"] = this.projectForm.value["endDate"]
@@ -287,6 +309,26 @@ export class ProjectDetailComponent implements OnInit {
   getAllEmployee() {
     this.employees = this.employeeService.getAll()
   }
+
+  loadPage(page: number) {
+    this.resolvable = true
+  
+    this.tasks = this.taskService.findByProject(this.id, page)
+    this.tasks.subscribe((data: any) => {
+      this.resolvable = true
+      for (let task of data._embedded.tasks) {
+        if (task.status == 'INPROGRESS' || task.status == 'WAITING') {
+          this.resolvable = false
+        }
+      }
+    })
+    // this.init()
+    // this.getAllEmployee()
+  }
+
+  counter(i: number) {
+    return new Array(i);
+    }
 
 }
 
