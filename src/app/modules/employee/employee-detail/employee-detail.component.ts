@@ -21,14 +21,17 @@ export class EmployeeDetailComponent implements OnInit {
     private route: ActivatedRoute
   ) { }
 
+  id: any
+  totalPagesProject: number = 0
   employee!: Observable<any>
   projects!: Observable<any>
   tasks!: Observable<any>
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((data: any) => {
+      this.id = data.params["id"]
       this.getEmployee(data.params["id"])
-      this.getProjects(data.params["id"])
+      this.getProjects(data.params["id"],0)
       this.getTasks(data.params["id"])
       this.init()
     })
@@ -37,8 +40,11 @@ export class EmployeeDetailComponent implements OnInit {
   getEmployee(employeeId: any) {
     this.employee = this.employeeService.getEmployee(employeeId)
   }
-  getProjects(employeeId: any) {
-    this.projects = this.projectService.findByOwner(employeeId)
+  getProjects(employeeId: any, page: number) {
+    this.projects = this.projectService.findByOwner(employeeId,page)
+    this.projects.subscribe((data:any)=>{
+      this.totalPagesProject = data.page.totalPages
+    })
   }
   getTasks(employeeId: any) {
     this.tasks = this.taskService.findByAssignedTo(employeeId)
@@ -300,4 +306,14 @@ export class EmployeeDetailComponent implements OnInit {
     })
 
   }
+
+  loadPageProjects(page: number) {
+    this.getProjects(this.id,page)
+    // this.init()
+    // this.getAllEmployee()
+  }
+
+  counterProjects(i: number) {
+    return new Array(i);
+    }
 }
