@@ -8,8 +8,8 @@ export class TaskService {
 
   constructor(private http: HttpClient) { }
 
-  getAll(){
-    return this.http.get(`api/tasks`)
+  getAll(sortBy: any, sortDesc: any){
+    return this.http.get(`api/tasks?&sort=${sortBy},${sortDesc}`)
   }
 
   create(task: any) {
@@ -24,13 +24,13 @@ export class TaskService {
     return this.http.put(`${task._links.self.href.replace('8080', '4200')}`,task)
   }
 
-  findByProject(projectId: number, page: number){
-    return this.http.get(`api/tasks/search/findByProject?project=${projectId}&page=${page}&size=5`)
+  findByProject(projectId: number, page: number, sortBy: any, sortDesc: any){
+    return this.http.get(`api/tasks/search/findByProject?project=${projectId}&page=${page}&size=10&sort=${sortBy},${sortDesc}`)
   }
-  findByParent(parentId: number){
-    return this.http.get(`api/tasks/search/findByParent?parent=${parentId}`)
+  findByParent(parentId: number, page: number, sortBy: any, sortDesc: any){
+    return this.http.get(`api/tasks/search/findByParent?parent=${parentId}&page=${page}&size=10&sort=${sortBy},${sortDesc}`)
   }
-  findByAssignedTo(employeeId: number){
-    return this.http.get(`api/tasks/search/findByAssignedTo?assignedTo=${employeeId}`)
+  findByAssignedTo(employeeId: number, page: number, sortBy: any, sortDesc: any){
+    return this.http.get(`api/tasks/search/findByAssignedTo?assignedTo=${employeeId}&page=${page}&size=10&sort=${sortBy},${sortDesc}`)
   }
 }

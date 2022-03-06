@@ -1,13 +1,18 @@
 <nav class="item-list">
-  <div class="list-title">
-    <span>Tasks</span>
+  <div class="list-title" >
+    <span>Tasks     <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()"></i></span>
+  </div>
+  <div class="sort-panel">
+    <div class="sort-panel-item" (click)="sortTaskBy('status')">Status</div>
+    <div class="sort-panel-item" (click)="sortTaskBy('createdDate')">Created</div>
+    <!-- <div class="sort-panel-item" (click)="sortProjectBy('projectName')"></div> -->
   </div>
   <div class="items" *ngIf="tasks | async as data">
     <div *ngFor="let task of data._embedded.tasks" class="list-container">
       <div class="item in-progress" [routerLink]="['details', task.id]">
         
         <span class="item-name">{{ task.title | uppercase }} <span *ngIf="task.parent" class="sub-task">Sub-Task</span> </span>
-        
+        <span class="item-name"> Created: {{ task.createdDate | date:'dd/MM/yyyy' }}</span>
         <span [class]="task.status">{{ task.status }}</span>
         <span [class]="task.priority">{{ task.priority }}</span>
         
@@ -15,9 +20,9 @@
       <div class="bages">Expire in {{task.endDate | amDifference: today :'days' : true }} days</div>
     </div>
   </div>
-  <div class="add-item">
+  <!-- <div class="add-item">
     <button (click)="clickShowCreateModal()">Add task</button>
-  </div>
+  </div> -->
 </nav>
 
 <div [class]="modalCreateClass">

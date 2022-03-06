@@ -20,6 +20,12 @@ export class ProjectListComponent implements OnInit {
 
   projects!: Observable<any>;
   employees!: Observable<any>
+  sortField = 'createdDate'
+  sortDesc = ''
+  sortBy: any
+  sortBool: Boolean = true
+  currenPage: number = 0
+  totalPages: number = 0
 
   ngOnInit(): void {
     this.pull()
@@ -27,7 +33,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   pull(): void {
-    this.projects = this.projectService.getAll()
+    this.projects = this.projectService.getAll(this.sortField, this.sortDesc)
   }
 
 
@@ -67,7 +73,7 @@ export class ProjectListComponent implements OnInit {
   create() {
     var project = this.project.value
     var createdDate = new Date()
-    project.createdDate = `${createdDate.getFullYear()}-${createdDate.getMonth()+1>9?createdDate.getMonth()+1:'0'+(createdDate.getMonth()+1)}-${createdDate.getDate()>9?createdDate.getDate():'0'+createdDate.getDate()}`
+    project.createdDate = `${createdDate.getFullYear()}-${createdDate.getMonth() + 1 > 9 ? createdDate.getMonth() + 1 : '0' + (createdDate.getMonth() + 1)}-${createdDate.getDate() > 9 ? createdDate.getDate() : '0' + createdDate.getDate()}`
     this.projectService.create(project).subscribe(() => {
       // this.project.reset()
       this.pull()
@@ -83,10 +89,25 @@ export class ProjectListComponent implements OnInit {
   //   this.clickShowChooseModal()
   // }
 
-  getAllEmployee(){
-    this.employees = this.employeeService.getAll()
+  getAllEmployee() {
+    this.employees = this.employeeService.getAll(0, 9999, 'firstName', '')
   }
 
   td = new Date()
-  today = `${this.td.getFullYear()}-${this.td.getMonth()+1>9?this.td.getMonth()+1:'0'+(this.td.getMonth()+1)}-${this.td.getDate()>9?this.td.getDate():'0'+this.td.getDate()}T00:00:00.000+00:00`
+  today = `${this.td.getFullYear()}-${this.td.getMonth() + 1 > 9 ? this.td.getMonth() + 1 : '0' + (this.td.getMonth() + 1)}-${this.td.getDate() > 9 ? this.td.getDate() : '0' + this.td.getDate()}T00:00:00.000+00:00`
+
+  sortProjectBy(field: any) {
+    this.sortField = field
+    console.log(this.sortBool, this.sortDesc)
+    if (this.sortBool === true) {
+      this.sortBool = false
+      this.sortDesc = "desc"
+    } else {
+      this.sortBool = true
+      this.sortDesc = ''
+    }
+    console.log(this.sortBool, this.sortDesc)
+    this.projects = this.projectService.getAll(this.sortField, this.sortDesc)
+  }
+
 }

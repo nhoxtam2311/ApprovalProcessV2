@@ -1,3 +1,5 @@
+@import "~font-awesome/css/font-awesome.css";
+
 .item-list{
     height: 100vh;
     width: 350px;
@@ -6,6 +8,17 @@
     position: fixed;
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
 }
+
+.item-list-2{
+    height: 20px;
+    width: 350px;
+    background: #f7f7f7;
+    margin-left: 75px;
+    position: fixed;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+    margin-top: 50%;
+}
+
 .list-title{
     padding: 20px;
     font-weight: bold;
@@ -53,6 +66,33 @@
 .item-name{
     display: block;
 }
+
+.sort-panel{
+    display: flex;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+    margin-bottom: 1em;
+    justify-content: space-around;
+    height: 35px;
+}
+
+.sort-panel-item{
+    width: 20%;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+    /* border-bottom: solid 1px#dbdbdb; */
+    /* width: 20px;
+    height: 2%; */
+    padding-top: 8px;
+}
+.sort-panel-item:hover {
+    background-color: rgb(170, 170, 170);
+    color: black;
+    padding-bottom: 5px;
+}
+
+
 .INPROGRESS{
     background-color: #465ee0;
     font-size: 11px;

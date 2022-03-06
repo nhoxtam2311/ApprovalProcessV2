@@ -23,6 +23,12 @@ export class TaskListComponent implements OnInit {
   tasks!: Observable<any>
   projects!: Observable<any>
   employees!: Observable<any>
+  sortField ='createdDate'
+  sortDesc = ''
+  sortBy: any
+  sortBool:Boolean = true
+  currenPage: number = 0
+  totalPages: number = 0
 
   ngOnInit(): void {
     this.pull()
@@ -46,7 +52,7 @@ export class TaskListComponent implements OnInit {
   }
 
   pull(): void {
-    this.tasks = this.taskService.getAll()
+    this.tasks = this.taskService.getAll(this.sortField,this.sortDesc)
   }
 
   task = new FormGroup({
@@ -93,11 +99,23 @@ export class TaskListComponent implements OnInit {
   }
 
   getEmpolyees() {
-    this.employees = this.employeeService.getAll()
+    this.employees = this.employeeService.getAll(0,9999,'firstName','')
   }
 
   td = new Date()
   today = `${this.td.getFullYear()}-${this.td.getMonth()+1>9?this.td.getMonth()+1:'0'+(this.td.getMonth()+1)}-${this.td.getDate()>9?this.td.getDate():'0'+this.td.getDate()}`
 
-
+  sortTaskBy(field: any) {
+    this.sortField = field
+    console.log(this.sortBool,this.sortDesc)
+    if (this.sortBool === true) {
+      this.sortBool = false
+      this.sortDesc = "desc"
+    } else {
+      this.sortBool = true
+      this.sortDesc = ''
+    }
+    console.log(this.sortBool,this.sortDesc)
+    this.tasks = this.taskService.getAll(this.sortField,this.sortDesc)
+  }
 }

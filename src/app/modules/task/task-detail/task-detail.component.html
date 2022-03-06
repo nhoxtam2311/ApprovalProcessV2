@@ -57,10 +57,11 @@
                     *ngIf="data.status=='INPROGRESS'"></i></h5>
             <table *ngIf="subTasks | async as subTaskData ">
                 <tr>
-                    <th>Name</th>
-                    <th>Employee Id</th>
+                    <th (click)="sortSubTaskBy('title')">Name</th>
+                    <th (click)="sortSubTaskBy('assignedTo')">Employee Id</th>
                     <th>Assignee</th>
-                    <th>Status</th>
+                    <th (click)="sortSubTaskBy('status')">Status</th>
+                    <th (click)="sortSubTaskBy('createdDate')" >Created Day</th>
                 </tr>
                 <tr *ngFor="let subTask of subTaskData._embedded.tasks" [routerLink]="['/task','details', subTask.id]">
                     <td>{{subTask.title}}</td>
@@ -70,19 +71,15 @@
                         {{employee.lastName}}</td>
                     <td *ngIf="!subTask.assignedTo">Not assigned</td>
                     <td>{{subTask.status}}</td>
+                    <td>{{subTask.createdDate | date:'MM-dd-yyyy'}}</td>
                 </tr>
 
 
             </table>
             <div class="pagination">
-                <a href="#">&laquo;</a>
-                <a href="#">1</a>
-                <a class="active" href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">4</a>
-                <a href="#">5</a>
-                <a href="#">6</a>
-                <a href="#">&raquo;</a>
+
+                <a *ngFor="let page of counter(totalPages); let i = index" (click)="loadPage(i)">{{i + 1}}</a>
+
             </div>
         </div>
         <div class="container" *ngIf="!data.parent">

@@ -9,8 +9,8 @@ export class EmployeeService {
   constructor(
     private http: HttpClient
   ) {}
-  getAll() {
-    return this.http.get(`api/employees`)
+  getAll(page: number, size: number, sortBy: any, sortDesc: any) {
+    return this.http.get(`api/employees?page=${page}&size=${size}&sort=${sortBy},${sortDesc}`)
   }
   create(employee: any) {
     return this.http.post(`api/employees`, employee)

@@ -1,21 +1,30 @@
 <nav class="item-list">
-  <div class="list-title">
-    <span>Projects</span>
+  <div class="list-title" >
+    <span>Projects     <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()"></i></span>
+  </div>
+  <div class="sort-panel">
+    <div class="sort-panel-item" (click)="sortProjectBy('status')">Status</div>
+    <div class="sort-panel-item" (click)="sortProjectBy('createdDate')">Created</div>
+    <!-- <div class="sort-panel-item" (click)="sortProjectBy('projectName')"></div> -->
   </div>
   <div class="items"*ngIf="projects | async as data">
     <div *ngFor="let project of data._embedded.projects" class="list-container">
       <div class="item in-progress" [routerLink]="['details', project.id]">
         <span class="item-name">{{ project.projectName | uppercase }}</span>
+        <span class="item-name"> Created: {{ project.createdDate | date:'dd/MM/yyyy' }}</span>
         <span [class]="project.status">{{ project.status }}</span>
         <span [class]="project.priority">{{ project.priority }}</span>
       </div>
       <div class="bages">Expire in {{project.endDate | amDifference: today :'days' : true }} days</div>
     </div>
   </div>
+  
+</nav>
+<!-- <nav class="item-list-2">
   <div class="add-item">
     <button (click)="clickShowCreateModal()">Add project</button>
   </div>
-</nav>
+</nav> -->
 
 <!-- Modal content -->
 <div [class]="modalCreateClass">

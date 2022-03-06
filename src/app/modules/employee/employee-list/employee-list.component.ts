@@ -16,12 +16,23 @@ export class EmployeeListComponent implements OnInit {
 
   employees!: Observable<any>
 
+  sortBy: any
+  sortDesc = ''
+  sortBool:Boolean = true
+  sortField ='firstName'
+  currenPage: number = 0
+  totalPages: number = 0
+  
+
   ngOnInit(): void {
     this.pull()
   }
 
   pull(): void {
-    this.employees = this.employeeService.getAll()
+    this.employees = this.employeeService.getAll(0,18,this.sortField,this.sortDesc)
+    this.employees.subscribe((data:any)=>{
+      this.totalPages = data.page.totalPages
+    })
   }
 
   modalClass = "modal"
@@ -64,4 +75,31 @@ export class EmployeeListComponent implements OnInit {
       })
     })
   }
+
+  loadPage(page: number) {
+    this.currenPage = page
+
+    this.employees = this.employeeService.getAll(page, 18, this.sortField, this.sortDesc)
+    
+    // this.init()
+    // this.getAllEmployee()
+  }
+
+  counter(i: number) {
+    return new Array(i);
+  }
+  sortEmployeeBy(field: any) {
+    this.sortField = field
+    console.log(this.sortBool,this.sortDesc)
+    if (this.sortBool === true) {
+      this.sortBool = false
+      this.sortDesc = "desc"
+    } else {
+      this.sortBool = true
+      this.sortDesc = ''
+    }
+    console.log(this.sortBool,this.sortDesc)
+    this.employees = this.employeeService.getAll(this.currenPage, 18, this.sortField, this.sortDesc)
+  }
+
 }

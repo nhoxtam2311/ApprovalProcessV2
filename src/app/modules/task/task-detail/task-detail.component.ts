@@ -21,9 +21,15 @@ export class TaskDetailComponent implements OnInit {
 
   chart!: Chart
   id: any
+  totalPages: number = 0
   task!: Observable<any>
   subTasks!: Observable<any>
   text: any
+  sortBy: any
+  sortDesc = ''
+  sortBool:Boolean = true
+  sortField ='createdDate'
+  
   taskForm = new FormGroup({
     title: new FormControl(),
     // projectName: new FormControl(Validators.required),
@@ -63,9 +69,10 @@ export class TaskDetailComponent implements OnInit {
 
       this.id = data.params["id"]
       this.getTask(data.params["id"])
-      this.subTasks = this.taskService.findByParent(data.params["id"])
+      this.subTasks = this.taskService.findByParent(data.params["id"], 0,'createdDate', this.sortDesc)
       this.resolvable = true
       this.subTasks.subscribe((data: any) => {
+        this.totalPages = data.page.totalPages
         this.resolvable = true
         for (let subTask of data._embedded.tasks) {
           if (subTask.status == 'INPROGRESS' || subTask.status == 'WAITING') {
@@ -85,6 +92,10 @@ export class TaskDetailComponent implements OnInit {
     this.task.subscribe(data => {
       this.projectId = data.project
     })
+  }
+
+  getSubTasks(parentId: any, page: number, sortBy: any, sortDesc: any) {
+    this.subTasks = this.taskService.findByParent(parentId, page, sortBy, sortDesc)
   }
 
   /* Chart */
@@ -347,7 +358,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   getEmpolyees() {
-    this.employees = this.employeeService.getAll()
+    this.employees = this.employeeService.getAll(0,9999,'firstName','')
   }
 
   createSubTask() {
@@ -368,6 +379,39 @@ export class TaskDetailComponent implements OnInit {
       this.pull()
     })
 
+  }
+  loadPage(page: number) {
+    // this.resolvable = true
+
+    this.getSubTasks(this.id,page,'createdDate', this.sortDesc)
+    // this.subTasks.subscribe((data: any) => {
+    //   this.resolvable = true
+    //   for (let task of data._embedded.tasks) {
+    //     if (task.status == 'INPROGRESS' || task.status == 'WAITING') {
+    //       this.resolvable = false
+    //     }
+    //   }
+    // })
+    // this.init()
+    // this.getAllEmployee()
+  }
+
+  counter(i: number) {
+    return new Array(i);
+  }
+
+  sortSubTaskBy(field: any) {
+    this.sortField = field
+    console.log(this.sortBool,this.sortDesc)
+    if (this.sortBool === true) {
+      this.sortBool = false
+      this.sortDesc = "desc"
+    } else {
+      this.sortBool = true
+      this.sortDesc = ''
+    }
+    console.log(this.sortBool,this.sortDesc)
+    this.getSubTasks(this.id, 0, this.sortField, this.sortDesc)
   }
 
 }

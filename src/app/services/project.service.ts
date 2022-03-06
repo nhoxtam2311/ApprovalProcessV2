@@ -11,8 +11,8 @@ export class ProjectService {
     private http: HttpClient
     ) {
   }
-  getAll() {
-    return this.http.get(`api/projects`)
+  getAll(sortBy: any, sortDesc: any) {
+    return this.http.get(`api/projects?&sort=${sortBy},${sortDesc}`)
   }
   create(project: any) {
     return this.http.post(`api/projects`, project)
@@ -27,7 +27,7 @@ export class ProjectService {
   findByStatus(status: String) {
     return this.http.get(`api/projects/search/findByStatus?status=${status}`)
   }
-  findByOwner(employeeId: String, page: number) {
-    return this.http.get(`api/projects/search/findByOwner?owner=${employeeId}&page=${page}&size=5`)
+  findByOwner(employeeId: String, page: number, sortBy: any, sortDesc: any) {
+    return this.http.get(`api/projects/search/findByOwner?owner=${employeeId}&page=${page}&size=10&sort=${sortBy},${sortDesc}`)
   }
 }

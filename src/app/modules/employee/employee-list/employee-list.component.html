@@ -3,10 +3,10 @@
         <h5>Employees <i class="fa fa-plus-circle" aria-hidden="true" (click)="click()"></i></h5>
         <table>
             <tr>
-                <th>Id</th>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Email</th>
+                <th (click)="sortEmployeeBy('id')">Id</th>
+                <th (click)="sortEmployeeBy('firstName')">First name</th>
+                <th (click)="sortEmployeeBy('lastName')">Last name</th>
+                <th (click)="sortEmployeeBy('emailAddress')">Email</th>
             </tr>
             <tr *ngFor="let employee of data._embedded.employees" [routerLink]="['details',employee.id]">
                 <td>{{employee.id}}</td>
@@ -16,14 +16,9 @@
             </tr>
         </table>
         <div class="pagination">
-            <a href="#">&laquo;</a>
-            <a href="#">1</a>
-            <a class="active" href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">5</a>
-            <a href="#">6</a>
-            <a href="#">&raquo;</a>
+
+            <a *ngFor="let page of counter(totalPages); let i = index" (click)="loadPage(i)">{{i + 1}}</a>
+
         </div>
     </div>
 

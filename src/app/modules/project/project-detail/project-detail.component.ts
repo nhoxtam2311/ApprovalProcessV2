@@ -26,6 +26,11 @@ export class ProjectDetailComponent implements OnInit {
   totalPages: number = 0
   project!: Observable<any>
   tasks!: Observable<any>
+  sortBy: any
+  sortDesc = ''
+  sortBool:Boolean = true
+  sortField ='createdDate'
+  currenPage: number = 0
   employees!: Observable<any>
   modalCreateClass = "modal"
   resolvable = true
@@ -43,11 +48,11 @@ export class ProjectDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((data: any) => {
-      this.id =  data.params["id"]
+      this.id = data.params["id"]
       // console.log(data.params["id"])
       this.resolvable = true
       this.getProject(data.params["id"])
-      this.tasks = this.taskService.findByProject(data.params["id"], 0)
+      this.tasks = this.taskService.findByProject(data.params["id"], 0, this.sortField, this.sortDesc)
       this.tasks.subscribe((data: any) => {
         this.totalPages = data.page.totalPages
         this.resolvable = true
@@ -65,6 +70,13 @@ export class ProjectDetailComponent implements OnInit {
 
   getProject(projectId: any) {
     this.project = this.projectService.getProject(projectId)
+  }
+
+  getTasks(projectId: any, page: number, sortBy: any, sortDesc: any) {
+    this.tasks = this.taskService.findByProject(projectId, page, sortBy, sortDesc)
+    this.tasks.subscribe((data: any) => {
+      this.totalPages = data.page.totalPages
+    })
   }
 
   /* Chart */
@@ -307,13 +319,14 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   getAllEmployee() {
-    this.employees = this.employeeService.getAll()
+    this.employees = this.employeeService.getAll(0,9999,'firstName','')
   }
 
   loadPage(page: number) {
+    this.currenPage = page
     this.resolvable = true
-  
-    this.tasks = this.taskService.findByProject(this.id, page)
+
+    this.tasks = this.taskService.findByProject(this.id, page, this.sortField, this.sortDesc)
     this.tasks.subscribe((data: any) => {
       this.resolvable = true
       for (let task of data._embedded.tasks) {
@@ -328,7 +341,20 @@ export class ProjectDetailComponent implements OnInit {
 
   counter(i: number) {
     return new Array(i);
+  }
+  sortTaskBy(field: any) {
+    this.sortField = field
+    console.log(this.sortBool,this.sortDesc)
+    if (this.sortBool === true) {
+      this.sortBool = false
+      this.sortDesc = "desc"
+    } else {
+      this.sortBool = true
+      this.sortDesc = ''
     }
+    console.log(this.sortBool,this.sortDesc)
+    this.getTasks(this.id, this.currenPage, this.sortField, this.sortDesc)
+  }
 
 }
 

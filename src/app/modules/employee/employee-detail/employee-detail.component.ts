@@ -23,16 +23,28 @@ export class EmployeeDetailComponent implements OnInit {
 
   id: any
   totalPagesProject: number = 0
+  totalPagesTask: number = 0
   employee!: Observable<any>
   projects!: Observable<any>
   tasks!: Observable<any>
+
+  sortByProject: any
+  sortDescProject = ''
+  sortBoolProject:Boolean = true
+  sortFieldProject ='createdDate'
+  
+  sortByTask: any
+  sortDescTask = ''
+  sortBoolTask:Boolean = true
+  sortFieldTask ='createdDate'
+  
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((data: any) => {
       this.id = data.params["id"]
       this.getEmployee(data.params["id"])
-      this.getProjects(data.params["id"],0)
-      this.getTasks(data.params["id"])
+      this.getProjects(data.params["id"], 0, this.sortFieldProject, this.sortDescProject)
+      this.getTasks(data.params["id"], 0, this.sortFieldTask, this.sortDescTask)
       this.init()
     })
   }
@@ -40,14 +52,17 @@ export class EmployeeDetailComponent implements OnInit {
   getEmployee(employeeId: any) {
     this.employee = this.employeeService.getEmployee(employeeId)
   }
-  getProjects(employeeId: any, page: number) {
-    this.projects = this.projectService.findByOwner(employeeId,page)
-    this.projects.subscribe((data:any)=>{
+  getProjects(employeeId: any, page: number, sortBy: any, sortDesc: any) {
+    this.projects = this.projectService.findByOwner(employeeId, page, sortBy, sortDesc)
+    this.projects.subscribe((data: any) => {
       this.totalPagesProject = data.page.totalPages
     })
   }
-  getTasks(employeeId: any) {
-    this.tasks = this.taskService.findByAssignedTo(employeeId)
+  getTasks(employeeId: any, page: number, sortBy: any, sortDesc: any) {
+    this.tasks = this.taskService.findByAssignedTo(employeeId, page, sortBy, sortDesc)
+    this.tasks.subscribe((data:any)=>{
+      this.totalPagesTask = data.page.totalPages
+    })
   }
 
   modalClass = "modal"
@@ -139,67 +154,67 @@ export class EmployeeDetailComponent implements OnInit {
       }
 
       var donePie: Array<any> = ["Done: " + doneProject, doneProject]
-        var waitingPie: Array<any> = ["Waiting: " + waitProject, waitProject]
-        var totalPie: Array<any> = ["Total: " + totalProject, totalProject]
-        var inProgressPie: Array<any> = ["inProgress: " + inprogressProject, inprogressProject]
-        var deferredPie: Array<any> = ["Reject: " + deferredTask, deferredTask]
+      var waitingPie: Array<any> = ["Waiting: " + waitProject, waitProject]
+      var totalPie: Array<any> = ["Total: " + totalProject, totalProject]
+      var inProgressPie: Array<any> = ["inProgress: " + inprogressProject, inprogressProject]
+      var deferredPie: Array<any> = ["Reject: " + deferredTask, deferredTask]
 
-        this.pieChartProject = new Chart({
-          chart: {
-            type: 'pie',
-            plotShadow: false,
-            backgroundColor: 'transparent',
-            height: '300px',
-            // width: '100px'
-          },
-          colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)','#f59e1b'],
-          title: {
-            text: 'Projects',
-            // x: 35,
-            align: 'center',
-          },
-          credits: {
-            enabled: false
-          },
-          plotOptions: {
-            pie: {
-              allowPointSelect: true,
-              cursor: 'pointer',
-              dataLabels: {
-                enabled: false
-              },
-              showInLegend: true,
-              shadow: false,
-              center: ['50%', '50%'],
-              size: '80%',
-              innerSize: '10%',
-            }
-          },
-          legend: {
-            layout: 'vertical',
-            // backgroundColor: '#transparent',
-            floating: true,
-            // align: 'left',
-            x: 170,
-            verticalAlign: 'top',
-            y: 100,
-            itemMarginTop: 10,
-            itemMarginBottom: 5
-          },
-          // xAxis: {
-          //   categories: categories, title: {
-          //     text: 'employees'
-          //   }},
-          series: [{
-            type: 'pie',
-            name: 'Tasks',
-            // data: [total.data - inprogress.data - reject.data, inprogress.data, reject.data]
-            // data: [['Total',total.data - inprogress.data - reject.data], ['In Progress',inprogress.data], ['Reject',reject.data]]
-            data: [inProgressPie, donePie, waitingPie, deferredPie]
-          }]
-        });
-        this.pieChartProject.ref$.subscribe(console.log);
-        // this.barChart.ref$.subscribe(console.log);
+      this.pieChartProject = new Chart({
+        chart: {
+          type: 'pie',
+          plotShadow: false,
+          backgroundColor: 'transparent',
+          height: '300px',
+          // width: '100px'
+        },
+        colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)', '#f59e1b'],
+        title: {
+          text: 'Projects',
+          // x: 35,
+          align: 'center',
+        },
+        credits: {
+          enabled: false
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              enabled: false
+            },
+            showInLegend: true,
+            shadow: false,
+            center: ['50%', '50%'],
+            size: '80%',
+            innerSize: '10%',
+          }
+        },
+        legend: {
+          layout: 'vertical',
+          // backgroundColor: '#transparent',
+          floating: true,
+          // align: 'left',
+          x: 170,
+          verticalAlign: 'top',
+          y: 100,
+          itemMarginTop: 10,
+          itemMarginBottom: 5
+        },
+        // xAxis: {
+        //   categories: categories, title: {
+        //     text: 'employees'
+        //   }},
+        series: [{
+          type: 'pie',
+          name: 'Tasks',
+          // data: [total.data - inprogress.data - reject.data, inprogress.data, reject.data]
+          // data: [['Total',total.data - inprogress.data - reject.data], ['In Progress',inprogress.data], ['Reject',reject.data]]
+          data: [inProgressPie, donePie, waitingPie, deferredPie]
+        }]
+      });
+      this.pieChartProject.ref$.subscribe(console.log);
+      // this.barChart.ref$.subscribe(console.log);
     })
 
     this.tasks.subscribe((tasksData: any) => {
@@ -225,95 +240,134 @@ export class EmployeeDetailComponent implements OnInit {
           }
         } else { deferredTask = deferredTask + 1 }
       }
-        // var total: any = {
-          //   type: 'line',
-          //   name: 'Total',
-          //   data: []
-        // }
-        // var done: any = {
-        //   type: 'line',
-        //   name: 'Done',
-        //   data: []
-        // }
-        // var inprogress: any = {
-        //   type: 'line',
-        //   name: 'In Progress',
-        //   data: []
-        // }
+      // var total: any = {
+      //   type: 'line',
+      //   name: 'Total',
+      //   data: []
+      // }
+      // var done: any = {
+      //   type: 'line',
+      //   name: 'Done',
+      //   data: []
+      // }
+      // var inprogress: any = {
+      //   type: 'line',
+      //   name: 'In Progress',
+      //   data: []
+      // }
 
-        var donePie: Array<any> = ["Done: " + doneTask, doneTask]
-        var waitingPie: Array<any> = ["Waiting: " + waitTask, waitTask]
-        var totalPie: Array<any> = ["Total", 0]
-        var inProgressPie: Array<any> = ["inProgress: " + inprogressTask, inprogressTask]
-        var deferredPie: Array<any> = ["Deferred: " + deferredTask, deferredTask]
+      var donePie: Array<any> = ["Done: " + doneTask, doneTask]
+      var waitingPie: Array<any> = ["Waiting: " + waitTask, waitTask]
+      var totalPie: Array<any> = ["Total", 0]
+      var inProgressPie: Array<any> = ["inProgress: " + inprogressTask, inprogressTask]
+      var deferredPie: Array<any> = ["Deferred: " + deferredTask, deferredTask]
 
-        this.pieChartTask = new Chart({
-          chart: {
-            type: 'pie',
-            plotShadow: false,
-            backgroundColor: 'transparent',
-            height: '300px',
-            // width: '100px'
-          },
-          colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)','#f59e1b'],
-          title: {
-            text: 'Tasks',
-            // x: 35,
-            align: 'center',
-          },
-          credits: {
-            enabled: false
-          },
-          plotOptions: {
-            pie: {
-              allowPointSelect: true,
-              cursor: 'pointer',
-              dataLabels: {
-                enabled: false
-              },
-              showInLegend: true,
-              shadow: false,
-              center: ['50%', '50%'],
-              size: '80%',
-              innerSize: '10%',
-            }
-          },
-          legend: {
-            layout: 'vertical',
-            // backgroundColor: '#transparent',
-            floating: true,
-            // align: 'left',
-            x: 170,
-            verticalAlign: 'top',
-            y: 100,
-            itemMarginTop: 10,
-            itemMarginBottom: 5
-          },
-          // xAxis: {
-          //   categories: categories, title: {
-          //     text: 'employees'
-          //   }},
-          series: [{
-            type: 'pie',
-            name: 'Tasks',
-            // data: [total.data - inprogress.data - reject.data, inprogress.data, reject.data]
-            // data: [['Total',total.data - inprogress.data - reject.data], ['In Progress',inprogress.data], ['Reject',reject.data]]
-            data: [inProgressPie, donePie, waitingPie, deferredPie]
-          }]
-        });
-        this.pieChartTask.ref$.subscribe(console.log);
-        // this.barChart.ref$.subscribe(console.log);
+      this.pieChartTask = new Chart({
+        chart: {
+          type: 'pie',
+          plotShadow: false,
+          backgroundColor: 'transparent',
+          height: '300px',
+          // width: '100px'
+        },
+        colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)', '#f59e1b'],
+        title: {
+          text: 'Tasks',
+          // x: 35,
+          align: 'center',
+        },
+        credits: {
+          enabled: false
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              enabled: false
+            },
+            showInLegend: true,
+            shadow: false,
+            center: ['50%', '50%'],
+            size: '80%',
+            innerSize: '10%',
+          }
+        },
+        legend: {
+          layout: 'vertical',
+          // backgroundColor: '#transparent',
+          floating: true,
+          // align: 'left',
+          x: 170,
+          verticalAlign: 'top',
+          y: 100,
+          itemMarginTop: 10,
+          itemMarginBottom: 5
+        },
+        // xAxis: {
+        //   categories: categories, title: {
+        //     text: 'employees'
+        //   }},
+        series: [{
+          type: 'pie',
+          name: 'Tasks',
+          // data: [total.data - inprogress.data - reject.data, inprogress.data, reject.data]
+          // data: [['Total',total.data - inprogress.data - reject.data], ['In Progress',inprogress.data], ['Reject',reject.data]]
+          data: [inProgressPie, donePie, waitingPie, deferredPie]
+        }]
+      });
+      this.pieChartTask.ref$.subscribe(console.log);
+      // this.barChart.ref$.subscribe(console.log);
     })
 
   }
 
   loadPageProjects(page: number) {
-    this.getProjects(this.id,page)
+    this.getProjects(this.id, page, this.sortFieldProject, this.sortDescProject)
+    // this.init()
+    // this.getAllEmployee()
+  }
+
+  loadPageTasks(page: number) {
+    this.getTasks(this.id, page, this.sortFieldTask, this.sortDescTask)
     // this.init()
     // this.getAllEmployee()
   }
 
   counterProjects(i: number) {
     return new Array(i);
+  }
+
+  counterTasks(i: number) {
+    return new Array(i);
+  }
+
+  sortTaskBy(field: any) {
+    this.sortFieldTask = field
+    console.log(this.sortBoolTask,this.sortDescTask)
+    if (this.sortBoolTask === true) {
+      this.sortBoolTask = false
+      this.sortDescTask = "desc"
+    } else {
+      this.sortBoolTask = true
+      this.sortDescTask = ''
     }
+    console.log(this.sortBoolTask,this.sortDescTask)
+    this.getTasks(this.id, 0, this.sortFieldTask, this.sortDescTask)
+  }
+
+  sortProjectBy(field: any) {
+    this.sortFieldProject = field
+    console.log(this.sortBoolProject,this.sortDescProject)
+    if (this.sortBoolProject === true) {
+      this.sortBoolProject = false
+      this.sortDescProject = "desc"
+    } else {
+      this.sortBoolProject = true
+      this.sortDescProject = ''
+    }
+    console.log(this.sortBoolProject,this.sortDescProject)
+    this.getTasks(this.id, 0, this.sortFieldProject, this.sortDescProject)
+  }
+
 }
