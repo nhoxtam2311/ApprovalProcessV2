@@ -1,21 +1,41 @@
-<nav class="item-list" *ngIf="author | async as user">
-  <div class="list-title" >
-    <span>Tasks     <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()" *ngIf="user.authorities[0].authority == 'ROLE_MANAGER' || user.authorities[0].authority == 'ROLE_STAFF'"></i></span>
+<nav class="item-list">
+  <!-- <nav class="item-list" *ngIf="author | async as user"> -->
+  <div class="list-title">
+    <span>Tasks
+      <!-- <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()"
+        *ngIf="user.authorities[0].authority == 'ROLE_MANAGER' || user.authorities[0].authority == 'ROLE_STAFF'"></i> -->
+      <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()"></i>
+    </span>
   </div>
   <div class="sort-panel">
-    <div class="sort-panel-item" (click)="sortTaskBy('status')">Status</div>
-    <div class="sort-panel-item" (click)="sortTaskBy('createdDate')">Created</div>
+    <div class="sort-button">
+      <select class="sort-panel-item-left" (change)="getTaskByStatus($event)">
+        <option value="Status">All</option>
+        <option value="COMPLETED">Complete</option>
+        <option value="WAITING">Waiting</option>
+        <option value="INPROGRESS">Inprogress</option>
+        <option value="DEFERRED">Deferred</option>
+      </select>
+      <div class="sort-panel-item-right" (click)="sortTaskBy('status')" (click)="clickSortStatus()"><i [class]="sortStatusArrow"
+          aria-hidden="true"></i></div>
+    </div>
+    <div class="sort-button">
+      <select class="sort-panel-item-left" >Created</select>
+      <div class="sort-panel-item-right" (click)="sortTaskBy('createdDate')" (click)="clickSortCreate()"><i [class]="sortCreatedArrow"
+          aria-hidden="true"></i></div>
+    </div>
     <!-- <div class="sort-panel-item" (click)="sortProjectBy('projectName')"></div> -->
   </div>
   <div class="items" *ngIf="tasks | async as data">
     <div *ngFor="let task of data._embedded.tasks" class="list-container">
       <div class="item in-progress" [routerLink]="['details', task.id]">
-        
-        <span class="item-name">{{ task.title | uppercase }} <span *ngIf="task.parent" class="sub-task">Sub-Task</span> </span>
+
+        <span class="item-name">{{ task.title | uppercase }} <span *ngIf="task.parent" class="sub-task">Sub-Task</span>
+        </span>
         <span class="item-name"> Created: {{ task.createdDate | date:'dd/MM/yyyy' }}</span>
         <span [class]="task.status">{{ task.status }}</span>
         <span [class]="task.priority">{{ task.priority }}</span>
-        
+
       </div>
       <div class="bages">Expire in {{task.endDate | amDifference: today :'days' : true }} days</div>
     </div>
@@ -40,7 +60,8 @@
         <div *ngIf="projects | async as projectData">
           <span class="label">Project</span>
           <select type="text" formControlName="project" required>
-            <option *ngFor="let project of projectData._embedded.projects" [value]="project.id">{{project.projectName}}</option>
+            <option *ngFor="let project of projectData._embedded.projects" [value]="project.id">{{project.projectName}}
+            </option>
           </select>
         </div>
 
@@ -56,7 +77,8 @@
         <div *ngIf="employees | async as employeeData">
           <span class="label">Assign</span>
           <select type="text" formControlName="assignedTo">
-            <option *ngFor="let employee of employeeData._embedded.employees" [value]="employee.id">{{employee.firstName + " " + employee.lastName}}</option>
+            <option *ngFor="let employee of employeeData._embedded.employees" [value]="employee.id">{{employee.firstName
+              + " " + employee.lastName}}</option>
           </select>
         </div>
       </div>

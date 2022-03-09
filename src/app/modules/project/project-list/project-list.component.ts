@@ -23,12 +23,14 @@ export class ProjectListComponent implements OnInit {
   projects!: Observable<any>;
   employees!: Observable<any>
   author!: Observable<any>
+  projectsByStatus!: Observable<any>
   sortField = 'createdDate'
   sortDesc = ''
   sortBy: any
   sortBool: Boolean = true
   currenPage: number = 0
   totalPages: number = 0
+  currentProjectsStatus= "Status"
 
   ngOnInit(): void {
     this.pull()
@@ -43,6 +45,25 @@ export class ProjectListComponent implements OnInit {
 
   modalCreateClass = "modal"
   modalChooseClass = "modal"
+
+  sortStatusArrow ="fa fa-angle-down"
+  sortCreatedArrow ="fa fa-angle-down"
+
+  clickSortCreate(){
+    if (this.sortCreatedArrow == "fa fa-angle-down") {
+      this.sortCreatedArrow = "fa fa-angle-up"
+    } else {
+      this.sortCreatedArrow = "fa fa-angle-down"
+    }
+  }
+
+  clickSortStatus(){
+    if (this.sortStatusArrow == "fa fa-angle-down") {
+      this.sortStatusArrow = "fa fa-angle-up"
+    } else {
+      this.sortStatusArrow = "fa fa-angle-down"
+    }
+  }
 
   clickShowCreateModal() {
     if (this.modalCreateClass == "modal") {
@@ -60,6 +81,18 @@ export class ProjectListComponent implements OnInit {
 
   getAuthor(){
     this.author = this.authorService.getAll()
+  }
+
+  getProjectByStatus(status: any){
+    this.currentProjectsStatus = status.target.value
+    if( this.currentProjectsStatus == "Status"){
+      this.pull()
+    }
+    else{
+      this.projects = this.projectService.findByStatus(this.currentProjectsStatus,this.sortField, this.sortDesc)
+    }
+    
+    // console.log(this.projectsByStatus)
   }
 
   project = new FormGroup({
@@ -113,7 +146,14 @@ export class ProjectListComponent implements OnInit {
       this.sortDesc = ''
     }
     console.log(this.sortBool, this.sortDesc)
-    this.projects = this.projectService.getAll(this.sortField, this.sortDesc)
+    if( this.currentProjectsStatus== "Status"){
+      this.projects = this.projectService.getAll(this.sortField, this.sortDesc)
+    }
+    else {
+      this.projects = this.projectService.findByStatus(this.currentProjectsStatus,this.sortField, this.sortDesc)
+    }
+    console.log(this.currentProjectsStatus)
+    
   }
 
 }

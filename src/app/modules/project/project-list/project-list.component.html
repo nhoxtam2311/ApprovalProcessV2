@@ -1,13 +1,31 @@
-<nav class="item-list" *ngIf="author | async as user">
-  <div class="list-title" >
-    <span>Projects     <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()" *ngIf="user.authorities[0].authority == 'ROLE_MANAGER'"></i></span>
+<nav class="item-list">
+  <!-- <nav class="item-list" *ngIf="author | async as user"></nav> -->
+  <div class="list-title">
+    <span>Projects
+      <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()"></i>
+      <!-- <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()" *ngIf="user.authorities[0].authority == 'ROLE_MANAGER'"></i> -->
+    </span>
   </div>
   <div class="sort-panel">
-    <div class="sort-panel-item" (click)="sortProjectBy('status')">Status</div>
-    <div class="sort-panel-item" (click)="sortProjectBy('createdDate')">Created</div>
+    <div class="sort-button">
+      <select class="sort-panel-item-left" (change)="getProjectByStatus($event)">
+        <option value="Status">All</option>
+        <option value="COMPLETED">Complete</option>
+        <option value="WAITING">Waiting</option>
+        <option value="INPROGRESS">Inprogress</option>
+        <option value="DEFERRED">Deferred</option>
+      </select>
+      <div class="sort-panel-item-right" (click)="sortProjectBy('Status')" (click)="clickSortStatus()"><i [class]="sortStatusArrow"
+          aria-hidden="true"></i></div>
+    </div>
+    <div class="sort-button">
+      <select class="sort-panel-item-left" >Created</select>
+      <div class="sort-panel-item-right" (click)="sortProjectBy('createdDate')" (click)="clickSortCreate()"><i [class]="sortCreatedArrow"
+          aria-hidden="true"></i></div>
+    </div>
     <!-- <div class="sort-panel-item" (click)="sortProjectBy('projectName')"></div> -->
   </div>
-  <div class="items"*ngIf="projects | async as data">
+  <div class="items" *ngIf="projects | async as data">
     <div *ngFor="let project of data._embedded.projects" class="list-container">
       <div class="item in-progress" [routerLink]="['details', project.id]">
         <span class="item-name">{{ project.projectName | uppercase }}</span>
@@ -18,7 +36,7 @@
       <div class="bages">Expire in {{project.endDate | amDifference: today :'days' : true }} days</div>
     </div>
   </div>
-  
+
 </nav>
 <!-- <nav class="item-list-2">
   <div class="add-item">
@@ -36,17 +54,18 @@
     <div class="container" [formGroup]="project">
       <h5>Project details</h5>
       <div class="h-container">
-        <div><span class="label">Project Name</span><input formControlName="projectName" ></div>
+        <div><span class="label">Project Name</span><input formControlName="projectName"></div>
         <div *ngIf="employees | async as employeeData">
           <span class="label">Owner</span>
           <select type="text" formControlName="owner">
-            <option *ngFor="let employee of employeeData._embedded.employees" [value]="employee.id">{{employee.firstName + " " + employee.lastName}}</option>
+            <option *ngFor="let employee of employeeData._embedded.employees" [value]="employee.id">{{employee.firstName
+              + " " + employee.lastName}}</option>
           </select>
         </div>
-        <div><span class="label">Category</span><input type="text" formControlName="category" ></div>
+        <div><span class="label">Category</span><input type="text" formControlName="category"></div>
         <div>
           <span class="label">Priority</span>
-          <select type="text" formControlName="priority" >
+          <select type="text" formControlName="priority">
             <option value="HIGH">High</option>
             <option value="NORMAL">Normal</option>
             <option value="LOW">Low</option>

@@ -33,4 +33,7 @@ export class TaskService {
   findByAssignedTo(employeeId: number, page: number, sortBy: any, sortDesc: any){
     return this.http.get(`api/tasks/search/findByAssignedTo?assignedTo=${employeeId}&page=${page}&size=10&sort=${sortBy},${sortDesc}`)
   }
+  findByStatus(status: String, sortBy: any, sortDesc: any) {
+    return this.http.get(`api/tasks/search/findByStatus?status=${status}&sort=${sortBy},${sortDesc}`)
+  }
 }

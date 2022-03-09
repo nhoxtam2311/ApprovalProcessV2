@@ -1,5 +1,5 @@
-<!-- <div class="main-screen"> -->
-    <div class="main-screen" *ngIf="author | async as user">
+<div class="main-screen">
+    <!-- <div class="main-screen" *ngIf="author | async as user"> -->
     <h4 class="project-name">COMPANY NAME</h4>
     <div class="details" *ngIf="project | async as data">
         <div *ngIf="tasks | async as taskData ">
@@ -8,8 +8,12 @@
                 <div class="inside-container">
                     <div class="container-detail">
 
-                        <h5>Project details <i class="fa fa-pencil-square-o" aria-hidden="true"
-                                (click)="clickShowCreateModal()" *ngIf="data.status == 'WAITING' && user.authorities[0].authority == 'ROLE_MANAGER'" ></i></h5>
+                        <h5>Project details
+                            <i class="fa fa-pencil-square-o" aria-hidden="true" (click)="clickShowCreateModal()"
+                                *ngIf="data.status == 'WAITING'"></i>
+                            <!-- <i class="fa fa-pencil-square-o" aria-hidden="true" (click)="clickShowCreateModal()"
+                                *ngIf="data.status == 'WAITING' && user.authorities[0].authority == 'ROLE_MANAGER'"></i> -->
+                        </h5>
 
                         <div class="h-container">
                             <div><span class="label">Project Name</span>{{data.projectName}}</div>
@@ -22,7 +26,9 @@
                             </div>
                             <div><span class="label">Category</span>{{data.category}}</div>
                             <div><span class="label">Priority</span>{{data.priority}}</div>
-                            <div><span class="label">Status</span><div [class]="data.status">{{data.status}}</div></div>
+                            <div><span class="label">Status</span>
+                                <div [class]="data.status">{{data.status}}</div>
+                            </div>
                         </div>
                         <div class="h-container">
                             <div><span class="label">Created Day</span>{{data.createdDate | date:'MM-dd-yyyy'}}</div>
@@ -49,11 +55,17 @@
 
             </div>
             <div class="approvalButton" *ngIf="data.status == 'WAITING'">
-                <button class="approveButton" (click)="approve(data)" *ngIf="user.authorities[0].authority == 'ROLE_DIRECTOR'">Approve</button>
-                <button class="declineButton" (click)="decline(data)" *ngIf="user.authorities[0].authority == 'ROLE_DIRECTOR'">Decline</button>
+                <!-- <button class="approveButton" (click)="approve(data)"
+                    *ngIf="user.authorities[0].authority == 'ROLE_DIRECTOR'">Approve</button>
+                <button class="declineButton" (click)="decline(data)"
+                    *ngIf="user.authorities[0].authority == 'ROLE_DIRECTOR'">Decline</button> -->
+                <button class="approveButton" (click)="approve(data)">Approve</button>
+                <button class="declineButton" (click)="decline(data)">Decline</button>
             </div>
             <div class="approvalButton" *ngIf="data.status == 'INPROGRESS'">
-                <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)" *ngIf="user.authorities[0].authority == 'ROLE_MANAGER'">Resolve</button>
+                <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)" >Resolve</button>
+                <!-- <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)"
+                    *ngIf="user.authorities[0].authority == 'ROLE_MANAGER'">Resolve</button> -->
             </div>
 
             <div class="container">
@@ -64,19 +76,19 @@
                         <th (click)="sortTaskBy('assignedTo')">Employee Id</th>
                         <th>Assignee</th>
                         <th (click)="sortTaskBy('status')">Status</th>
-                        <th (click)="sortTaskBy('createdDate')" >Created Day</th>
+                        <th (click)="sortTaskBy('createdDate')">Created Day</th>
                     </tr>
                     <tr *ngFor="let task of taskData._embedded.tasks" [routerLink]="['/task','details', task.id]">
                         <!-- <div *ngIf="task.parent == 11" hidden> -->
 
-                            <td>{{task.title}}</td>
-                            <td *ngIf="task.assignedTo">{{task.assignedTo}}</td>
-                            <td *ngIf="!task.assignedTo">-</td>
-                            <td *ngIf="(task.assignedTo | employee) | async as employee">{{employee.firstName}}
-                                {{employee.lastName}}</td>
-                            <td *ngIf="!task.assignedTo">Not assigned</td>
-                            <td>{{task.status}}</td>
-                            <td>{{task.createdDate | date:'MM-dd-yyyy'}}</td>
+                        <td>{{task.title}}</td>
+                        <td *ngIf="task.assignedTo">{{task.assignedTo}}</td>
+                        <td *ngIf="!task.assignedTo">-</td>
+                        <td *ngIf="(task.assignedTo | employee) | async as employee">{{employee.firstName}}
+                            {{employee.lastName}}</td>
+                        <td *ngIf="!task.assignedTo">Not assigned</td>
+                        <td>{{task.status}}</td>
+                        <td>{{task.createdDate | date:'MM-dd-yyyy'}}</td>
                         <!-- </div> -->
                     </tr>
 

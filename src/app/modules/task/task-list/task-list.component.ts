@@ -32,6 +32,26 @@ export class TaskListComponent implements OnInit {
   sortBool:Boolean = true
   currenPage: number = 0
   totalPages: number = 0
+  currentTasksStatus= "Status"
+
+  sortStatusArrow ="fa fa-angle-down"
+  sortCreatedArrow ="fa fa-angle-down"
+
+  clickSortCreate(){
+    if (this.sortCreatedArrow == "fa fa-angle-down") {
+      this.sortCreatedArrow = "fa fa-angle-up"
+    } else {
+      this.sortCreatedArrow = "fa fa-angle-down"
+    }
+  }
+
+  clickSortStatus(){
+    if (this.sortStatusArrow == "fa fa-angle-down") {
+      this.sortStatusArrow = "fa fa-angle-up"
+    } else {
+      this.sortStatusArrow = "fa fa-angle-down"
+    }
+  }
 
   ngOnInit(): void {
     this.pull()
@@ -103,7 +123,7 @@ export class TaskListComponent implements OnInit {
   }
 
   getProjects(): void{
-    this.projects = this.projectService.findByStatus("INPROGRESS")
+    this.projects = this.projectService.findByStatus("INPROGRESS","createdDate","")
   }
 
   getEmpolyees() {
@@ -124,6 +144,25 @@ export class TaskListComponent implements OnInit {
       this.sortDesc = ''
     }
     console.log(this.sortBool,this.sortDesc)
-    this.tasks = this.taskService.getAll(this.sortField,this.sortDesc)
+    if( this.currentTasksStatus== "Status"){
+      this.tasks = this.taskService.getAll(this.sortField, this.sortDesc)
+    }
+    else {
+      this.tasks = this.taskService.findByStatus(this.currentTasksStatus,this.sortField, this.sortDesc)
+    }
+    console.log(this.currentTasksStatus)
   }
+
+  getTaskByStatus(status: any){
+    this.currentTasksStatus = status.target.value
+    if( this.currentTasksStatus == "Status"){
+      this.pull()
+    }
+    else{
+      this.tasks = this.taskService.findByStatus(this.currentTasksStatus,this.sortField, this.sortDesc)
+    }
+    
+    // console.log(this.projectsByStatus)
+  }
+
 }

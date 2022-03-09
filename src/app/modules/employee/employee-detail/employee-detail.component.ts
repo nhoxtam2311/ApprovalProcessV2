@@ -40,6 +40,9 @@ export class EmployeeDetailComponent implements OnInit {
   sortDescTask = ''
   sortBoolTask:Boolean = true
   sortFieldTask ='createdDate'
+
+  currenPageProject: number = 0
+  currenPageTask: number = 0
   
 
   ngOnInit(): void {
@@ -331,13 +334,15 @@ export class EmployeeDetailComponent implements OnInit {
   }
 
   loadPageProjects(page: number) {
-    this.getProjects(this.id, page, this.sortFieldProject, this.sortDescProject)
+    this.currenPageProject = page
+    this.getProjects(this.id, this.currenPageProject, this.sortFieldProject, this.sortDescProject)
     // this.init()
     // this.getAllEmployee()
   }
 
   loadPageTasks(page: number) {
-    this.getTasks(this.id, page, this.sortFieldTask, this.sortDescTask)
+    this.currenPageTask = page
+    this.getTasks(this.id, this.currenPageTask, this.sortFieldTask, this.sortDescTask)
     // this.init()
     // this.getAllEmployee()
   }
@@ -361,7 +366,7 @@ export class EmployeeDetailComponent implements OnInit {
       this.sortDescTask = ''
     }
     console.log(this.sortBoolTask,this.sortDescTask)
-    this.getTasks(this.id, 0, this.sortFieldTask, this.sortDescTask)
+    this.getTasks(this.id, this.currenPageTask, this.sortFieldTask, this.sortDescTask)
   }
 
   sortProjectBy(field: any) {
@@ -375,7 +380,7 @@ export class EmployeeDetailComponent implements OnInit {
       this.sortDescProject = ''
     }
     console.log(this.sortBoolProject,this.sortDescProject)
-    this.getTasks(this.id, 0, this.sortFieldProject, this.sortDescProject)
+    this.getProjects(this.id, this.currenPageProject, this.sortFieldProject, this.sortDescProject)
   }
 
 }

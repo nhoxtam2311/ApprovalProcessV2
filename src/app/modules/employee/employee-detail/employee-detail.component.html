@@ -1,5 +1,6 @@
 <div class="main-screen" *ngIf="employee | async as employeeData">
-    <div *ngIf="author | async as user">
+    <div>
+        <!-- <div *ngIf="author | async as user"> -->
         <h4 class="project-name">Employee - {{employeeData.firstName}}</h4>
         <div class="details">
             <div class="container">
@@ -35,14 +36,16 @@
                         <h5>Projects</h5>
                         <table>
                             <tr>
-                                <th>Name</th>
-                                <th>Priority</th>
-                                <th>Status</th>
+                                <th (click)="sortProjectBy('projectName')">Name</th>
+                                <th (click)="sortProjectBy('priority')">Priority</th>
+                                <th (click)="sortProjectBy('status')">Status</th>
+                                <th (click)="sortProjectBy('createdDate')">Created Day</th>
                             </tr>
-                            <tr *ngFor="let project of projectsData._embedded.projects">
+                            <tr *ngFor="let project of projectsData._embedded.projects" [routerLink]="['/project','details', project.id]">
                                 <td>{{project.projectName}}</td>
                                 <td>{{project.priority}}</td>
                                 <td>{{project.status}}</td>
+                                <td>{{project.createdDate | date:'MM-dd-yyyy'}}</td>
                             </tr>
 
                         </table>
@@ -63,14 +66,16 @@
                         <h5>Tasks</h5>
                         <table>
                             <tr>
-                                <th>Name</th>
-                                <th>Project</th>
-                                <th>Status</th>
+                                <th (click)="sortTaskBy('title')">Name</th>
+                                <th (click)="sortTaskBy('projectName')">Project</th>
+                                <th (click)="sortTaskBy('status')">Status</th>
+                                <th (click)="sortTaskBy('createdDate')">Created Day</th>
                             </tr>
-                            <tr *ngFor="let task of tasksData._embedded.tasks">
+                            <tr *ngFor="let task of tasksData._embedded.tasks" [routerLink]="['/task','details', task.id]">
                                 <td>{{task.title}}</td>
                                 <td *ngIf="(task.project | project) | async as project">{{project.projectName}}</td>
                                 <td>{{task.status}}</td>
+                                <td>{{task.createdDate | date:'MM-dd-yyyy'}}</td>
                             </tr>
 
                         </table>
