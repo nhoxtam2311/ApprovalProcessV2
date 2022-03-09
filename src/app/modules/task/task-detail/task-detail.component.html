@@ -1,11 +1,11 @@
-<div class="main-screen">
+<div class="main-screen"  *ngIf="author | async as user">
     <h4 class="project-name">COMPANY NAME</h4>
     <div class="details" *ngIf="task | async as data">
         <div class="container">
             <div class="inside-container">
                 <div class="container-detail">
                     <h5>Task details <i class="fa fa-pencil-square-o" aria-hidden="true"
-                            (click)="clickShowCreateModal()" *ngIf="data.status == 'WAITING'"></i>
+                            (click)="clickShowCreateModal()" *ngIf="data.status == 'WAITING' && user.authorities[0].authority == 'ROLE_STAFF' "></i>
                     </h5>
                     <div class="h-container">
                         <div *ngIf="(data.project | project) | async as project"><span class="label">Project</span><a
@@ -46,15 +46,15 @@
             </div>
         </div>
         <div class="approvalButton" *ngIf="data.status == 'WAITING'">
-            <button class="approveButton" (click)="approve(data)">Approve</button>
-            <button class="declineButton" (click)="decline(data)">Decline</button>
+            <button class="approveButton" (click)="approve(data)" *ngIf="user.authorities[0].authority == 'ROLE_MANAGER'">Approve</button>
+            <button class="declineButton" (click)="decline(data)" *ngIf="user.authorities[0].authority == 'ROLE_MANAGER'">Decline</button>
         </div>
         <div class="approvalButton" *ngIf="data.status == 'INPROGRESS'">
-            <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)">Resolve</button>
+            <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)" *ngIf="user.authorities[0].authority == 'ROLE_STAFF'">Resolve</button>
         </div>
         <div class="container" *ngIf="!data.parent">
             <h5>Sub-Tasks <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateSubTaskModal()"
-                    *ngIf="data.status=='INPROGRESS'"></i></h5>
+                    *ngIf="data.status=='INPROGRESS' && (user.authorities[0].authority == 'ROLE_MANAGER' || user.authorities[0].authority == 'ROLE_STAFF')" ></i></h5>
             <table *ngIf="subTasks | async as subTaskData ">
                 <tr>
                     <th (click)="sortSubTaskBy('title')">Name</th>

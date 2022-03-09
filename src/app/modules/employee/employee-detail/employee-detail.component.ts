@@ -6,6 +6,7 @@ import { EmployeeService } from 'src/app/services/employee.service';
 import { ProjectService } from 'src/app/services/project.service';
 import { TaskService } from 'src/app/services/task.service';
 import { Chart } from 'angular-highcharts';
+import { AuthorService } from 'src/app/services/author-service.service';
 
 @Component({
   selector: 'app-employee-detail',
@@ -18,7 +19,8 @@ export class EmployeeDetailComponent implements OnInit {
     private employeeService: EmployeeService,
     private projectService: ProjectService,
     private taskService: TaskService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authorService: AuthorService
   ) { }
 
   id: any
@@ -27,6 +29,7 @@ export class EmployeeDetailComponent implements OnInit {
   employee!: Observable<any>
   projects!: Observable<any>
   tasks!: Observable<any>
+  author!: Observable<any>
 
   sortByProject: any
   sortDescProject = ''
@@ -40,6 +43,7 @@ export class EmployeeDetailComponent implements OnInit {
   
 
   ngOnInit(): void {
+    this.getAuthor()
     this.route.paramMap.subscribe((data: any) => {
       this.id = data.params["id"]
       this.getEmployee(data.params["id"])
@@ -63,6 +67,10 @@ export class EmployeeDetailComponent implements OnInit {
     this.tasks.subscribe((data:any)=>{
       this.totalPagesTask = data.page.totalPages
     })
+  }
+
+  getAuthor(){
+    this.author = this.authorService.getAll()
   }
 
   modalClass = "modal"

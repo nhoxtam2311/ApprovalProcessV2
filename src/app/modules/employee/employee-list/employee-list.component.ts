@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { AuthorService } from 'src/app/services/author-service.service';
 import { EmployeeService } from 'src/app/services/employee.service';
 
 @Component({
@@ -12,9 +13,11 @@ export class EmployeeListComponent implements OnInit {
 
   constructor(
     private employeeService: EmployeeService,
+    private authorService: AuthorService
   ) { }
 
   employees!: Observable<any>
+  author!: Observable<any>
 
   sortBy: any
   sortDesc = ''
@@ -26,6 +29,7 @@ export class EmployeeListComponent implements OnInit {
 
   ngOnInit(): void {
     this.pull()
+    this.getAuthor()
   }
 
   pull(): void {
@@ -33,6 +37,10 @@ export class EmployeeListComponent implements OnInit {
     this.employees.subscribe((data:any)=>{
       this.totalPages = data.page.totalPages
     })
+  }
+
+  getAuthor(){
+    this.author = this.authorService.getAll()
   }
 
   modalClass = "modal"

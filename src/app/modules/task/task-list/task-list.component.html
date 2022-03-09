@@ -1,6 +1,6 @@
-<nav class="item-list">
+<nav class="item-list" *ngIf="author | async as user">
   <div class="list-title" >
-    <span>Tasks     <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()"></i></span>
+    <span>Tasks     <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()" *ngIf="user.authorities[0].authority == 'ROLE_MANAGER' || user.authorities[0].authority == 'ROLE_STAFF'"></i></span>
   </div>
   <div class="sort-panel">
     <div class="sort-panel-item" (click)="sortTaskBy('status')">Status</div>

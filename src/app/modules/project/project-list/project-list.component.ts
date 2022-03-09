@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { AuthorService } from 'src/app/services/author-service.service';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { ProjectService } from 'src/app/services/project.service';
 
@@ -15,11 +16,13 @@ export class ProjectListComponent implements OnInit {
   constructor(
     private projectService: ProjectService,
     private employeeService: EmployeeService,
-    private router: Router
+    private router: Router,
+    private authorService: AuthorService
   ) { }
 
   projects!: Observable<any>;
   employees!: Observable<any>
+  author!: Observable<any>
   sortField = 'createdDate'
   sortDesc = ''
   sortBy: any
@@ -30,6 +33,7 @@ export class ProjectListComponent implements OnInit {
   ngOnInit(): void {
     this.pull()
     this.getAllEmployee()
+    this.getAuthor()
   }
 
   pull(): void {
@@ -54,7 +58,9 @@ export class ProjectListComponent implements OnInit {
     } else this.modalChooseClass = "modal"
   }
 
-
+  getAuthor(){
+    this.author = this.authorService.getAll()
+  }
 
   project = new FormGroup({
     projectName: new FormControl(),

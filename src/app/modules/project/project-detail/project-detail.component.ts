@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Chart } from 'angular-highcharts';
 import { Observable } from 'rxjs';
+import { AuthorService } from 'src/app/services/author-service.service';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { ProjectService } from 'src/app/services/project.service';
 import { TaskService } from 'src/app/services/task.service';
@@ -18,7 +19,8 @@ export class ProjectDetailComponent implements OnInit {
     private projectService: ProjectService,
     private taskService: TaskService,
     private employeeService: EmployeeService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authorService: AuthorService
   ) {
   }
 
@@ -26,6 +28,7 @@ export class ProjectDetailComponent implements OnInit {
   totalPages: number = 0
   project!: Observable<any>
   tasks!: Observable<any>
+  author!: Observable<any>
   sortBy: any
   sortDesc = ''
   sortBool:Boolean = true
@@ -64,12 +67,21 @@ export class ProjectDetailComponent implements OnInit {
       })
       this.init()
       this.getAllEmployee()
+      this.getAuthor()
+      this.author.subscribe((data:any)=>{
+        data.authorities.authority
+        console.log(data.authorities[0].authority)
+      })
     })
 
   }
 
   getProject(projectId: any) {
     this.project = this.projectService.getProject(projectId)
+  }
+
+  getAuthor(){
+    this.author = this.authorService.getAll()
   }
 
   getTasks(projectId: any, page: number, sortBy: any, sortDesc: any) {

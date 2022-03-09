@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { AuthorService } from 'src/app/services/author-service.service';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { ProjectService } from 'src/app/services/project.service';
 import { TaskService } from 'src/app/services/task.service';
@@ -17,12 +18,14 @@ export class TaskListComponent implements OnInit {
     private taskService: TaskService,
     private router: Router,
     private projectService: ProjectService,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private authorService: AuthorService
   ) { }
 
   tasks!: Observable<any>
   projects!: Observable<any>
   employees!: Observable<any>
+  author!: Observable<any>
   sortField ='createdDate'
   sortDesc = ''
   sortBy: any
@@ -34,6 +37,7 @@ export class TaskListComponent implements OnInit {
     this.pull()
     this.getProjects()
     this.getEmpolyees()
+    this.getAuthor()
   }
 
   modalCreateClass = "modal"
@@ -53,6 +57,10 @@ export class TaskListComponent implements OnInit {
 
   pull(): void {
     this.tasks = this.taskService.getAll(this.sortField,this.sortDesc)
+  }
+
+  getAuthor(){
+    this.author = this.authorService.getAll()
   }
 
   task = new FormGroup({

@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Chart } from 'angular-highcharts';
 import { Observable } from 'rxjs';
+import { AuthorService } from 'src/app/services/author-service.service';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { TaskService } from 'src/app/services/task.service';
 
@@ -16,7 +17,8 @@ export class TaskDetailComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     private route: ActivatedRoute,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private authorService: AuthorService
   ) { }
 
   chart!: Chart
@@ -24,6 +26,7 @@ export class TaskDetailComponent implements OnInit {
   totalPages: number = 0
   task!: Observable<any>
   subTasks!: Observable<any>
+  author!: Observable<any>
   text: any
   sortBy: any
   sortDesc = ''
@@ -82,6 +85,7 @@ export class TaskDetailComponent implements OnInit {
       })
       this.init()
       this.getEmpolyees()
+      this.getAuthor()
     })
 
   }
@@ -359,6 +363,10 @@ export class TaskDetailComponent implements OnInit {
 
   getEmpolyees() {
     this.employees = this.employeeService.getAll(0,9999,'firstName','')
+  }
+
+  getAuthor(){
+    this.author = this.authorService.getAll()
   }
 
   createSubTask() {
