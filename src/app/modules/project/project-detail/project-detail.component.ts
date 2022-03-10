@@ -37,6 +37,14 @@ export class ProjectDetailComponent implements OnInit {
   employees!: Observable<any>
   modalCreateClass = "modal"
   resolvable = true
+  currentTasksStatus= "Status"
+  sortStatusArrow = "fa fa-angle-down"
+  sortCreatedArrow = "fa fa-angle-down"
+
+  tasksByStatus!: Observable<any>
+
+
+
   projectForm = new FormGroup({
     projectName: new FormControl(),
     owner: new FormControl(),
@@ -89,6 +97,10 @@ export class ProjectDetailComponent implements OnInit {
     this.tasks.subscribe((data: any) => {
       this.totalPages = data.page.totalPages
     })
+  }
+
+  getTasksByStatus(){
+
   }
 
   /* Chart */
@@ -222,7 +234,12 @@ export class ProjectDetailComponent implements OnInit {
         },
         xAxis: {
           categories: categories, title: {
-            text: 'employees'
+            text: 'employee\'s Id'
+          }
+        },
+        yAxis: {
+          categories: categories, title: {
+            text: 'The volume of tasks'
           }
         },
         series: [total, done, inprogress, reject]
@@ -243,8 +260,8 @@ export class ProjectDetailComponent implements OnInit {
         },
         colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)', '#f59e1b'],
         title: {
-          text: 'Tasks',
-          x: 35,
+          text: 'The volume of tasks',
+          x: 60,
           align: 'left',
         },
         credits: {
@@ -366,6 +383,35 @@ export class ProjectDetailComponent implements OnInit {
     }
     console.log(this.sortBool,this.sortDesc)
     this.getTasks(this.id, this.currenPage, this.sortField, this.sortDesc)
+  }
+
+  getTaskByStatus(status: any){
+    console.log(status)
+    this.currentTasksStatus = status.target.value
+    
+      this.getTasks(this.id, this.currenPage, this.sortField, this.sortDesc)
+    
+    
+    
+    // console.log(this.projectsByStatus)
+  }
+
+  clickSortStatus(){
+    if (this.sortStatusArrow == "fa fa-angle-down") {
+      this.sortStatusArrow = "fa fa-angle-up"
+      console.log( this.sortStatusArrow = "fa fa-angle-up")
+    } else {
+      this.sortStatusArrow = "fa fa-angle-down"
+      console.log( this.sortStatusArrow = "fa fa-angle-up")
+    }
+  }
+
+  clickSortCreate(){
+    if (this.sortCreatedArrow == "fa fa-angle-down") {
+      this.sortCreatedArrow = "fa fa-angle-up"
+    } else {
+      this.sortCreatedArrow = "fa fa-angle-down"
+    }
   }
 
 }

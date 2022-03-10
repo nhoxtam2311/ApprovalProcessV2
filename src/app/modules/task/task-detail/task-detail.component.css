@@ -54,6 +54,34 @@
     width: 206px;
     padding: 1px;
 }
+
+.sort-button{
+    display: flex;
+    justify-content: space-between;
+}
+
+.sort-panel-item-left{
+    width: 80%;
+    cursor: pointer;
+    background-color: transparent;;
+    color: white;
+    height: 19px;
+    appearance: none;
+	color: white;
+	border-left-style: none;
+    border-top-style: none;
+    border-bottom-style: none;
+    border-right-width: 2.5px;
+    text-align: left;
+    background-color: #505050;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: -webkit-pictograph;
+}
+.sort-panel-item-right{
+    width: 10%;
+}
+
 table{
     width: 100%;
     border-collapse: collapse;

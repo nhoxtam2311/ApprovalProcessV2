@@ -53,6 +53,42 @@
     height: 15px;
 }
 
+.sort-panel{
+    display: flex;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+    margin-bottom: 1em;
+    justify-content: space-around;
+    height: 18px;
+}
+
+.sort-button{
+    display: flex;
+    justify-content: space-between;
+}
+
+.sort-panel-item-left{
+    width: 80%;
+    cursor: pointer;
+    background-color: transparent;;
+    color: white;
+    height: 19px;
+    appearance: none;
+	color: white;
+	border-left-style: none;
+    border-top-style: none;
+    border-bottom-style: none;
+    border-right-width: 2.5px;
+    text-align: left;
+    background-color: #505050;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: -webkit-pictograph;
+}
+.sort-panel-item-right{
+    width: 10%;
+}
+
 .INPROGRESS{
     font-size: 15px;
     width: 150px;

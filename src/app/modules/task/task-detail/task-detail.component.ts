@@ -32,6 +32,9 @@ export class TaskDetailComponent implements OnInit {
   sortDesc = ''
   sortBool:Boolean = true
   sortField ='createdDate'
+  currentTasksStatus= "Status"
+  sortStatusArrow = "fa fa-angle-down"
+  sortCreatedArrow = "fa fa-angle-down"
   
   taskForm = new FormGroup({
     title: new FormControl(),
@@ -240,7 +243,12 @@ export class TaskDetailComponent implements OnInit {
         },
         xAxis: {
           categories: categories, title: {
-            text: 'employees'
+            text: 'employee\'s Id'
+          }
+        },
+        yAxis: {
+          categories: categories, title: {
+            text: 'The volume of sub-tasks'
           }
         },
         series: [total, done, inprogress, reject]
@@ -261,8 +269,8 @@ export class TaskDetailComponent implements OnInit {
         },
         colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)', '#f59e1b'],
         title: {
-          text: 'Subtasks',
-          x: 35,
+          text: 'The volume of sub-tasks',
+          x: 60,
           align: 'left',
         },
         credits: {
@@ -409,6 +417,40 @@ export class TaskDetailComponent implements OnInit {
   }
 
   sortSubTaskBy(field: any) {
+    this.sortField = field
+    console.log(this.sortBool,this.sortDesc)
+    if (this.sortBool === true) {
+      this.sortBool = false
+      this.sortDesc = "desc"
+    } else {
+      this.sortBool = true
+      this.sortDesc = ''
+    }
+    console.log(this.sortBool,this.sortDesc)
+    this.getSubTasks(this.id, 0, this.sortField, this.sortDesc)
+  }
+
+  getTaskByStatus(status: any){
+    this.currentTasksStatus = status.target.value
+    
+    this.getSubTasks(this.id, 0, this.sortField, this.sortDesc)
+    
+    
+    
+    // console.log(this.projectsByStatus)
+  }
+
+  clickSortStatus(){
+    if (this.sortStatusArrow == "fa fa-angle-down") {
+      this.sortStatusArrow = "fa fa-angle-up"
+      console.log( this.sortStatusArrow = "fa fa-angle-up")
+    } else {
+      this.sortStatusArrow = "fa fa-angle-down"
+      console.log( this.sortStatusArrow = "fa fa-angle-up")
+    }
+  }
+
+  sortTaskBy(field: any) {
     this.sortField = field
     console.log(this.sortBool,this.sortDesc)
     if (this.sortBool === true) {

@@ -78,7 +78,7 @@
 
 .sort-button{
     display: flex;
-    width: 30%;
+    width: 47%;
 }
 
 .sort-panel-item-left{
@@ -126,6 +126,10 @@
     background-color: #99a6f1;
     color: black;
     padding-bottom: 5px;
+}
+
+.month{
+    appearance: none;
 }
 
 .INPROGRESS{

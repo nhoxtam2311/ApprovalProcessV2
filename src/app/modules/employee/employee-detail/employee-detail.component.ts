@@ -180,8 +180,9 @@ export class EmployeeDetailComponent implements OnInit {
         },
         colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)', '#f59e1b'],
         title: {
-          text: 'Projects',
-          // x: 35,
+          text: 'The volume of projects',
+          x: 60,
+          y: 45,
           align: 'center',
         },
         credits: {
@@ -283,8 +284,9 @@ export class EmployeeDetailComponent implements OnInit {
         },
         colors: ['rgb(124, 181, 236)', '#fe6694', 'rgb(144, 237, 125)', '#f59e1b'],
         title: {
-          text: 'Tasks',
-          // x: 35,
+          text: 'The volume of tasks',
+          x: 60,
+          y: 45,
           align: 'center',
         },
         credits: {

@@ -15,19 +15,20 @@
         <option value="INPROGRESS">Inprogress</option>
         <option value="DEFERRED">Deferred</option>
       </select>
-      <div class="sort-panel-item-right" (click)="sortProjectBy('Status')" (click)="clickSortStatus()"><i [class]="sortStatusArrow"
-          aria-hidden="true"></i></div>
+      <div class="sort-panel-item-right" (click)="sortProjectBy('Status')" (click)="clickSortStatus()"><i
+          [class]="sortStatusArrow" aria-hidden="true"></i></div>
     </div>
     <div class="sort-button">
-      <select class="sort-panel-item-left" >Created</select>
-      <div class="sort-panel-item-right" (click)="sortProjectBy('createdDate')" (click)="clickSortCreate()"><i [class]="sortCreatedArrow"
-          aria-hidden="true"></i></div>
+      <input type="month" class="sort-panel-item-left month" (change)="getMonthChanged($event)">
+      <div class="sort-panel-item-right" (click)="sortProjectBy('createdDate')" (click)="clickSortCreate()"><i
+          [class]="sortCreatedArrow" aria-hidden="true"></i></div>
     </div>
     <!-- <div class="sort-panel-item" (click)="sortProjectBy('projectName')"></div> -->
   </div>
   <div class="items" *ngIf="projects | async as data">
     <div *ngFor="let project of data._embedded.projects" class="list-container">
-      <div class="item in-progress" [routerLink]="['details', project.id]">
+      <div class="item in-progress" [style]="show" [routerLink]="['details', project.id]"
+        *ngIf="check(project.createdDate)">
         <span class="item-name">{{ project.projectName | uppercase }}</span>
         <span class="item-name"> Created: {{ project.createdDate | date:'dd/MM/yyyy' }}</span>
         <span [class]="project.status">{{ project.status }}</span>

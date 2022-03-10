@@ -54,18 +54,15 @@
             </div>
         </div>
         <div class="approvalButton" *ngIf="data.status == 'WAITING'">
-            <button class="approveButton" (click)="approve(data)"
-               >Approve</button>
+            <button class="approveButton" (click)="approve(data)">Approve</button>
             <!-- <button class="approveButton" (click)="approve(data)"
                 *ngIf="user.authorities[0].authority == 'ROLE_MANAGER'">Approve</button> -->
-            <button class="declineButton" (click)="decline(data)"
-                >Decline</button>
+            <button class="declineButton" (click)="decline(data)">Decline</button>
             <!-- <button class="declineButton" (click)="decline(data)"
                 *ngIf="user.authorities[0].authority == 'ROLE_MANAGER'">Decline</button> -->
         </div>
         <div class="approvalButton" *ngIf="data.status == 'INPROGRESS'">
-            <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)"
-                >Resolve</button>
+            <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)">Resolve</button>
             <!-- <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)"
                 *ngIf="user.authorities[0].authority == 'ROLE_STAFF'">Resolve</button> -->
         </div>
@@ -81,7 +78,21 @@
                     <th (click)="sortSubTaskBy('title')">Name</th>
                     <th (click)="sortSubTaskBy('assignedTo')">Employee Id</th>
                     <th>Assignee</th>
-                    <th (click)="sortSubTaskBy('status')">Status</th>
+                    <th class="sort-button ">
+
+                        <select (change)="getTaskByStatus($event)" class="sort-panel-item-left">
+                            <option value="Status">Status</option>
+                            <option value="COMPLETED">Complete</option>
+                            <option value="WAITING">Waiting</option>
+                            <option value="INPROGRESS">Inprogress</option>
+                            <option value="DEFERRED">Deferred</option>
+                        </select>
+                        <div class="sort-panel-item-right" (click)="sortTaskBy('status')" (click)="clickSortStatus()"><i
+                                [class]="sortStatusArrow" aria-hidden="true"></i></div>
+
+                        <!-- <div class="sort-panel-item" (click)="sortProjectBy('projectName')"></div> -->
+
+                    </th>
                     <th (click)="sortSubTaskBy('createdDate')">Created Day</th>
                 </tr>
                 <tr *ngFor="let subTask of subTaskData._embedded.tasks" [routerLink]="['/task','details', subTask.id]">

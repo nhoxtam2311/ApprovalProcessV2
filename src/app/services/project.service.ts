@@ -30,4 +30,7 @@ export class ProjectService {
   findByOwner(employeeId: String, page: number, sortBy: any, sortDesc: any) {
     return this.http.get(`api/projects/search/findByOwner?owner=${employeeId}&page=${page}&size=10&sort=${sortBy},${sortDesc}`)
   }
+  findByCreatedDate(date: any){
+    return this.http.get(`api/projects/search/findByCreatedDate?createdDate=${date}`)
+  }
 }

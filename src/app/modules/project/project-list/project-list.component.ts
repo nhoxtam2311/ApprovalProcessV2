@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -30,7 +31,13 @@ export class ProjectListComponent implements OnInit {
   sortBool: Boolean = true
   currenPage: number = 0
   totalPages: number = 0
-  currentProjectsStatus= "Status"
+  currentProjectsStatus = "Status"
+  td = new Date()
+  today = `${this.td.getFullYear()}-${this.td.getMonth() + 1 > 9 ? this.td.getMonth() + 1 : '0' + (this.td.getMonth() + 1)}-${this.td.getDate() > 9 ? this.td.getDate() : '0' + this.td.getDate()}T00:00:00.000+00:00`
+  month: any = `${this.td.getMonth() + 1 > 9 ? this.td.getMonth() + 1 : '0' + (this.td.getMonth() + 1)}`
+  year: any =`${this.td.getFullYear()}`
+  // test: any = "2022-03-05T00:00:00.000+00:00"
+  show: any = ""
 
   ngOnInit(): void {
     this.pull()
@@ -40,16 +47,19 @@ export class ProjectListComponent implements OnInit {
 
   pull(): void {
     this.projects = this.projectService.getAll(this.sortField, this.sortDesc)
+    // this.projects.subscribe((data:any)=>{
+    //   console.log(data["_embedded"]["projects"][1]["createdDate"])
+    // })
   }
 
 
   modalCreateClass = "modal"
   modalChooseClass = "modal"
 
-  sortStatusArrow ="fa fa-angle-down"
-  sortCreatedArrow ="fa fa-angle-down"
+  sortStatusArrow = "fa fa-angle-down"
+  sortCreatedArrow = "fa fa-angle-down"
 
-  clickSortCreate(){
+  clickSortCreate() {
     if (this.sortCreatedArrow == "fa fa-angle-down") {
       this.sortCreatedArrow = "fa fa-angle-up"
     } else {
@@ -57,7 +67,7 @@ export class ProjectListComponent implements OnInit {
     }
   }
 
-  clickSortStatus(){
+  clickSortStatus() {
     if (this.sortStatusArrow == "fa fa-angle-down") {
       this.sortStatusArrow = "fa fa-angle-up"
     } else {
@@ -79,19 +89,19 @@ export class ProjectListComponent implements OnInit {
     } else this.modalChooseClass = "modal"
   }
 
-  getAuthor(){
+  getAuthor() {
     this.author = this.authorService.getAll()
   }
 
-  getProjectByStatus(status: any){
+  getProjectByStatus(status: any) {
     this.currentProjectsStatus = status.target.value
-    if( this.currentProjectsStatus == "Status"){
+    if (this.currentProjectsStatus == "Status") {
       this.pull()
     }
-    else{
-      this.projects = this.projectService.findByStatus(this.currentProjectsStatus,this.sortField, this.sortDesc)
+    else {
+      this.projects = this.projectService.findByStatus(this.currentProjectsStatus, this.sortField, this.sortDesc)
     }
-    
+
     // console.log(this.projectsByStatus)
   }
 
@@ -112,7 +122,8 @@ export class ProjectListComponent implements OnInit {
   create() {
     var project = this.project.value
     var createdDate = new Date()
-    project.createdDate = `${createdDate.getFullYear()}-${createdDate.getMonth() + 1 > 9 ? createdDate.getMonth() + 1 : '0' + (createdDate.getMonth() + 1)}-${createdDate.getDate() > 9 ? createdDate.getDate() : '0' + createdDate.getDate()}`
+    project.createdDate = `${createdDate.getFullYear()}-${createdDate.getMonth() + 1 > 9 ? createdDate.getMonth() + 1 : '0' + (createdDate.getMonth() + 1)}-${createdDate.getDate() > 9 ? createdDate.getDate() : '0' + createdDate.getDate()}T00:00:00.000+00:00`
+    // console.log(project.createdDate)
     this.projectService.create(project).subscribe(() => {
       // this.project.reset()
       this.pull()
@@ -132,12 +143,10 @@ export class ProjectListComponent implements OnInit {
     this.employees = this.employeeService.getAll(0, 9999, 'firstName', '')
   }
 
-  td = new Date()
-  today = `${this.td.getFullYear()}-${this.td.getMonth() + 1 > 9 ? this.td.getMonth() + 1 : '0' + (this.td.getMonth() + 1)}-${this.td.getDate() > 9 ? this.td.getDate() : '0' + this.td.getDate()}T00:00:00.000+00:00`
 
   sortProjectBy(field: any) {
     this.sortField = field
-    console.log(this.sortBool, this.sortDesc)
+    // console.log(this.sortBool, this.sortDesc)
     if (this.sortBool === true) {
       this.sortBool = false
       this.sortDesc = "desc"
@@ -145,15 +154,66 @@ export class ProjectListComponent implements OnInit {
       this.sortBool = true
       this.sortDesc = ''
     }
-    console.log(this.sortBool, this.sortDesc)
-    if( this.currentProjectsStatus== "Status"){
+    // console.log(this.sortBool, this.sortDesc)
+    if (this.currentProjectsStatus == "Status") {
       this.projects = this.projectService.getAll(this.sortField, this.sortDesc)
     }
     else {
-      this.projects = this.projectService.findByStatus(this.currentProjectsStatus,this.sortField, this.sortDesc)
+      this.projects = this.projectService.findByStatus(this.currentProjectsStatus, this.sortField, this.sortDesc)
     }
-    console.log(this.currentProjectsStatus)
-    
+    // console.log(this.currentProjectsStatus)
   }
+
+
+  getMonthChanged(change: any) {
+    this.month = change.target.value[5] + change.target.value[6]
+    this.year = change.target.value[0] + change.target.value[1] + change.target.value[2] + change.target.value[3]
+    // console.log(this.month + "+" + this.year)
+    if (this.currentProjectsStatus == "Status") {
+      this.projects = this.projectService.getAll(this.sortField, this.sortDesc)
+    }
+    else {
+      this.projects = this.projectService.findByStatus(this.currentProjectsStatus, this.sortField, this.sortDesc)
+    }
+  }
+
+  check(createDay: any) {
+    // console.log(this.month + this.year)
+    if (((createDay[5] + createDay[6]) == this.month) && ((createDay[0] + createDay[1] + createDay[2] + createDay[3]) == this.year)) {
+      this.show = ''
+      return true
+
+    } else {
+      this.show = 'display: none'
+      return false
+    }
+  }
+
+  // getMonthChanged(month: any){
+  //   let year = month.target.value[0] + month.target.value[1] + month.target.value[2] + month.target.value[3]
+  //   let months = month.target.value[5] + month.target.value[6]
+  //   let day = month.target.value[8] + month.target.value[9]
+
+  //   var testDay
+  //   console.log(month.target.value + "T00:00:00.000+00:00")
+
+  //   // console.log(" ..." + month.target.value)
+  //   // console.log("year "  + year )
+  //   // console.log("month" + months)
+  //   // console.log("day" + day)
+
+  //   testDay = new Date(month.target.value + "T00:00:00.000+00:00")
+  //   let lastDay = `${testDay.getFullYear()}-${testDay.getMonth() + 1 > 9 ? testDay.getMonth() + 1 : '0' + (testDay.getMonth() + 1)}-${testDay.getDate() > 9 ? testDay.getDate() : '0' + testDay.getDate()}T00:00:00.000+00:00`
+  //   // console.log(testDay)
+  //   console.log(lastDay)
+  //   // console.log(year + '-' + months + '-' + day + 'T00:00:00.000+00:00')
+
+  //   this.projects = this.projectService.findByCreatedDate(lastDay)
+
+  //   //   this.projects.subscribe((data:any)=>{
+  //   //     console.log(data._embedded)
+  //   //   })
+
+  // }
 
 }
