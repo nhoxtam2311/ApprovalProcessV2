@@ -3,7 +3,7 @@
   <div class="list-title">
     <span>Tasks
       <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()"
-        *ngIf="user.authorities[0].authority == 'ROLE_MANAGER' || user.authorities[0].authority == 'ROLE_STAFF'"></i>
+        *ngIf="user.authorities[0].authority == 'ROLE_MANAGER' || user.authorities[0].authority == 'ROLE_STAFF' || user.authorities[0].authority == 'ROLE_ADMIN'"></i>
       <!-- <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()"></i> -->
     </span>
   </div>

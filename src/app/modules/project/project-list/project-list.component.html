@@ -3,7 +3,7 @@
   <div class="list-title">
     <span>Projects
       <!-- <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()"></i> -->
-      <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()" *ngIf="user.authorities[0].authority == 'ROLE_MANAGER'"></i>
+      <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()" *ngIf="user.authorities[0].authority == 'ROLE_MANAGER' || user.authorities[0].authority == 'ROLE_ADMIN'"></i>
     </span>
   </div>
   <div class="sort-panel">
