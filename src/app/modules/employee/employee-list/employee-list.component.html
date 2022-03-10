@@ -1,10 +1,10 @@
 <div class="main-screen" *ngIf="employees | async as data">
-    <div class="container">
-        <!-- <div class="container" *ngIf="author | async as user"> -->
+    <!-- <div class="container"> -->
+        <div class="container" *ngIf="author | async as user">
         <h5>Employees
-            <!-- <i class="fa fa-plus-circle" aria-hidden="true" (click)="click()"
-                *ngIf="user.authorities[0].authority == 'ROLE_MANAGER' || user.authorities[0].authority == 'ROLE_DIRECTOR'"></i> -->
-            <i class="fa fa-plus-circle" aria-hidden="true" (click)="click()"></i>
+            <i class="fa fa-plus-circle" aria-hidden="true" (click)="click()"
+                *ngIf="user.authorities[0].authority == 'ROLE_MANAGER' || user.authorities[0].authority == 'ROLE_DIRECTOR'"></i>
+            <!-- <i class="fa fa-plus-circle" aria-hidden="true" (click)="click()"></i> -->
         </h5>
         <table>
             <tr>

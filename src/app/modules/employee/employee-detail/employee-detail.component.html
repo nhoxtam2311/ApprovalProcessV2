@@ -1,6 +1,6 @@
 <div class="main-screen" *ngIf="employee | async as employeeData">
-    <div>
-        <!-- <div *ngIf="author | async as user"> -->
+    <!-- <div> -->
+        <div *ngIf="author | async as user">
         <h4 class="project-name">Employee - {{employeeData.firstName}}</h4>
         <div class="details">
             <div class="container">
