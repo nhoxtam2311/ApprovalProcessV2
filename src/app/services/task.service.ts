@@ -36,4 +36,13 @@ export class TaskService {
   findByStatus(status: String, sortBy: any, sortDesc: any) {
     return this.http.get(`api/tasks/search/findByStatus?status=${status}&sort=${sortBy},${sortDesc}`)
   }
+  findByCreatedDate(year: any, month:any, sortBy:any, sortDesc:any){
+    return this.http.get(`api/tasks/search/findByCreatedDateBetween?after=${year}-${month}-01&before=${year}-${month}-31&sort=${sortBy},${sortDesc}`)
+  }
+  findByProjectFix(projectId: number){
+    return this.http.get(`api/tasks/search/findByProject?project=${projectId}`)
+  }
+  findByParentFix(parentId: number){
+    return this.http.get(`api/tasks/search/findByParent?parent=${parentId}`)
+  }
 }

@@ -1,13 +1,14 @@
 <!-- <nav class="item-list"> -->
-  <nav class="item-list" *ngIf="author | async as user">
+<nav class="item-list" *ngIf="author | async as user">
   <div class="list-title">
     <span>Projects
       <!-- <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()"></i> -->
-      <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()" *ngIf="user.authorities[0].authority == 'ROLE_MANAGER' || user.authorities[0].authority == 'ROLE_ADMIN'"></i>
+      <i class="fa fa-plus-circle" aria-hidden="true" (click)="clickShowCreateModal()"
+        *ngIf="user.authorities[0].authority == 'ROLE_MANAGER' || user.authorities[0].authority == 'ROLE_ADMIN'"></i>
     </span>
   </div>
   <div class="sort-panel">
-    <div class="sort-button">
+    <div class="sort-button-status">
       <select class="sort-panel-item-left" (change)="getProjectByStatus($event)">
         <option value="Status">All</option>
         <option value="COMPLETED">Complete</option>
@@ -18,17 +19,16 @@
       <div class="sort-panel-item-right" (click)="sortProjectBy('Status')" (click)="clickSortStatus()"><i
           [class]="sortStatusArrow" aria-hidden="true"></i></div>
     </div>
-    <div class="sort-button">
-      <input type="month" class="sort-panel-item-left month" (change)="getMonthChanged($event)">
-      <div class="sort-panel-item-right" (click)="sortProjectBy('createdDate')" (click)="clickSortCreate()"><i
+    <div class="sort-button-month">
+      <input type="month" class="sort-panel-item-left month" (change)="getProjectByCreatedDate($event)">
+      <div class="sort-panel-item-right" (click)="sortByCreatedDate()" (click)="clickSortCreate()"><i
           [class]="sortCreatedArrow" aria-hidden="true"></i></div>
     </div>
     <!-- <div class="sort-panel-item" (click)="sortProjectBy('projectName')"></div> -->
   </div>
   <div class="items" *ngIf="projects | async as data">
     <div *ngFor="let project of data._embedded.projects" class="list-container">
-      <div class="item in-progress" [style]="show" [routerLink]="['details', project.id]"
-        *ngIf="check(project.createdDate)">
+      <div class="item in-progress" [routerLink]="['details', project.id]">
         <span class="item-name">{{ project.projectName | uppercase }}</span>
         <span class="item-name"> Created: {{ project.createdDate | date:'dd/MM/yyyy' }}</span>
         <span [class]="project.status">{{ project.status }}</span>

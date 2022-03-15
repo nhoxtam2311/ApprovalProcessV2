@@ -82,6 +82,23 @@ th{
     background-color: #505050;
     color: white;
 }
+
+.INPROGRESS{
+    color: #465ee0;
+}
+.OPEN{
+    color: #9e9e9e;
+}
+.WAITING{
+    color: #ec1dae;
+}
+.DEFERRED{
+    color: #9e9e9e;
+}
+.COMPLETED{
+    color: #0fa523;
+}
+
 .pagination{
     margin: 1rem;
     text-align: right;

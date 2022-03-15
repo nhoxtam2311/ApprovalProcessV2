@@ -33,6 +33,8 @@ export class TaskListComponent implements OnInit {
   currenPage: number = 0
   totalPages: number = 0
   currentTasksStatus= "Status"
+  month: any
+  year: any
 
   sortStatusArrow ="fa fa-angle-down"
   sortCreatedArrow ="fa fa-angle-down"
@@ -163,6 +165,25 @@ export class TaskListComponent implements OnInit {
     }
     
     // console.log(this.projectsByStatus)
+  }
+
+  sortByCreatedDate(){
+    if (this.sortBool === true) {
+      this.sortBool = false
+      this.sortDesc = "desc"
+    } else {
+      this.sortBool = true
+      this.sortDesc = ''
+    }
+    this.tasks = this.taskService.findByCreatedDate(this.year,this.month,'createdDate',this.sortDesc)
+  }
+
+  getProjectByCreatedDate(event:any){
+    this.year = event.target.value[0] + event.target.value[1] + event.target.value[2] + event.target.value[3]
+    this.month = event.target.value[5] + event.target.value[6]
+    console.log(this.year + '+' + this.month)
+    this.tasks = this.taskService.findByCreatedDate(this.year,this.month,'createdDate',this.sortDesc)
+
   }
 
 }

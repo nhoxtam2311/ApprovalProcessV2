@@ -54,6 +54,7 @@ export class EmployeeListComponent implements OnInit {
   }
 
   employeeForm = new FormGroup({
+    userName: new FormControl(),
     firstName: new FormControl(),
     lastName: new FormControl(),
     company: new FormControl(),

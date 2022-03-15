@@ -8,7 +8,7 @@
     </span>
   </div>
   <div class="sort-panel">
-    <div class="sort-button">
+    <div class="sort-button-status">
       <select class="sort-panel-item-left" (change)="getTaskByStatus($event)">
         <option value="Status">All</option>
         <option value="COMPLETED">Complete</option>
@@ -19,9 +19,9 @@
       <div class="sort-panel-item-right" (click)="sortTaskBy('status')" (click)="clickSortStatus()"><i
           [class]="sortStatusArrow" aria-hidden="true"></i></div>
     </div>
-    <div class="sort-button">
-      <select class="sort-panel-item-left">Created</select>
-      <div class="sort-panel-item-right" (click)="sortTaskBy('createdDate')" (click)="clickSortCreate()"><i
+    <div class="sort-button-month">
+      <input type="month" class="sort-panel-item-left month" (change)="getProjectByCreatedDate($event)">
+      <div class="sort-panel-item-right" (click)="sortByCreatedDate()" (click)="clickSortCreate()"><i
           [class]="sortCreatedArrow" aria-hidden="true"></i></div>
     </div>
     <!-- <div class="sort-panel-item" (click)="sortProjectBy('projectName')"></div> -->

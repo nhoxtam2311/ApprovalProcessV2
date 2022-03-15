@@ -35,6 +35,7 @@ export class TaskDetailComponent implements OnInit {
   currentTasksStatus= "Status"
   sortStatusArrow = "fa fa-angle-down"
   sortCreatedArrow = "fa fa-angle-down"
+  subTasksFix!: Observable<any>
   
   taskForm = new FormGroup({
     title: new FormControl(),
@@ -75,6 +76,7 @@ export class TaskDetailComponent implements OnInit {
 
       this.id = data.params["id"]
       this.getTask(data.params["id"])
+      this.getsubTasksFix(data.params["id"])
       this.subTasks = this.taskService.findByParent(data.params["id"], 0,'createdDate', this.sortDesc)
       this.resolvable = true
       this.subTasks.subscribe((data: any) => {
@@ -104,6 +106,10 @@ export class TaskDetailComponent implements OnInit {
   getSubTasks(parentId: any, page: number, sortBy: any, sortDesc: any) {
     this.subTasks = this.taskService.findByParent(parentId, page, sortBy, sortDesc)
   }
+  
+  getsubTasksFix(parentId: any){
+    this.subTasksFix = this.taskService.findByParentFix(parentId)
+  }
 
   /* Chart */
   barChart!: Chart
@@ -111,7 +117,7 @@ export class TaskDetailComponent implements OnInit {
   init() {
     var members: any = {}
     var ids: Array<any> = []
-    this.subTasks.subscribe((subTasksData: any) => {
+    this.subTasksFix.subscribe((subTasksData: any) => {
       var doneTask = 0
       var inprogressTask = 0
       var waitTask = 0
@@ -247,7 +253,7 @@ export class TaskDetailComponent implements OnInit {
           }
         },
         yAxis: {
-          categories: categories, title: {
+          title: {
             text: 'The volume of sub-tasks'
           }
         },

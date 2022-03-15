@@ -3,7 +3,7 @@
         <div class="container" *ngIf="author | async as user">
         <h5>Employees
             <i class="fa fa-plus-circle" aria-hidden="true" (click)="click()"
-                *ngIf="user.authorities[0].authority == 'ROLE_MANAGER' || user.authorities[0].authority == 'ROLE_DIRECTOR' || user.authorities[0].authority == 'ROLE_ADMIN' "></i>
+                *ngIf="user.authorities[0].authority == 'ROLE_DIRECTOR' || user.authorities[0].authority == 'ROLE_ADMIN' "></i>
             <!-- <i class="fa fa-plus-circle" aria-hidden="true" (click)="click()"></i> -->
         </h5>
         <table>
@@ -45,6 +45,8 @@
                     <div><span class="label">First Name</span><input type="text" formControlName="firstName">
                     </div>
                     <div><span class="label">Last Name</span><input type="text" formControlName="lastName">
+                    </div>
+                    <div><span class="label">User Name</span><input type="text" formControlName="userName">
                     </div>
                     <div><span class="label">Company</span><input type="text" formControlName="company"></div>
                     <div><span class="label">Job Title</span><input type="text" formControlName="jobTitle"></div>

@@ -2,14 +2,14 @@
 <div class="main-screen" *ngIf="author | async as user">
     <h4 class="project-name">COMPANY NAME</h4>
     <div class="details" *ngIf="task | async as data">
-        <div class="container">
+        <div class="container" *ngIf="(data.assignedTo | employee) | async as employee">
             <div class="inside-container">
                 <div class="container-detail">
                     <h5>Task details
                         <!-- <i class="fa fa-pencil-square-o" aria-hidden="true"
                             (click)="clickShowCreateModal()" *ngIf="data.status == 'WAITING'"></i> -->
                         <i class="fa fa-pencil-square-o" aria-hidden="true" (click)="clickShowCreateModal()"
-                            *ngIf="data.status == 'WAITING' && (user.authorities[0].authority == 'ROLE_STAFF' || user.authorities[0].authority == 'ROLE_ADMIN')  "></i>
+                            *ngIf="data.status == 'WAITING' && ((user.authorities[0].authority == 'ROLE_STAFF' &&  user.name == employee.userName) || user.authorities[0].authority == 'ROLE_ADMIN')  "></i>
                     </h5>
                     <div class="h-container">
                         <div *ngIf="(data.project | project) | async as project"><span class="label">Project</span><a
@@ -18,11 +18,12 @@
                                 [routerLink]>Task</span><a
                                 [routerLink]="['/task/details',data.parent]">{{parent.title}}</a></div>
                         <div><span class="label">Title</span>{{data.title}}</div>
-                        <div *ngIf="(data.assignedTo | employee) | async as employee"><span
-                                class="label">Assignee</span>{{employee.firstName}} {{employee.lastName}}</div>
+                        <div><span class="label">Assignee</span>{{employee.firstName}} {{employee.lastName}}</div>
                         <div *ngIf="!data.assignedTo"><span class="label">Assignee</span>Not Assigned</div>
                         <div><span class="label">Priority</span>{{data.priority}}</div>
-                        <div><span class="label">Status</span>{{data.status}}</div>
+                        <div><span class="label">Status</span>
+                            <div [class]="data.status">{{data.status}}</div>
+                        </div>
 
                     </div>
                     <div class="h-container">
@@ -53,18 +54,25 @@
                 </div>
             </div>
         </div>
-        <div class="approvalButton" *ngIf="data.status == 'WAITING'">
-            <!-- <button class="approveButton" (click)="approve(data)">Approve</button> -->
-            <button class="approveButton" (click)="approve(data)"
-                *ngIf="user.authorities[0].authority == 'ROLE_MANAGER' || user.authorities[0].authority == 'ROLE_ADMIN'">Approve</button>
-            <!-- <button class="declineButton" (click)="decline(data)">Decline</button> -->
-            <button class="declineButton" (click)="decline(data)"
-                *ngIf="user.authorities[0].authority == 'ROLE_MANAGER' || user.authorities[0].authority == 'ROLE_ADMIN'">Decline</button>
+        <div *ngIf="(data.project | project) | async as project">
+            <div *ngIf="(project.owner | employee) | async as projectOwner">
+
+                <div class="approvalButton" *ngIf="data.status == 'WAITING'">
+                    <!-- <button class="approveButton" (click)="approve(data)">Approve</button> -->
+                    <button class="approveButton" (click)="approve(data)"
+                        *ngIf="(user.authorities[0].authority == 'ROLE_MANAGER' &&  user.name == projectOwner.userName ) || user.authorities[0].authority == 'ROLE_ADMIN'">Approve</button>
+                    <!-- <button class="declineButton" (click)="decline(data)">Decline</button> -->
+                    <button class="declineButton" (click)="decline(data)"
+                        *ngIf="(user.authorities[0].authority == 'ROLE_MANAGER' &&  user.name == projectOwner.userName) || user.authorities[0].authority == 'ROLE_ADMIN'">Decline</button>
+                </div>
+            </div>
         </div>
-        <div class="approvalButton" *ngIf="data.status == 'INPROGRESS'">
-            <!-- <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)">Resolve</button> -->
-            <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)"
-                *ngIf="user.authorities[0].authority == 'ROLE_STAFF' || user.authorities[0].authority == 'ROLE_ADMIN'">Resolve</button>
+        <div *ngIf="(data.assignedTo | employee) | async as employee">
+            <div class="approvalButton" *ngIf="data.status == 'INPROGRESS'">
+                <!-- <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)">Resolve</button> -->
+                <button [disabled]="!resolvable" class="resolveButton" (click)="resolve(data)"
+                    *ngIf="(user.authorities[0].authority == 'ROLE_STAFF' &&  user.name == employee.userName) || user.authorities[0].authority == 'ROLE_ADMIN'">Resolve</button>
+            </div>
         </div>
         <div class="container" *ngIf="!data.parent">
             <h5>Sub-Tasks
@@ -79,21 +87,7 @@
                     <th (click)="sortSubTaskBy('title')">Name</th>
                     <th (click)="sortSubTaskBy('assignedTo')">Employee Id</th>
                     <th>Assignee</th>
-                    <th class="sort-button ">
-
-                        <select (change)="getTaskByStatus($event)" class="sort-panel-item-left">
-                            <option value="Status">Status</option>
-                            <option value="COMPLETED">Complete</option>
-                            <option value="WAITING">Waiting</option>
-                            <option value="INPROGRESS">Inprogress</option>
-                            <option value="DEFERRED">Deferred</option>
-                        </select>
-                        <div class="sort-panel-item-right" (click)="sortTaskBy('status')" (click)="clickSortStatus()"><i
-                                [class]="sortStatusArrow" aria-hidden="true"></i></div>
-
-                        <!-- <div class="sort-panel-item" (click)="sortProjectBy('projectName')"></div> -->
-
-                    </th>
+                    <th (click)="sortSubTaskBy('status')">Status</th>
                     <th (click)="sortSubTaskBy('createdDate')">Created Day</th>
                 </tr>
                 <tr *ngFor="let subTask of subTaskData._embedded.tasks" [routerLink]="['/task','details', subTask.id]">
@@ -103,7 +97,7 @@
                     <td *ngIf="(subTask.assignedTo | employee) | async as employee">{{employee.firstName}}
                         {{employee.lastName}}</td>
                     <td *ngIf="!subTask.assignedTo">Not assigned</td>
-                    <td>{{subTask.status}}</td>
+                    <td [class]="subTask.status" >{{subTask.status}}</td>
                     <td>{{subTask.createdDate | date:'MM-dd-yyyy'}}</td>
                 </tr>
 

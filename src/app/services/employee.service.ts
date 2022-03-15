@@ -19,6 +19,10 @@ export class EmployeeService {
     return this.http.get(`api/employees/${employeeId}`)
   }
 
+  getEmployeeByUserName(userName: any){
+    return this.http.get(`api/employees/search/findByUserName?userName=${userName}`)
+  }
+
   updateEmployee(employee: any){
     return this.http.put(`${employee._links.self.href.replace('8080', '4200')}`,employee)
   }

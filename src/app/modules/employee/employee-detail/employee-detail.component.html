@@ -1,15 +1,17 @@
 <div class="main-screen" *ngIf="employee | async as employeeData">
     <!-- <div> -->
-        <div *ngIf="author | async as user">
+    <div *ngIf="author | async as user">
         <h4 class="project-name">Employee - {{employeeData.firstName}}</h4>
         <div class="details">
             <div class="container">
-                <h5>Informations <i class="fa fa-pencil-square-o" aria-hidden="true" (click)="click()" ></i></h5>
+                <h5>Informations <i class="fa fa-pencil-square-o" aria-hidden="true" (click)="click()"
+                        *ngIf="user.authorities[0].authority == 'ROLE_DIRECTOR' || user.authorities[0].authority == 'ROLE_ADMIN' || (user.authorities[0].authority == 'ROLE_STAFF' && employeeData.userName == user.Name ) "></i>
+                </h5>
                 <div class="h-container">
-                    <div><span class="label">First Name</span>{{employeeData.firstName}}</div>
-                    <div><span class="label">Last Name</span>{{employeeData.lastName}}</div>
-                    <div><span class="label">Company</span>{{employeeData.firstName}}</div>
-                    <div><span class="label">Job Title</span>{{employeeData.firstName}}</div>
+                    <div><span class="label">Name</span>{{employeeData.firstName}} {{employeeData.lastName}}</div>
+                    <div><span class="label">User Name</span>{{employeeData.userName}}</div>
+                    <div><span class="label">Company</span>{{employeeData.company}}</div>
+                    <div><span class="label">Job Title</span>{{employeeData.jobTitle}}</div>
 
                 </div>
                 <div class="h-container">
@@ -41,10 +43,11 @@
                                 <th (click)="sortProjectBy('status')">Status</th>
                                 <th (click)="sortProjectBy('createdDate')">Created Day</th>
                             </tr>
-                            <tr *ngFor="let project of projectsData._embedded.projects" [routerLink]="['/project','details', project.id]">
+                            <tr *ngFor="let project of projectsData._embedded.projects"
+                                [routerLink]="['/project','details', project.id]">
                                 <td>{{project.projectName}}</td>
                                 <td>{{project.priority}}</td>
-                                <td>{{project.status}}</td>
+                                <td><div [class]="project.status">{{project.status}}</div></td>
                                 <td>{{project.createdDate | date:'MM-dd-yyyy'}}</td>
                             </tr>
 
@@ -71,10 +74,11 @@
                                 <th (click)="sortTaskBy('status')">Status</th>
                                 <th (click)="sortTaskBy('createdDate')">Created Day</th>
                             </tr>
-                            <tr *ngFor="let task of tasksData._embedded.tasks" [routerLink]="['/task','details', task.id]">
+                            <tr *ngFor="let task of tasksData._embedded.tasks"
+                                [routerLink]="['/task','details', task.id]">
                                 <td>{{task.title}}</td>
                                 <td *ngIf="(task.project | project) | async as project">{{project.projectName}}</td>
-                                <td>{{task.status}}</td>
+                                <td><div [class]="task.status">{{task.status}}</div></td>
                                 <td>{{task.createdDate | date:'MM-dd-yyyy'}}</td>
                             </tr>
 
@@ -144,12 +148,11 @@
                         <div><span class="label">Country/Region</span><input type="text" formControlName="country"
                                 value="country">
                         </div>
-                    </div>
-                    <div class="h-container">
                         <div><span class="label">Email</span><input type="text" formControlName="emailAddress"
                                 value="emailAddress">
                         </div>
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn-success" (click)="update(employeeData)">Update</button>

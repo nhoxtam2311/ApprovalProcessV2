@@ -34,8 +34,8 @@ export class ProjectListComponent implements OnInit {
   currentProjectsStatus = "Status"
   td = new Date()
   today = `${this.td.getFullYear()}-${this.td.getMonth() + 1 > 9 ? this.td.getMonth() + 1 : '0' + (this.td.getMonth() + 1)}-${this.td.getDate() > 9 ? this.td.getDate() : '0' + this.td.getDate()}T00:00:00.000+00:00`
-  month: any = `${this.td.getMonth() + 1 > 9 ? this.td.getMonth() + 1 : '0' + (this.td.getMonth() + 1)}`
-  year: any =`${this.td.getFullYear()}`
+  month: any
+  year: any
   // test: any = "2022-03-05T00:00:00.000+00:00"
   show: any = ""
 
@@ -105,6 +105,14 @@ export class ProjectListComponent implements OnInit {
     // console.log(this.projectsByStatus)
   }
 
+  getProjectByCreatedDate(event:any){
+    this.year = event.target.value[0] + event.target.value[1] + event.target.value[2] + event.target.value[3]
+    this.month = event.target.value[5] + event.target.value[6]
+    console.log(this.year + '+' + this.month)
+    this.projects = this.projectService.findByCreatedDate(this.year,this.month,'createdDate',this.sortDesc)
+
+  }
+
   project = new FormGroup({
     projectName: new FormControl(),
     owner: new FormControl(),
@@ -141,6 +149,17 @@ export class ProjectListComponent implements OnInit {
 
   getAllEmployee() {
     this.employees = this.employeeService.getAll(0, 9999, 'firstName', '')
+  }
+
+  sortByCreatedDate(){
+    if (this.sortBool === true) {
+      this.sortBool = false
+      this.sortDesc = "desc"
+    } else {
+      this.sortBool = true
+      this.sortDesc = ''
+    }
+    this.projects = this.projectService.findByCreatedDate(this.year,this.month,'createdDate',this.sortDesc)
   }
 
 

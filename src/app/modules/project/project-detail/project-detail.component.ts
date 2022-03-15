@@ -28,6 +28,7 @@ export class ProjectDetailComponent implements OnInit {
   totalPages: number = 0
   project!: Observable<any>
   tasks!: Observable<any>
+  tasksFix!:Observable<any>
   author!: Observable<any>
   sortBy: any
   sortDesc = ''
@@ -64,6 +65,7 @@ export class ProjectDetailComponent implements OnInit {
       this.resolvable = true
       this.getProject(data.params["id"])
       this.tasks = this.taskService.findByProject(data.params["id"], 0, this.sortField, this.sortDesc)
+      this.tasksFix = this.taskService.findByProjectFix(data.params["id"])
       this.tasks.subscribe((data: any) => {
         this.totalPages = data.page.totalPages
         this.resolvable = true
@@ -109,7 +111,7 @@ export class ProjectDetailComponent implements OnInit {
   init() {
     var members: any = {}
     var ids: Array<any> = []
-    this.tasks.subscribe((taskData: any) => {
+    this.tasksFix.subscribe((taskData: any) => {
       var doneTask = 0
       var inprogressTask = 0
       var waitTask = 0
@@ -238,7 +240,7 @@ export class ProjectDetailComponent implements OnInit {
           }
         },
         yAxis: {
-          categories: categories, title: {
+          title: {
             text: 'The volume of tasks'
           }
         },

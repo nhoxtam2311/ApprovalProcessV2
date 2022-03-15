@@ -76,9 +76,13 @@
     height: 18px;
 }
 
-.sort-button{
+.sort-button-status{
     display: flex;
-    width: 47%;
+    width: 35%;
+}
+.sort-button-month{
+    display: flex;
+    width: 60%;
 }
 
 .sort-panel-item-left{

@@ -124,6 +124,15 @@
     padding-bottom: 5px;
 }
 
+.sort-button-status{
+    display: flex;
+    width: 35%;
+}
+.sort-button-month{
+    display: flex;
+    width: 60%;
+}
+
 .INPROGRESS{
     background-color: #465ee0;
     font-size: 11px;
