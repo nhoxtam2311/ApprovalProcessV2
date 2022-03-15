@@ -26,20 +26,20 @@ export class TaskListComponent implements OnInit {
   projects!: Observable<any>
   employees!: Observable<any>
   author!: Observable<any>
-  sortField ='createdDate'
+  sortField = 'createdDate'
   sortDesc = ''
   sortBy: any
-  sortBool:Boolean = true
+  sortBool: Boolean = true
   currenPage: number = 0
   totalPages: number = 0
-  currentTasksStatus= "Status"
-  month: any
-  year: any
+  currentTasksStatus = "Status"
+  month: any =''
+  year: any =''
 
-  sortStatusArrow ="fa fa-angle-down"
-  sortCreatedArrow ="fa fa-angle-down"
+  sortStatusArrow = "fa fa-angle-down"
+  sortCreatedArrow = "fa fa-angle-down"
 
-  clickSortCreate(){
+  clickSortCreate() {
     if (this.sortCreatedArrow == "fa fa-angle-down") {
       this.sortCreatedArrow = "fa fa-angle-up"
     } else {
@@ -47,7 +47,7 @@ export class TaskListComponent implements OnInit {
     }
   }
 
-  clickSortStatus(){
+  clickSortStatus() {
     if (this.sortStatusArrow == "fa fa-angle-down") {
       this.sortStatusArrow = "fa fa-angle-up"
     } else {
@@ -78,10 +78,10 @@ export class TaskListComponent implements OnInit {
   }
 
   pull(): void {
-    this.tasks = this.taskService.getAll(this.sortField,this.sortDesc)
+    this.tasks = this.taskService.getAll(this.sortField, this.sortDesc)
   }
 
-  getAuthor(){
+  getAuthor() {
     this.author = this.authorService.getAll()
   }
 
@@ -100,13 +100,13 @@ export class TaskListComponent implements OnInit {
   })
 
   create() {
-    if(this.task.invalid){
+    if (this.task.invalid) {
       this.task.markAsTouched()
       return
     }
     var task = this.task.value
     var createdDate = new Date()
-    task.createdDate = `${createdDate.getFullYear()}-${createdDate.getMonth()+1>9?createdDate.getMonth()+1:'0'+(createdDate.getMonth()+1)}-${createdDate.getDate()>9?createdDate.getDate():'0'+createdDate.getDate()}`
+    task.createdDate = `${createdDate.getFullYear()}-${createdDate.getMonth() + 1 > 9 ? createdDate.getMonth() + 1 : '0' + (createdDate.getMonth() + 1)}-${createdDate.getDate() > 9 ? createdDate.getDate() : '0' + createdDate.getDate()}`
     console.log(task)
     console.log(this.task.value)
     this.taskService.create(task).subscribe(() => {
@@ -124,20 +124,20 @@ export class TaskListComponent implements OnInit {
     this.clickShowChooseModal()
   }
 
-  getProjects(): void{
-    this.projects = this.projectService.findByStatus("INPROGRESS","createdDate","")
+  getProjects(): void {
+    this.projects = this.projectService.findByStatus("INPROGRESS", "createdDate", "")
   }
 
   getEmpolyees() {
-    this.employees = this.employeeService.getAll(0,9999,'firstName','')
+    this.employees = this.employeeService.getAll(0, 9999, 'firstName', '')
   }
 
   td = new Date()
-  today = `${this.td.getFullYear()}-${this.td.getMonth()+1>9?this.td.getMonth()+1:'0'+(this.td.getMonth()+1)}-${this.td.getDate()>9?this.td.getDate():'0'+this.td.getDate()}`
+  today = `${this.td.getFullYear()}-${this.td.getMonth() + 1 > 9 ? this.td.getMonth() + 1 : '0' + (this.td.getMonth() + 1)}-${this.td.getDate() > 9 ? this.td.getDate() : '0' + this.td.getDate()}`
 
   sortTaskBy(field: any) {
     this.sortField = field
-    console.log(this.sortBool,this.sortDesc)
+    console.log(this.sortBool, this.sortDesc)
     if (this.sortBool === true) {
       this.sortBool = false
       this.sortDesc = "desc"
@@ -145,29 +145,33 @@ export class TaskListComponent implements OnInit {
       this.sortBool = true
       this.sortDesc = ''
     }
-    console.log(this.sortBool,this.sortDesc)
-    if( this.currentTasksStatus== "Status"){
+    console.log(this.sortBool, this.sortDesc)
+    if (this.currentTasksStatus == "Status") {
       this.tasks = this.taskService.getAll(this.sortField, this.sortDesc)
     }
     else {
-      this.tasks = this.taskService.findByStatus(this.currentTasksStatus,this.sortField, this.sortDesc)
+      this.tasks = this.taskService.findByStatus(this.currentTasksStatus, this.sortField, this.sortDesc)
     }
-    console.log(this.currentTasksStatus)
+    // console.log(this.currentTasksStatus)
+    this.year=''
+    this.month=''
   }
 
-  getTaskByStatus(status: any){
+  getTaskByStatus(status: any) {
     this.currentTasksStatus = status.target.value
-    if( this.currentTasksStatus == "Status"){
+    if (this.currentTasksStatus == "Status") {
       this.pull()
     }
-    else{
-      this.tasks = this.taskService.findByStatus(this.currentTasksStatus,this.sortField, this.sortDesc)
+    else {
+      this.tasks = this.taskService.findByStatus(this.currentTasksStatus, this.sortField, this.sortDesc)
     }
-    
+    this.year=''
+    this.month=''
+
     // console.log(this.projectsByStatus)
   }
 
-  sortByCreatedDate(){
+  sortByCreatedDate() {
     if (this.sortBool === true) {
       this.sortBool = false
       this.sortDesc = "desc"
@@ -175,14 +179,28 @@ export class TaskListComponent implements OnInit {
       this.sortBool = true
       this.sortDesc = ''
     }
-    this.tasks = this.taskService.findByCreatedDate(this.year,this.month,'createdDate',this.sortDesc)
+
+    if (this.year != '' && this.month != ''){
+      this.tasks = this.taskService.findByCreatedDate(this.year, this.month, 'createdDate', this.sortDesc)
+
+    } else {
+      if (this.currentTasksStatus == "Status") {
+        this.tasks = this.taskService.getAll('createdDate', this.sortDesc)
+      }
+      else {
+        this.tasks = this.taskService.findByStatus(this.currentTasksStatus, 'createdDate', this.sortDesc)
+      }
+      
+      
+    }
+
   }
 
-  getProjectByCreatedDate(event:any){
+  getProjectByCreatedDate(event: any) {
     this.year = event.target.value[0] + event.target.value[1] + event.target.value[2] + event.target.value[3]
     this.month = event.target.value[5] + event.target.value[6]
     console.log(this.year + '+' + this.month)
-    this.tasks = this.taskService.findByCreatedDate(this.year,this.month,'createdDate',this.sortDesc)
+    this.tasks = this.taskService.findByCreatedDate(this.year, this.month, 'createdDate', this.sortDesc)
 
   }
 

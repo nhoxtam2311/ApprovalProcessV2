@@ -26,16 +26,18 @@ export class ProjectListComponent implements OnInit {
   author!: Observable<any>
   projectsByStatus!: Observable<any>
   sortField = 'createdDate'
-  sortDesc = ''
+  sortDescStatus = ''
+  sortDescCreatedDate = ''
   sortBy: any
-  sortBool: Boolean = true
+  sortBoolStatus: Boolean = true
+  sortBoolCreatedDate: Boolean = true
   currenPage: number = 0
   totalPages: number = 0
   currentProjectsStatus = "Status"
   td = new Date()
   today = `${this.td.getFullYear()}-${this.td.getMonth() + 1 > 9 ? this.td.getMonth() + 1 : '0' + (this.td.getMonth() + 1)}-${this.td.getDate() > 9 ? this.td.getDate() : '0' + this.td.getDate()}T00:00:00.000+00:00`
-  month: any
-  year: any
+  month: any =''
+  year: any =''
   // test: any = "2022-03-05T00:00:00.000+00:00"
   show: any = ""
 
@@ -46,7 +48,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   pull(): void {
-    this.projects = this.projectService.getAll(this.sortField, this.sortDesc)
+    this.projects = this.projectService.getAll(this.sortField, this.sortDescCreatedDate)
     // this.projects.subscribe((data:any)=>{
     //   console.log(data["_embedded"]["projects"][1]["createdDate"])
     // })
@@ -99,8 +101,10 @@ export class ProjectListComponent implements OnInit {
       this.pull()
     }
     else {
-      this.projects = this.projectService.findByStatus(this.currentProjectsStatus, this.sortField, this.sortDesc)
+      this.projects = this.projectService.findByStatus(this.currentProjectsStatus, this.sortField, this.sortDescStatus)
     }
+    this.year=''
+    this.month=''
 
     // console.log(this.projectsByStatus)
   }
@@ -109,7 +113,8 @@ export class ProjectListComponent implements OnInit {
     this.year = event.target.value[0] + event.target.value[1] + event.target.value[2] + event.target.value[3]
     this.month = event.target.value[5] + event.target.value[6]
     console.log(this.year + '+' + this.month)
-    this.projects = this.projectService.findByCreatedDate(this.year,this.month,'createdDate',this.sortDesc)
+    this.projects = this.projectService.findByCreatedDate(this.year,this.month,'createdDate',this.sortDescCreatedDate)
+    
 
   }
 
@@ -152,61 +157,74 @@ export class ProjectListComponent implements OnInit {
   }
 
   sortByCreatedDate(){
-    if (this.sortBool === true) {
-      this.sortBool = false
-      this.sortDesc = "desc"
+    if (this.sortBoolCreatedDate === true) {
+      this.sortBoolCreatedDate = false
+      this.sortDescCreatedDate = "desc"
     } else {
-      this.sortBool = true
-      this.sortDesc = ''
+      this.sortBoolCreatedDate = true
+      this.sortDescCreatedDate = ''
     }
-    this.projects = this.projectService.findByCreatedDate(this.year,this.month,'createdDate',this.sortDesc)
+    if (this.year != '' && this.month != ''){
+      this.projects = this.projectService.findByCreatedDate(this.year,this.month,'createdDate',this.sortDescCreatedDate)
+    } else {
+      if (this.currentProjectsStatus == "Status") {
+        this.projects = this.projectService.getAll('createdDate', this.sortDescCreatedDate)
+      }
+      else {
+        this.projects = this.projectService.findByStatus(this.currentProjectsStatus, 'createdDate', this.sortDescCreatedDate)
+      }
+      
+      
+    }
   }
 
 
   sortProjectBy(field: any) {
     this.sortField = field
     // console.log(this.sortBool, this.sortDesc)
-    if (this.sortBool === true) {
-      this.sortBool = false
-      this.sortDesc = "desc"
+    if (this.sortBoolStatus === true) {
+      this.sortBoolStatus = false
+      this.sortDescStatus = "desc"
     } else {
-      this.sortBool = true
-      this.sortDesc = ''
+      this.sortBoolStatus = true
+      this.sortDescStatus = ''
     }
     // console.log(this.sortBool, this.sortDesc)
     if (this.currentProjectsStatus == "Status") {
-      this.projects = this.projectService.getAll(this.sortField, this.sortDesc)
+      this.projects = this.projectService.getAll(this.sortField, this.sortDescStatus)
     }
     else {
-      this.projects = this.projectService.findByStatus(this.currentProjectsStatus, this.sortField, this.sortDesc)
+      this.projects = this.projectService.findByStatus(this.currentProjectsStatus, this.sortField, this.sortDescStatus)
     }
+    this.year=''
+    this.month=''
     // console.log(this.currentProjectsStatus)
   }
 
 
-  getMonthChanged(change: any) {
-    this.month = change.target.value[5] + change.target.value[6]
-    this.year = change.target.value[0] + change.target.value[1] + change.target.value[2] + change.target.value[3]
-    // console.log(this.month + "+" + this.year)
-    if (this.currentProjectsStatus == "Status") {
-      this.projects = this.projectService.getAll(this.sortField, this.sortDesc)
-    }
-    else {
-      this.projects = this.projectService.findByStatus(this.currentProjectsStatus, this.sortField, this.sortDesc)
-    }
-  }
+  // getMonthChanged(change: any) {
+  //   this.month = change.target.value[5] + change.target.value[6]
+  //   this.year = change.target.value[0] + change.target.value[1] + change.target.value[2] + change.target.value[3]
+  //   // console.log(this.month + "+" + this.year)
+  //   if (this.currentProjectsStatus == "Status") {
+  //     this.projects = this.projectService.getAll(this.sortField, this.sortDesc)
+  //   }
+  //   else {
+  //     this.projects = this.projectService.findByStatus(this.currentProjectsStatus, this.sortField, this.sortDesc)
+  //   }
+  // }
 
-  check(createDay: any) {
-    // console.log(this.month + this.year)
-    if (((createDay[5] + createDay[6]) == this.month) && ((createDay[0] + createDay[1] + createDay[2] + createDay[3]) == this.year)) {
-      this.show = ''
-      return true
+  // check(createDay: any) {
+  //   // console.log(this.month + this.year)
+  //   if (((createDay[5] + createDay[6]) == this.month) && ((createDay[0] + createDay[1] + createDay[2] + createDay[3]) == this.year)) {
+  //     this.show = ''
+  //     return true
 
-    } else {
-      this.show = 'display: none'
-      return false
-    }
-  }
+  //   } else {
+  //     this.show = 'display: none'
+  //     return false
+  //   }
+  // }
 
   // getMonthChanged(month: any){
   //   let year = month.target.value[0] + month.target.value[1] + month.target.value[2] + month.target.value[3]
