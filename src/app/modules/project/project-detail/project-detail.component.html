@@ -31,6 +31,7 @@
                             </div>
                         </div>
                         <div class="h-container">
+                            <div><span class="label">% Complete</span>{{percentComplete | number }}% ({{completeTask}}/{{totalTask}} Tasks)</div>
                             <div><span class="label">Created Day</span>{{data.createdDate | date:'MM-dd-yyyy'}}</div>
                             <div *ngIf="data.status == 'WAITING'"><span class="label">Start
                                     (Proposed)</span>{{data.startDate | date:'MM-dd-yyyy'}}</div>
@@ -40,8 +41,8 @@
                                     (Proposed)</span>{{data.endDate | date:'MM-dd-yyyy'}}</div>
                             <div *ngIf="data.status == 'COMPLETED'"><span class="label">End</span>{{data.endDate |
                                 date:'MM-dd-yyyy'}}</div>
-                            <div><span class="label">Budget</span>{{data.budget}}</div>
-                            <div><span class="label">Budget In Days</span>{{data.budgetInDays}}</div>
+                            <!-- <div><span class="label">Budget</span>{{data.budget}}</div>
+                            <div><span class="label">Budget In Days</span>{{data.budgetInDays}}</div> -->
                         </div>
                     </div>
                     <div class="container-chart">

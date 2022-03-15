@@ -36,6 +36,9 @@ export class TaskDetailComponent implements OnInit {
   sortStatusArrow = "fa fa-angle-down"
   sortCreatedArrow = "fa fa-angle-down"
   subTasksFix!: Observable<any>
+  percentComplete: any
+  totalTask = 0
+  completeTask = 0
   
   taskForm = new FormGroup({
     title: new FormControl(),
@@ -109,6 +112,17 @@ export class TaskDetailComponent implements OnInit {
   
   getsubTasksFix(parentId: any){
     this.subTasksFix = this.taskService.findByParentFix(parentId)
+    this.subTasksFix.subscribe((data:any)=>{
+      for (let task of data._embedded.tasks ){
+        if(task.status != 'DEFERRED'){
+          this.totalTask = this.totalTask + 1
+        }
+        if(task.status == 'COMPLETED'){
+          this.completeTask = this.completeTask + 1
+        }
+      }
+      this.percentComplete = (this.completeTask / this.totalTask) * 100
+    })
   }
 
   /* Chart */

@@ -45,4 +45,7 @@ export class TaskService {
   findByParentFix(parentId: number){
     return this.http.get(`api/tasks/search/findByParent?parent=${parentId}`)
   }
+  findByAssignedToFix(employeeId: number){
+    return this.http.get(`api/tasks/search/findByAssignedTo?assignedTo=${employeeId}`)
+  }
 }

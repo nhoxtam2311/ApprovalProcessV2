@@ -33,4 +33,7 @@ export class ProjectService {
   findByCreatedDate(year: any, month:any, sortBy:any, sortDesc:any){
     return this.http.get(`api/projects/search/findByCreatedDateBetween?after=${year}-${month}-01&before=${year}-${month}-31&sort=${sortBy},${sortDesc}`)
   }
+  findByOwnerFix(employeeId: String){
+    return this.http.get(`api/projects/search/findByOwner?owner=${employeeId}`)
+  }
 }

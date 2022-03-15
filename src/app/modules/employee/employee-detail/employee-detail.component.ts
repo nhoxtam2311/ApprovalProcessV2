@@ -30,6 +30,8 @@ export class EmployeeDetailComponent implements OnInit {
   projects!: Observable<any>
   tasks!: Observable<any>
   author!: Observable<any>
+  projectsFix!: Observable<any>
+  tasksFix!: Observable<any>
 
   sortByProject: any
   sortDescProject = ''
@@ -43,12 +45,43 @@ export class EmployeeDetailComponent implements OnInit {
 
   currenPageProject: number = 0
   currenPageTask: number = 0
+
+  totalProject = 0
+  completeProject = 0
+  totalTask = 0
+  completeTask = 0
+  percentCompleteProject: any
+  percentCompleteTask: any
   
 
   ngOnInit(): void {
     this.getAuthor()
     this.route.paramMap.subscribe((data: any) => {
       this.id = data.params["id"]
+      this.projectsFix = this.getProjectsFix(this.id)
+      this.projectsFix.subscribe((data:any)=>{
+        for (let project of data._embedded.projects ){
+          if(project.status != 'DEFERRED'){
+            this.totalProject = this.totalProject + 1
+          }
+          if(project.status == 'COMPLETED'){
+            this.completeProject = this.completeProject + 1
+          }
+        }
+        this.percentCompleteProject = (this.completeProject / this.totalProject) * 100
+      })
+      this.tasksFix = this.getTasksFix(this.id)
+      this.tasksFix.subscribe((data:any)=>{
+        for (let task of data._embedded.tasks ){
+          if(task.status != 'DEFERRED'){
+            this.totalTask = this.totalTask + 1
+          }
+          if(task.status == 'COMPLETED'){
+            this.completeTask = this.completeTask + 1
+          }
+        }
+        this.percentCompleteTask = (this.completeTask / this.totalTask) * 100
+      })
       this.getEmployee(data.params["id"])
       this.getProjects(data.params["id"], 0, this.sortFieldProject, this.sortDescProject)
       this.getTasks(data.params["id"], 0, this.sortFieldTask, this.sortDescTask)
@@ -65,6 +98,15 @@ export class EmployeeDetailComponent implements OnInit {
       this.totalPagesProject = data.page.totalPages
     })
   }
+  getProjectsFix(employeeId:any){
+    return this.projectService.findByOwnerFix(employeeId)
+  }
+
+  getTasksFix(employeeId:any){
+    return this.taskService.findByAssignedToFix(employeeId)
+
+  }
+
   getTasks(employeeId: any, page: number, sortBy: any, sortDesc: any) {
     this.tasks = this.taskService.findByAssignedTo(employeeId, page, sortBy, sortDesc)
     this.tasks.subscribe((data:any)=>{
@@ -139,7 +181,7 @@ export class EmployeeDetailComponent implements OnInit {
     let projects: any = {}
     var projectIds: Array<any> = []
     // console.log("project")
-    this.projects.subscribe((projectsData: any) => {
+    this.projectsFix.subscribe((projectsData: any) => {
       // console.log("project")
       var doneProject = 0
       var inprogressProject = 0
@@ -229,7 +271,7 @@ export class EmployeeDetailComponent implements OnInit {
       // this.barChart.ref$.subscribe(console.log);
     })
 
-    this.tasks.subscribe((tasksData: any) => {
+    this.tasksFix.subscribe((tasksData: any) => {
       var doneTask = 0
       var inprogressTask = 0
       var waitTask = 0

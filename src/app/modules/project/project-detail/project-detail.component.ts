@@ -30,6 +30,9 @@ export class ProjectDetailComponent implements OnInit {
   tasks!: Observable<any>
   tasksFix!:Observable<any>
   author!: Observable<any>
+  percentComplete: any
+  totalTask = 0
+  completeTask = 0
   sortBy: any
   sortDesc = ''
   sortBool:Boolean = true
@@ -66,6 +69,18 @@ export class ProjectDetailComponent implements OnInit {
       this.getProject(data.params["id"])
       this.tasks = this.taskService.findByProject(data.params["id"], 0, this.sortField, this.sortDesc)
       this.tasksFix = this.taskService.findByProjectFix(data.params["id"])
+      this.tasksFix.subscribe((data:any)=>{
+        
+        for (let task of data._embedded.tasks ){
+          if(task.status != 'DEFERRED'){
+            this.totalTask = this.totalTask + 1
+          }
+          if(task.status == 'COMPLETED'){
+            this.completeTask = this.completeTask + 1
+          }
+        }
+        this.percentComplete = (this.completeTask / this.totalTask) * 100
+      })
       this.tasks.subscribe((data: any) => {
         this.totalPages = data.page.totalPages
         this.resolvable = true
