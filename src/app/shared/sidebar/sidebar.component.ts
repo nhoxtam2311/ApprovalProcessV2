@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {  } from '@fortawesome/fontawesome-svg-core';
 import { Observable } from 'rxjs';
@@ -14,7 +15,8 @@ export class SidebarComponent implements OnInit {
 
   constructor(
     private employeeService: EmployeeService,
-    private authorService: AuthorService
+    private authorService: AuthorService,
+    private http: HttpClient
   ) { }
 
   employee!: Observable<any>
@@ -40,5 +42,9 @@ export class SidebarComponent implements OnInit {
       })
       // console.log(this.userName)
     })
+  }
+  logout(){
+    window.location.href = "http://localhost:8081/logout";
+  
   }
 }

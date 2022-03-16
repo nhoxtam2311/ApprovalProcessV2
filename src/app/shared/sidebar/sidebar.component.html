@@ -12,7 +12,10 @@
         <span>Employees</span>
     </a>
     <a [routerLink]="['employee/details/',id]" routerLinkActive="active" class="menu-item">
-            <fa-icon [icon]="['far','user']"></fa-icon>
-            <span>Personal</span>
+        <fa-icon [icon]="['far','user']"></fa-icon>
+        <span>Personal</span>
+    </a>
+    <a (click)="logout()" routerLinkActive="active" class="menu-item" style="margin-top: 90%;">
+        <span>Sign out</span>
     </a>
 </nav>
