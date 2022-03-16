@@ -25,13 +25,13 @@ export class TaskService {
   }
 
   findByProject(projectId: number, page: number, sortBy: any, sortDesc: any){
-    return this.http.get(`api/tasks/search/findByProject?project=${projectId}&page=${page}&size=10&sort=${sortBy},${sortDesc}`)
+    return this.http.get(`api/tasks/search/findByProject?project=${projectId}&page=${page}&size=5&sort=${sortBy},${sortDesc}`)
   }
   findByParent(parentId: number, page: number, sortBy: any, sortDesc: any){
-    return this.http.get(`api/tasks/search/findByParent?parent=${parentId}&page=${page}&size=10&sort=${sortBy},${sortDesc}`)
+    return this.http.get(`api/tasks/search/findByParent?parent=${parentId}&page=${page}&size=5&sort=${sortBy},${sortDesc}`)
   }
   findByAssignedTo(employeeId: number, page: number, sortBy: any, sortDesc: any){
-    return this.http.get(`api/tasks/search/findByAssignedTo?assignedTo=${employeeId}&page=${page}&size=10&sort=${sortBy},${sortDesc}`)
+    return this.http.get(`api/tasks/search/findByAssignedTo?assignedTo=${employeeId}&page=${page}&size=5&sort=${sortBy},${sortDesc}`)
   }
   findByStatus(status: String, sortBy: any, sortDesc: any) {
     return this.http.get(`api/tasks/search/findByStatus?status=${status}&sort=${sortBy},${sortDesc}`)

@@ -28,7 +28,7 @@ export class ProjectService {
     return this.http.get(`api/projects/search/findByStatus?status=${status}&sort=${sortBy},${sortDesc}`)
   }
   findByOwner(employeeId: String, page: number, sortBy: any, sortDesc: any) {
-    return this.http.get(`api/projects/search/findByOwner?owner=${employeeId}&page=${page}&size=10&sort=${sortBy},${sortDesc}`)
+    return this.http.get(`api/projects/search/findByOwner?owner=${employeeId}&page=${page}&size=5&sort=${sortBy},${sortDesc}`)
   }
   findByCreatedDate(year: any, month:any, sortBy:any, sortDesc:any){
     return this.http.get(`api/projects/search/findByCreatedDateBetween?after=${year}-${month}-01&before=${year}-${month}-31&sort=${sortBy},${sortDesc}`)

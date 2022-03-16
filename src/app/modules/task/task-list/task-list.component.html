@@ -77,7 +77,7 @@
         <div *ngIf="employees | async as employeeData">
           <span class="label">Assign</span>
           <select type="text" formControlName="assignedTo">
-            <option *ngFor="let employee of employeeData._embedded.employees" [value]="employee.id">{{employee.firstName
+            <option *ngFor="let employee of employeeData._embedded.employees" [value]="employee.id">[{{employee.id}}] {{employee.firstName
               + " " + employee.lastName}}</option>
           </select>
         </div>
